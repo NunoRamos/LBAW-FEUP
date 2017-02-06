@@ -1,2 +1,4 @@
 # LBAW-FEUP
-Repository for LBAW project
+
+Host of the project:
+http://gnomo.fe.up.pt/~lbaw1612
