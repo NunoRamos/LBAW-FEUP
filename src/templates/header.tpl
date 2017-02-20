@@ -53,21 +53,17 @@
 <div class="modal fade" id="sign-in-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header no-bottom-border">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <div class="collapse in">
-                    <h4 class="col-md-5 inline">Sign In</h4>
-                    <h4 class="col-md-offset-1 col-md-5 inline">Register</h4>
-                </div>
-                <ul class="nav nav-tabs collapse">
-                    <li role="presentation" class="active"><a href="#">Sign In</a></li>
-                    <li role="presentation"><a href="#">Register</a></li>
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation" class="active"><a href="#sign-in" data-toggle="tab">Sign In</a></li>
+                    <li role="presentation"><a href="#sign-up" data-toggle="tab">Sign Up</a></li>
                 </ul>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <form class="col-md-6">
+                <div class="tab-content row">
+                    <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" placeholder="Username">
@@ -76,9 +72,9 @@
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" placeholder="Password">
                         </div>
-                        <button type="submit" class="btn btn-primary full-width">Sign In</button>
+                        <button type="submit" class="btn btn-primary col-xs-12">Sign In</button>
                     </form>
-                    <form class="col-md-6">
+                    <form id="sign-up" class="modal-form tab-pane fade col-xs-12">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" placeholder="Username">
@@ -95,12 +91,9 @@
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" placeholder="Repeat your password">
                         </div>
-                        <button type="submit" class="btn btn-primary full-width">Register</button>
+                        <button type="submit" class="btn btn-primary col-xs-12">Sign Up</button>
                     </form>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
