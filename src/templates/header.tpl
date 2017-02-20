@@ -26,19 +26,19 @@
         <ul class="nav navbar-nav">
             <li><a>Categories</a></li>
             <li>
-                <div class="navbar-form input-group">
-                    <input type="text" class="form-control" placeholder="Search"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Go!</button>
+                <form class="navbar-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search"/>
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i></button>
                     </span>
-                </div>
+                    </div>
+                </form>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <button type="button" class="btn btn-default navbar-btn">Sign In</button>
-            </li>
-            <li>
                 <button type="button" class="btn btn-default navbar-btn">Register</button>
             </li>
         </ul>
