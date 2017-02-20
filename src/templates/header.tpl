@@ -12,25 +12,27 @@
     <div class="navbar-header">
         <a class="navbar-brand" href="index.php">Reply Planet</a>
     </div>
-    <ul class="nav navbar-nav">
-        <li><a>Categories</a></li>
-        <li>
-            <form class="navbar-form">
-                <input type="text" class="form-control" placeholder="Search"/>
-                <input type="submit" class="btn btn-default" value="Search"/>
-            </form>
-        </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <form class="navbar-form">
-                <input type="submit" class="btn btn-default" value="Log In">
-            </form>
-        </li>
-        <li>
-            <form class="navbar-form">
-                <input type="submit" class="btn btn-default" value="Register">
-            </form>
-        </li>
-    </ul>
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li><a>Categories</a></li>
+            <li>
+                <form class="navbar-form">
+                    <input type="text" class="form-control" placeholder="Search"/>
+                    <input type="submit" class="btn btn-default" value="Search"/>
+                </form>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <form class="navbar-form">
+                    <input type="submit" class="btn btn-default" value="Log In">
+                </form>
+            </li>
+            <li>
+                <form class="navbar-form">
+                    <input type="submit" class="btn btn-default" value="Register">
+                </form>
+            </li>
+        </ul>
+    </div>
 </nav>
