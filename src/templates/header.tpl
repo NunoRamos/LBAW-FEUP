@@ -10,7 +10,7 @@
 
 <nav class="navbar navbar-default">
     <div class="navbar-header">
-        <a class="navbar-brand" href="#">Reply Planet</a>
+        <a class="navbar-brand" href="index.php">Reply Planet</a>
     </div>
     <ul class="nav navbar-nav">
         <li><a>Categories</a></li>
