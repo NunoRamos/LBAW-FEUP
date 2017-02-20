@@ -24,6 +24,7 @@
         <div class="leave-answer-text">Leave your answer:</div>
         <form class="form-horizontal">
             <textarea class="form-control" rows="3" placeholder="Help Me"></textarea>
+            <input class="btn btn-default submit-answer-btn" type="submit" value="Post Answer">
         </form>
     </div>
 </div>
