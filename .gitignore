@@ -3,3 +3,7 @@
 
 # Smarty Cache
 src/templates_c/*
+
+# Sass
+*.min.css
+*.min.css.map
