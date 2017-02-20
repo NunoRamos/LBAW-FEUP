@@ -26,10 +26,12 @@
         <ul class="nav navbar-nav">
             <li><a>Categories</a></li>
             <li>
-                <form class="navbar-form">
+                <div class="navbar-form input-group">
                     <input type="text" class="form-control" placeholder="Search"/>
-                    <input type="submit" class="btn btn-default" value="Search"/>
-                </form>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                </div>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
