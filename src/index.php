@@ -5,11 +5,14 @@ $smarty = new Smarty;
 
 $smarty->assign("page_title", "Reply Planet");
 
-switch ($_GET['page']) {
-    case 'question_page':
-        $smarty->display('templates/question_page.tpl');
-        break;
-    default:
-        $smarty->display('templates/landing_page.tpl');
-        break;
-}
+if (isset($_GET['page']))
+    switch ($_GET['page']) {
+        case 'question_page':
+            $smarty->display('templates/question_page.tpl');
+            break;
+        default:
+            $smarty->display('templates/landing_page.tpl');
+            break;
+    }
+else
+    $smarty->display('templates/landing_page.tpl');
