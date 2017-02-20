@@ -5,10 +5,23 @@
             <h3 class="panel-title">Question</h3>
         </div>
         <div class="list-group">
-            {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rate" => "5"],
-            ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rate" => "-2"]]}
-            {$question = $questions[$smarty.get.id-1]}
-            {include file="question.tpl"}
+            {$question=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
+            "rate" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?"]}
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-2 col-sm-1 center-text">
+                        <div class="glyphicon glyphicon-triangle-top" aria-hidden="true"></div>
+                        <div>{$question["rate"]}</div>
+                        <div class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></div>
+                    </div>
+                    <div class="col-xs-10 col-sm-11">
+                        <div class="question-title">{$question["title"]}</div>
+                        <div class="question-text">{$question["text"]}</div>
+                        <span class="question-author">By {$question["author"]}</span>
+                        <span class="pull-right">{$question["date"]}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-xs-offset-1">
