@@ -2,7 +2,7 @@
 .idea/*
 
 # Smarty Cache
-src/**/templates_c/*
+src/pages/templates_c/*
 
 # Sass
 *.min.css

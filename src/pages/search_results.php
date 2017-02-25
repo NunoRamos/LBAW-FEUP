@@ -2,4 +2,4 @@
 require '../libs/Smarty.class.php';
 
 $smarty = new Smarty;
-$smarty->display('templates/landing_page_page.tpl');
+$smarty->display('templates/search_results_page.tpl');
