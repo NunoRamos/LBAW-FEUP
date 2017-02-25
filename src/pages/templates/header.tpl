@@ -29,7 +29,7 @@
                 <li>
                     <form class="navbar-form" action="search_results.php">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search"/>
+                            <input type="text" name="search" class="form-control full-width" placeholder="Search"/>
                             <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
