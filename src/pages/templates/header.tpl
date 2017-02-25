@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{$page_title}</title>
+    <title>Reply Planet</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/custom.min.css">
@@ -21,17 +21,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">Reply Planet</a>
+            <a class="navbar-brand" href="../index.php">Reply Planet</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="nav navbar-nav">
                 <li><a>Categories</a></li>
                 <li>
-                    <form class="navbar-form">
+                    <form class="navbar-form" action="index.php?page=">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search"/>
                             <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"><i
+                        <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
                     </span>
                         </div>

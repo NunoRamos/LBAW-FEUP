@@ -1,4 +1,4 @@
-<a href="index.php?page=question_page&id={$question["id"]}" class="list-group-item">
+<a href="question_page.php" class="list-group-item">
     <div class="row">
         <div class="col-xs-2 col-sm-1 center-text">
             <div class="glyphicon glyphicon-triangle-top" aria-hidden="true"></div>
