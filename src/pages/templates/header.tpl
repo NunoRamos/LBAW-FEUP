@@ -26,17 +26,19 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="nav navbar-nav">
                 <li><a>Categories</a></li>
-                <li>
-                    <form class="navbar-form" action="search_results.php">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control full-width" placeholder="Search"/>
-                            <span class="input-group-btn">
+                {if $smarty.server.SCRIPT_NAME !== "/pages/search_results.php"}
+                    <li>
+                        <form class="navbar-form" action="search_results.php">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control full-width" placeholder="Search"/>
+                                <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
                     </span>
-                        </div>
-                    </form>
-                </li>
+                            </div>
+                        </form>
+                    </li>
+                {/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -50,6 +52,7 @@
 </nav>
 
 
+<!-- Sign in/up modal -->
 <div class="modal fade" id="sign-in-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
