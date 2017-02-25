@@ -4,7 +4,7 @@
     <div class="col-xs-12 col-sm-4 col-md-3">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <span>Results</span>
+                <span>Result Type</span>
                 <button class="btn btn-default btn-xs pull-right visible-xs" data-toggle="collapse"
                         data-target=".results-collapse">
                     <span class="collapse in results-collapse no-animation"><i
