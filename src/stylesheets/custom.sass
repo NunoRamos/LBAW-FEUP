@@ -1,3 +1,6 @@
+@import "bootstrap/variables"
+@import "colors"
+
 @media (min-width: 1200px)
   .wrapper
     width: 1200px
@@ -23,8 +26,8 @@ body
 //  color: #F0FFFF
 
 .navbar-default
-  //background-color: #34495E
-  //border-color: #9B2114
+//background-color: #34495E
+//border-color: #9B2114
 
 .navbar-right
   margin-right: 0
@@ -54,7 +57,27 @@ body
 .submit-answer-btn
   margin-top: 10px
 
-/* Miscellaneous */
+/******************************
+ * Search Results
+ ******************************/
+
+.filter-list
+  a.filter
+    color: black
+    display: block
+    cursor: pointer
+    padding-left: 0.5em
+
+    &:hover
+      color: $component-active-bg
+      text-decoration: none
+
+    .active
+      color: $component-active-bg
+
+/******************************
+ * Miscellaneous
+ ******************************/
 
 .center-text
   text-align: center
@@ -72,23 +95,11 @@ body
 .no-bottom-border
   border-bottom: 0
 
-.no-bottom-margin
-  margin-bottom: 0
-
 .modal-form
   padding: 0 2.5em 1em 2.5em
 
 .close
   margin-left: 1em
-
-.no-animation.collapsing
-  -webkit-transition: none
-  -moz-transition: none
-  -ms-transition: none
-  -o-transition: none
-  transition: none
-  -webkit-transition-property: none
-  transition-property: none
 
 @media (min-width: 768px)
   .modal-dialog

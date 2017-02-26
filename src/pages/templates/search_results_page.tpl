@@ -2,6 +2,7 @@
 
 <div class="container-fluid">
     <div class="col-xs-12 col-sm-4 col-md-3">
+        <!-- Result Type -->
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span>Result Type</span>
@@ -16,6 +17,7 @@
                 <button type="button" class="list-group-item">Users</button>
             </div>
         </div>
+        <!-- Filters -->
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span>Filters</span>
@@ -27,28 +29,41 @@
                                 class="glyphicon glyphicon-resize-full"></i></span>
             </div>
             <div class="panel-body collapse in filters-collapse">
-                <div class="panel panel-default no-bottom-margin">
-                    <div class="panel-heading">Sort By</div>
-                    <div class="list-group">
-                        <button type="button" class="list-group-item">Popularity</button>
-                        <button type="button" class="list-group-item">Answers - Ascending</button>
-                        <button type="button" class="list-group-item">Answers - Descending</button>
-                        <button type="button" class="list-group-item">Rating - Ascending</button>
-                        <button type="button" class="list-group-item">Rating - Descending</button>
+                <form class="form-horizontal filter-list">
+                    <h5><strong>Sort By</strong></h5>
+                    <a class="filter">Popularity</a>
+                    <a class="filter">Answers - Ascending</a>
+                    <a class="filter">Answers - Descending</a>
+                    <a class="filter">Rating - Ascending</a>
+                    <a class="filter">Rating - Descending</a>
+                </form>
+
+                <form class="form-horizontal filter-list">
+                    <h5><strong>Tags</strong></h5>
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search"/>
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><i
+                                    class="glyphicon glyphicon-search"></i></button></span>
                     </div>
-                </div>
+
+                    <!-- Results -->
+                    <a class="filter">Android</a>
+                    <a class="filter">iOS</a>
+                    <a class="filter">Java</a>
+                    <a class="filter">Bootstrap</a>
+                </form>
             </div>
         </div>
     </div>
-    <div class="container col-xs-12 col-sm-8 col-md-9">
-
+    <div class="col-xs-12 col-sm-8 col-md-9">
         <form action="">
             <div class="input-group form-group">
                 <input type="text" name="search" class="form-control" placeholder="Search"/>
                 <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
-                    </span>
+            </span>
             </div>
         </form>
 
@@ -58,6 +73,5 @@
             {include file="question.tpl"}
         {/foreach}
     </div>
-
 </div>
 {include file="footer.tpl"}
