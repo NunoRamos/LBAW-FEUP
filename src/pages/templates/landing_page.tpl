@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 <div class="container col-xs-12 col-md-8">
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <div class="panel-heading panel-style">
             <h3 class="panel-title">Top Questions</h3>
         </div>
         <div class="list-group">
