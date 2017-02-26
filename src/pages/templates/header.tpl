@@ -24,7 +24,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="nav navbar-nav">
-                <li><a>Categories</a></li>
                 {if $smarty.server.SCRIPT_NAME !== "/pages/search_results.php"}
                     <li>
                         <form class="navbar-form" action="search_results.php">

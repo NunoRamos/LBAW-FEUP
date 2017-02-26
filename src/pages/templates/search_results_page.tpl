@@ -1,4 +1,10 @@
 {include file="header.tpl"}
+<!--
+    Select2 for tag selection
+    https://github.com/select2/select2 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/select2/4.0.3/css/select2.min.css"
+      integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous">
+<link rel="stylesheet" href="../../stylesheets/select2.css">
 
 <div class="container-fluid">
     <div class="col-xs-12 col-sm-4 col-md-3">
@@ -17,6 +23,7 @@
                 <button type="button" class="list-group-item">Users</button>
             </div>
         </div>
+
         <!-- Filters -->
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -40,18 +47,14 @@
 
                 <form class="form-horizontal filter-list">
                     <h5><strong>Tags</strong></h5>
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search"/>
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i
-                                    class="glyphicon glyphicon-search"></i></button></span>
-                    </div>
-
-                    <!-- Results -->
-                    <a class="filter">Android</a>
-                    <a class="filter">iOS</a>
-                    <a class="filter">Java</a>
-                    <a class="filter">Bootstrap</a>
+                    <!-- Inline width is MANDATORY for responsiveness. https://select2.github.io/examples.html#responsive -->
+                    <select id="tags-select" multiple="multiple" style="width: 100%;">
+                        <!-- Add these options dinamically  -->
+                        <option value="android">Android</option>
+                        <option value="ios">iOS</option>
+                        <option value="java">Java</option>
+                        <option value="bootstrap">Bootstrap</option>
+                    </select>
                 </form>
             </div>
         </div>
@@ -74,4 +77,9 @@
         {/foreach}
     </div>
 </div>
+
 {include file="footer.tpl"}
+
+<script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
+        integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
+<script src="javascript/search_results_page.js"></script>
