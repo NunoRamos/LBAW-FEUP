@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{$page_title}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/custom.min.css">
+    <title>Reply Planet</title>
+    <link rel="stylesheet" href="../../stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="../../stylesheets/custom.min.css">
 </head>
 <body>
 
@@ -21,28 +20,46 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">Reply Planet</a>
+            <a class="navbar-brand" href="../index.php">Reply Planet</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="nav navbar-nav">
-                <li><a>Categories</a></li>
-                <li>
-                    <form class="navbar-form">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search"/>
-                            <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"><i
+                {if $smarty.server.SCRIPT_NAME !== "/pages/search_results.php"}
+                    <li>
+                        <form class="navbar-form" action="search_results.php">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control full-width" placeholder="Search"/>
+                                <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
                     </span>
-                        </div>
-                    </form>
-                </li>
+                            </div>
+                        </form>
+                    </li>
+                {/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
-                            data-target="#sign-in-modal">Sign In
-                    </button>
+                    {$logged_in=true}
+                    {if $logged_in}
+                        <div class="dropdown">
+                            <img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
+                                 data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">
+                            <ul class="dropdown-menu menu-spot">
+                                <li><span>Signed in as</span></li>
+                                <li><span><strong>Nuno Ramos</strong></span></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Profile</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Sign Out</a></li>
+                            </ul>
+                        </div>
+                    {else}
+                        <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                                data-target="#sign-in-modal">Sign In
+                        </button>
+                    {/if}
                 </li>
             </ul>
         </div>
@@ -50,6 +67,7 @@
 </nav>
 
 
+<!-- Sign in/up modal -->
 <div class="modal fade" id="sign-in-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

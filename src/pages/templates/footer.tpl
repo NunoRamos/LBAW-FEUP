@@ -1,4 +1,22 @@
 </div>
+
+<div class="container-fluid col-xs-12 footer-info-centered">
+    <div class="">
+
+        <p class="">
+            <a href="#">Home</a>
+            ·
+            <a href="#">About</a>
+            ·
+            <a href="#">Faq</a>
+            ·
+            <a href="#">Contact</a>
+        </p>
+
+        <p>Reply Planet &copy; 2017</p>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
