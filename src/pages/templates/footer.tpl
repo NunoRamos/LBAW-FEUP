@@ -1,8 +1,7 @@
 </div>
 
-<div class="container-fluid col-xs-12 footer-info-centered">
-    <div class="">
-
+<div id="footer" class="container-fluid">
+    <div>
         <p class="">
             <a href="#">Home</a>
             ·

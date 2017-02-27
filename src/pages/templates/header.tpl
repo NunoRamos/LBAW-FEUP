@@ -10,59 +10,50 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="wrapper">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#navbar" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="../index.php">Reply Planet</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar">
-            <ul class="nav navbar-nav">
-                {if $smarty.server.SCRIPT_NAME !== "/pages/search_results.php"}
-                    <li>
-                        <form class="navbar-form" action="search_results.php">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control full-width" placeholder="Search"/>
-                                <span class="input-group-btn">
+        <ul class="nav navbar-nav full-width">
+            <li>
+                <a class="navbar-brand" href="../index.php">Reply Planet</a>
+            </li>
+            {if $smarty.server.SCRIPT_NAME !== "/pages/search_results.php"}
+                <li>
+                    <form class="navbar-form navbar-collapse collapse" action="search_results.php">
+                        <div class="input-group">
+                            <input type="text" name="search"
+                                   class="form-control full-width"
+                                   placeholder="Search"/>
+                            <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
                     </span>
-                            </div>
-                        </form>
-                    </li>
-                {/if}
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    {$logged_in=true}
-                    {if $logged_in}
-                        <div class="dropdown">
-                            <img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
-                                 data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">
-                            <ul class="dropdown-menu menu-spot">
-                                <li><span>Signed in as</span></li>
-                                <li><span><strong>Nuno Ramos</strong></span></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Settings</a></li>
-                                <li><a href="#">Sign Out</a></li>
-                            </ul>
                         </div>
-                    {else}
-                        <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
-                                data-target="#sign-in-modal">Sign In
-                        </button>
-                    {/if}
+                    </form>
                 </li>
-            </ul>
-        </div>
+            {/if}
+            {$logged_in=true}
+            {if $logged_in}
+                <li class="pull-right dropdown">
+                    <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right"
+                         data-toggle="dropdown" src="../img/user-default.png" alt="User Image">
+                    <ul class="dropdown-menu dropdown-responsive">
+                        <li class="hidden-xs"><span>Signed in as</span></li>
+                        <li class="hidden-xs"><span><strong>Nuno Ramos</strong></span></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Sign Out</a></li>
+                    </ul>
+                </li>
+            {else}
+                <li class="pull-right">
+                    <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                            data-target="#sign-in-modal">Sign In
+                    </button>
+                </li>
+            {/if}
+        </ul>
     </div>
 </nav>
 
