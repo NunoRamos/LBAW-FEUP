@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Reply Planet</title>
-    <link rel="stylesheet" href="../stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" href="../stylesheets/custom.min.css">
+    <link rel="stylesheet" href="../../stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="../../stylesheets/custom.min.css">
 </head>
 <body>
 
@@ -20,6 +20,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+
             <a class="navbar-brand" href="../index.php">Reply Planet</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar">
@@ -39,7 +40,9 @@
                 {/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
+
                 <li>
+
                     {$logged_in=true}
                     {if $logged_in}
                         <div class="dropdown">
@@ -60,7 +63,18 @@
                                 data-target="#sign-in-modal">Sign In
                         </button>
                     {/if}
+                    <div class="dropdown">
+                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="../notifications.php">
+                            <i class="glyphicon glyphicon-bell"></i>
+                        </a>
+                        {*<img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
+                             data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">*}
+
+
+                    </div>
                 </li>
+
+
             </ul>
         </div>
     </div>
