@@ -40,9 +40,21 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                    <!--<button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
                             data-target="#sign-in-modal">Sign In
-                    </button>
+                    </button>-->
+                    <div class="dropdown">
+                            <img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style" data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">
+                            <ul class="dropdown-menu menu-spot">
+                                <li class="disabled"><a href="#">Sign in as</a></li>
+                                <li class="disabled"><a href="#">Nuno Ramos</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Profile</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Sign Out</a></li>
+                            </ul>
+                    </div>
                 </li>
             </ul>
         </div>
