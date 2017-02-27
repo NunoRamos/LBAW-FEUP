@@ -40,21 +40,26 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <!--<button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
-                            data-target="#sign-in-modal">Sign In
-                    </button>-->
-                    <div class="dropdown">
-                            <img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style" data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">
+                    {$logged_in=true}
+                    {if $logged_in}
+                        <div class="dropdown">
+                            <img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
+                                 data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">
                             <ul class="dropdown-menu menu-spot">
-                                <li class="disabled"><a href="#">Sign in as</a></li>
-                                <li class="disabled"><a href="#">Nuno Ramos</a></li>
+                                <li><span>Signed in as</span></li>
+                                <li><span><strong>Nuno Ramos</strong></span></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Profile</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Settings</a></li>
                                 <li><a href="#">Sign Out</a></li>
                             </ul>
-                    </div>
+                        </div>
+                    {else}
+                        <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                                data-target="#sign-in-modal">Sign In
+                        </button>
+                    {/if}
                 </li>
             </ul>
         </div>
