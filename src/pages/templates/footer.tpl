@@ -1,4 +1,4 @@
-</div>
+    </div>
 
 <div class="container-fluid col-xs-12 footer-info-centered">
     <div class="">
