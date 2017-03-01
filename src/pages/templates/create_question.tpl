@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-xs-12 col-sm-2 control-label" for="question-text">Question</label>
+            <label id="question-text-label" class="col-xs-12 col-sm-2 control-label" for="question-text">Question</label>
             <div class="col-xs-12 col-sm-9">
                 <textarea class="form-control" id="question-text" rows="8"></textarea>
             </div>
