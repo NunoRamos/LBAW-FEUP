@@ -9,20 +9,29 @@
             </ul>
         </div>
         <div class="tab-content panel-body">
-            <div class="tab-pane fade in active" id="admin-user-search">
-                <h4 class="">Search for a User</h4>
-                <form action="">
-                    <div class="input-group form-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search"/>
-                        <span class="input-group-btn">
+            <div class="tab-pane fade in active container" id="admin-user-search">
+                <h4 class="col-xs-12">Search for a User:</h4>
+                <div class="col-xs-12 col-sm-12 col-md-8">
+                    <form action="">
+                        <div class="input-group form-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search"/>
+                            <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
                         </span>
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="tab-pane fade" id="admin-tags-management">
-                <h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
+                <h4>Suggested Tabs:</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">tag</li>
+                    <li class="list-group-item">tag</li>
+                    <li class="list-group-item">tag</li>
+                    <li class="list-group-item">tag</li>
+                    <li class="list-group-item">tag</li>
+                </ul>
             </div>
         </div>
     </div>
