@@ -42,7 +42,7 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Profile</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Settings</a></li>
+                        <li><a href="settings_page.php">Settings</a></li>
                         <li><a href="#">Sign Out</a></li>
                     </ul>
                 </li>
@@ -61,73 +61,6 @@
                 </li>
             {/if}
         </ul>
-        <!--
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#navbar" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <a class="navbar-brand" href="../index.php">Reply Planet</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar">
-            <ul class="nav navbar-nav">
-                {if $smarty.server.SCRIPT_NAME !== "/pages/search_results.php"}
-                    <li>
-                        <form class="navbar-form" action="search_results.php">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control full-width" placeholder="Search"/>
-                                <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i
-                                    class="glyphicon glyphicon-search"></i></button>
-                    </span>
-                            </div>
-                        </form>
-                    </li>
-                {/if}
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-
-                <li>
-
-                    {$logged_in=true}
-                    {if $logged_in}
-                        <div class="dropdown">
-                            <img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
-                                 data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">
-                            <ul class="dropdown-menu menu-spot">
-                                <li><span>Signed in as</span></li>
-                                <li><span><strong>Nuno Ramos</strong></span></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Settings</a></li>
-                                <li><a href="#">Sign Out</a></li>
-                            </ul>
-                        </div>
-                    {else}
-                        <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
-                                data-target="#sign-in-modal">Sign In
-                        </button>
-                    {/if}
-                    <div class="dropdown">
-                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="../notifications.php">
-                            <i class="glyphicon glyphicon-bell"></i>
-                        </a>
-                        {*<img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
-                             data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">*}
-
-
-                    </div>
-                </li>
-
-
-            </ul>
-        </div>
-        -->
     </div>
 </nav>
 
