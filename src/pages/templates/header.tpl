@@ -34,7 +34,7 @@
             {$logged_in=true}
             {if $logged_in}
                 <li class="pull-right dropdown">
-                    <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right"
+                    <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right image-padding"
                          data-toggle="dropdown" src="../img/user-default.png" alt="User Image">
                     <ul class="dropdown-menu dropdown-responsive">
                         <li class="hidden-xs"><span>Signed in as</span></li>
@@ -45,6 +45,11 @@
                         <li><a href="settings_page.php">Settings</a></li>
                         <li><a href="#">Sign Out</a></li>
                     </ul>
+                </li>
+                <li class="pull-right">
+                    <a  role="button" href="create_question.php">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </a>
                 </li>
                 <li class="pull-right">
                     <a id="dLabel" role="button" href="../notifications.php">
