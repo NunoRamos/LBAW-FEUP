@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-<div>
+<div class="panel panel-default">
     Batard
 </div>
 
