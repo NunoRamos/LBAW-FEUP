@@ -1,3 +1,4 @@
 $(document).ready(function () {
-    $('#tags-select-create-question').select2();
+    $('#question-tags').select2();
+    $('#question-text').trumbowyg();
 });
