@@ -40,14 +40,14 @@
                         <li class="hidden-xs"><span>Signed in as</span></li>
                         <li class="hidden-xs"><span><strong>Nuno Ramos</strong></span></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Profile</a></li>
+                        <li><a href="profile_page.php">Profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="settings_page.php">Settings</a></li>
                         <li><a href="#">Sign Out</a></li>
                     </ul>
                 </li>
                 <li class="pull-right">
-                    <a id="dLabel" role="button" href="../notifications.php">
+                    <a id="dLabel" role="button" href="notifications_page.php">
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
                     {*<img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
