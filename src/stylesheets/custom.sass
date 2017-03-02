@@ -15,9 +15,6 @@ body
   font-size: 20px
   margin: 5px 0
 
-.question-text
-  margin: 5px
-
 .question-author
   font-size: 10px
 
@@ -72,9 +69,6 @@ body
 
 .answer-date
   font-size: 10px
-
-.answer-div
-  margin-bottom: 10px
 
 .leave-answer-text
   font-size: 20px
@@ -132,8 +126,14 @@ hr.divider
 .center-text
   text-align: center
 
+.small-bottom-margin
+  margin-bottom: 5px
+
 .no-side-margin
   margin-left: 0
+  margin-right: 0
+
+.no-right-margin
   margin-right: 0
 
 .inline
@@ -159,13 +159,7 @@ hr.divider
   .modal-dialog
     width: 500px
 
-//create_question page
-.label-style
-  padding: 0.5em
-
 #footer
-  //position: absolute
-  //bottom: 0
   width: 100%
   padding: 2em
   margin-top: 25px
@@ -180,4 +174,24 @@ hr.divider
 
 .image-padding
   margin-left: 1em
+
+.text-align-right
+  text-align: right
+
+a.no-style
+  text-decoration: none
+  color: $text-color
+
+@media (max-width: $screen-xs-max)
+  .text-align-left-xs
+    .align-left-xs
+      text-align: left
+
+  .pull-left-xs
+    float: left !important
+
+//No gutter cols
+.no-gutter > [class*='col-']
+  padding-right: 0
+  padding-left: 0
 
