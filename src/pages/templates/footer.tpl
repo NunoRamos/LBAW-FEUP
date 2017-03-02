@@ -5,11 +5,9 @@
         <p class="">
             <a href="#">Home</a>
             ·
-            <a href="#">About</a>
+            <a href="about_page.php">About Us</a>
             ·
             <a href="#">Faq</a>
-            ·
-            <a href="#">Contact</a>
         </p>
 
         <p>Reply Planet &copy; 2017</p>
