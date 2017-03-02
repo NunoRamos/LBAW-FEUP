@@ -7,7 +7,7 @@
             ·
             <a href="about_page.php">About Us</a>
             ·
-            <a href="#">Faq</a>
+            <a href="#">FAQ</a>
         </p>
 
         <p>Reply Planet &copy; 2017</p>

@@ -35,7 +35,8 @@
                 <div class="well">
                     <img class="img-responsive img-circle our-team-img center-block large-bottom-margin"
                          src="https://scontent.flis7-1.fna.fbcdn.net/v/t1.0-9/11011001_879061538851804_4495432161306348525_n.jpg?oh=19944a99b2fb0efad4df1573c5121fdb&oe=59393396">
-                    <span class="text-center">Bernardo Belchior</span>
+                    <span class="glyphicon glyphicon-user small-right-margin"></span><span class="text-center ">Bernardo Belchior</span>
+                    <br> <span class="glyphicon glyphicon-envelope small-right-margin"></span><span class="text-center">up201405381@fe.up.pt</span>
                 </div>
             </div>
 
@@ -43,7 +44,8 @@
                 <div class="well">
                     <img class="img-responsive img-circle our-team-img center-block large-bottom-margin"
                          src="https://scontent.flis7-1.fna.fbcdn.net/v/t1.0-9/13680786_1282532241776852_1738195604531669386_n.jpg?oh=adc1ed1f8ca91b090f3f1d2f32591adb&oe=593F1D58">
-                    <span>Joao Gomes</span>
+                    <span class="glyphicon glyphicon-user small-right-margin"></span><span>Joao Gomes</span>
+                    <br> <span class="glyphicon glyphicon-envelope small-right-margin"></span><span class="text-center">up201403275@fe.up.pt</span>
                 </div>
             </div>
 
@@ -51,7 +53,8 @@
                 <div class="well">
                     <img class="img-responsive img-circle our-team-img center-block large-bottom-margin"
                          src="https://scontent.flis7-1.fna.fbcdn.net/v/t1.0-9/14925287_1240230119372214_4693466882515253009_n.jpg?oh=cf8be0f7dd12c17fb55837480467cb58&oe=593EA9E3">
-                    <span>Nuno Ramos</span>
+                    <span class="glyphicon glyphicon-user small-right-margin"></span> <span>Nuno Ramos</span>
+                    <br> <span class="glyphicon glyphicon-envelope small-right-margin"></span><span class="text-center">up201405498@fe.up.pt</span>
                 </div>
             </div>
 
@@ -59,7 +62,8 @@
                 <div class="well">
                     <img class="img-responsive img-circle our-team-img center-block large-bottom-margin"
                          src="https://scontent.flis7-1.fna.fbcdn.net/v/t1.0-9/13620326_1304098202951483_3281202136950473840_n.jpg?oh=22198cc7e22d10499c100508191f46e7&oe=59377871">
-                    <span>Vasco Ribeiro</span>
+                    <span class="glyphicon glyphicon-user small-right-margin"></span> <span>Vasco Ribeiro</span>
+                    <br> <span class="glyphicon glyphicon-envelope small-right-margin"></span><span class="text-center">up201402723@fe.up.pt</span>
                 </div>
             </div>
         </div>
