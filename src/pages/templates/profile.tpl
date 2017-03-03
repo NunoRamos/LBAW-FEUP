@@ -2,29 +2,30 @@
 
 <div class="container">
     <div class="row row-centered">
-        <div class="col-sm-12 well">
+        <div class="col-sm-12 col-xs-12 well">
 
-            <div class="col-sm-3"><img src="../img/user-default.png" width="200em" height="200em" class="img-circle img-responsive">
+            <div class="col-sm-3"><img src="../img/user-default.png" width="200em" height="200em" class="img-circle img-responsive img-profile">
             </div>
-            <div class="col-sm-9">
-                <h1><strong>João Gomes</strong><a href="#" class="btn btn-primary btn-danger pull-right    ">Ban User</a>
+            <div class="col-sm-9 col-xs-12">
+                <h1 class="name-center"><strong>João Gomes</strong>
+                    <a href="#" class="btn btn-primary btn-danger button-right img-profile">Ban User</a>
             </div>
 
-            <div class="col-sm-8 col-xs-8 divider">
-                <div class="col-xs-4 col-sm-4 emphasis">
-                    <h2><strong> 20,7K </strong></h2>
+            <div class="col-sm-8 col-xs-12 divider">
+                <div class="col-xs-4 col-sm-4 emphasis text-center">
+                    <h2><strong>200</strong></h2>
                     <p>
                         <small>Followers</small>
                     </p>
                 </div>
-                <div class="col-xs-4 col-sm-4 emphasis">
+                <div class="col-xs-4 col-sm-4 emphasis text-center">
                     <h2><strong>245</strong></h2>
                     <p>
                         <small>Questions</small>
                     </p>
 
                 </div>
-                <div class="col-xs-4 col-sm-4 emphasis">
+                <div class="col-xs-4 col-sm-4 emphasis text-center">
                     <h2><strong>43</strong></h2>
                     <p>
                         <small>Answers</small>
