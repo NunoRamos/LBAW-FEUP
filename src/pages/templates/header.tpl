@@ -41,6 +41,7 @@
                         <li class="hidden-xs"><span><strong>Nuno Ramos</strong></span></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="profile_page.php">Profile</a></li>
+                        <li><a href="admin_page.php">Admin Page</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="settings_page.php">Settings</a></li>
                         <li><a href="#">Sign Out</a></li>

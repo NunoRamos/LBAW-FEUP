@@ -3,10 +3,10 @@
         {include file="rating.tpl"}
     </div>
     <div class="col-xs-11">
-        <div class="question-title col-xs-12 col-sm-9">{$content["title"]}</div>
-        <div class="col-xs-12 col-sm-3 text-align-right no-gutter text-align-left-xs">
-            <span class="col-xs-6 col-sm-12 align-left-xs">{$content["author"]}</span>
-            <span class="col-xs-6 col-sm-12">{$content["date"]}</span>
+        <div class="col-xs-12">
+            <a class="small-text" href="profile_page.php"><span>{$content["author"]}</span></a>
+            <span class="small-text">| {$content["date"]}</span>
         </div>
+        <span class="large-text col-xs-12">{$content["title"]}</span>
     </div>
 </div>

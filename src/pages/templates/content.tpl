@@ -6,8 +6,8 @@
         <div class="col-xs-11 no-gutter">
             <div class="col-xs-11 no-gutter">
                 <div class="col-xs-12 text-left">
-                    <a class="answer-author" href="#">{$content["author"]}</a>
-                    <span class="answer-date">| {$content["date"]}</span>
+                    <a class="small-text" href="#">{$content["author"]}</a>
+                    <span class="small-text">| {$content["date"]}</span>
                 </div>
                 <div>
                     {$content["text"]}
