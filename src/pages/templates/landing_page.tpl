@@ -9,7 +9,7 @@
             ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
             {foreach $questions as $content}
                 <a href="question_page.php" class="list-group-item">
-                    {include file="question_overview.tpl.tpl"}
+                    {include file="question_overview.tpl"}
                 </a>
             {/foreach}
         </div>
