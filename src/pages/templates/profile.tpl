@@ -9,6 +9,9 @@
             <div class="col-xs-4">
                 <h1><strong>João Gomes</strong></h1>
             </div>
+            <div class="col-md-5">
+                <a href="#" class="btn btn-primary btn-danger pull-right">Ban User</a>
+            </div>
             <div class="col-xs-8 divider">
                 <div class="col-xs-4 col-sm-4 emphasis">
                     <h2><strong> 20,7K </strong></h2>
