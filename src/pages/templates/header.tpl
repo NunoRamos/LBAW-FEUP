@@ -37,6 +37,7 @@
                     <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right image-padding"
                          data-toggle="dropdown" src="../img/user-default.png" alt="User Image">
                     <ul class="dropdown-menu dropdown-responsive">
+
                         <li class="hidden-xs"><span>Signed in as</span></li>
                         <li class="hidden-xs"><span><strong>Nuno Ramos</strong></span></li>
                         <li role="separator" class="divider"></li>
@@ -52,7 +53,8 @@
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-responsive notification-dropdown">
-                        <li role="separator" class="visible-xs divider"></li>
+                        <li class="dropdown-header">Notifications</li>
+                        <li role="separator" class="divider"></li>
                         <li><a href="notifications_page.php"><span>Dave Lister commented on DWARF-13 - Maintenance</span></a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a></li>
