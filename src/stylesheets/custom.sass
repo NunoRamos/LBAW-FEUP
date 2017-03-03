@@ -56,15 +56,11 @@ body
   .notification-dropdown
     width: 100%
 
-
 #sign-in-image
   max-height: 30px
   cursor: pointer
 
 @media (max-width: $screen-xs-max)
-  ul.nav.navbar-nav > li
-    display: inline-block
-
   .navbar-nav .dropdown.open .dropdown-responsive.dropdown-menu
     position: fixed
     left: 0
@@ -165,6 +161,10 @@ img.our-team-img
 .no-right-margin
   margin-right: 0
 
+
+.medium-left-padding
+  padding-left: 15px
+
 .inline
   display: inline
 
@@ -204,26 +204,27 @@ img.our-team-img
 .image-padding
   margin-left: 1em
 
-.text-align-right
-  text-align: right
-
 a.no-style
   text-decoration: none
   color: $text-color
-
-@media (max-width: $screen-xs-max)
-  .text-align-left-xs
-    .align-left-xs
-      text-align: left
-
-  .pull-left-xs
-    float: left !important
 
 //No gutter cols
 .no-gutter > [class*='col-']
   padding-right: 0
   padding-left: 0
 
-.stick-to-bottom
-  position: relative
-  bottom: 0
+.inline
+  display: inline-block
+
+@media (max-width: $screen-xs-max)
+  .full-screen-xs
+    padding-left: 0
+    padding-right: 0
+
+    & > div.panel
+      border-right: 0
+      border-left: 0
+
+      & > div.panel-body
+        padding-right: 0
+        padding-left: 0
