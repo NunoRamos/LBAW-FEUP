@@ -2,17 +2,15 @@
 
 <div class="container">
     <div class="row row-centered">
-        <div class="col-md-12 well">
+        <div class="col-sm-12 well">
 
-            <div class="col-md-3"><img src="../img/user-default.png" width="200em" height="200em" class="img-circle">
+            <div class="col-sm-3"><img src="../img/user-default.png" width="200em" height="200em" class="img-circle img-responsive">
             </div>
-            <div class="col-xs-4">
-                <h1><strong>João Gomes</strong></h1>
+            <div class="col-sm-9">
+                <h1><strong>João Gomes</strong><a href="#" class="btn btn-primary btn-danger pull-right    ">Ban User</a>
             </div>
-            <div class="col-md-5">
-                <a href="#" class="btn btn-primary btn-danger pull-right">Ban User</a>
-            </div>
-            <div class="col-xs-8 divider">
+
+            <div class="col-sm-8 col-xs-8 divider">
                 <div class="col-xs-4 col-sm-4 emphasis">
                     <h2><strong> 20,7K </strong></h2>
                     <p>
@@ -38,7 +36,7 @@
 
     </div>
     <div class="row row-centered">
-        <div class="col-md-3">
+        <div class="col-sm-4 ">
             <div class="panel panel-default ">
                 <div class="panel-heading center-text">
                     <h1 class="panel-title">Bio</h1>
@@ -56,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-sm-8">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
