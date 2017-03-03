@@ -46,17 +46,24 @@
                         <li><a href="#">Sign Out</a></li>
                     </ul>
                 </li>
-                <li class="pull-right">
-                    <a id="dLabel" role="button" href="notifications_page.php">
+                <li class="pull-right dropdown">
+                    <a id="dLabel" role="button" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
-                    {*<img class="pull-right dropdown-toggle img-circle navbar-btn sign-in-btn-style"
-                         data-toggle="dropdown" src="../img/user-default.png" width="10%" alt="User Image">*}
+                    <ul class="notification dropdown-menu dropdown-responsive">
+                        <li><a href="notifications_page.php">Dave Lister commented on DWARF-13 - Maintenance</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="notifications_page.php">Nuno Ramos liked your comment on DWARF-13 - Maintenance</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="notifications_page.php">Dave Lister liked DWARF-13 - Maintenance</a></li>
+
+                    </ul>
                 </li>
                 <li class="pull-right">
                     <a  role="button" href="create_question.php">
                         <i class="glyphicon glyphicon-plus"></i>
                     </a>
+
                 </li>
             {else}
                 <li class="pull-right">
