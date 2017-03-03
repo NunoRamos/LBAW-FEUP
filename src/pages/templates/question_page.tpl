@@ -40,9 +40,9 @@
             <h3 class="panel-title">Suggested Tags</h3>
         </div>
         <div class="panel-body list-group">
-            <a href="#" class="list-group-item">Android</a>
-            <a href="#" class="list-group-item">iOS</a>
-            <a href="#" class="list-group-item">Windows Phone</a>
+            <a href="search_results.php" class="list-group-item">Android</a>
+            <a href="search_results.php" class="list-group-item">iOS</a>
+            <a href="search_results.php" class="list-group-item">Windows Phone</a>
         </div>
     </div>
 </div>

@@ -70,11 +70,15 @@
             </div>
         </form>
 
-        {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rate" => "5"],
-        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rate" => "-2"]]}
-        {foreach $questions as $question}
-            {include file="question.tpl"}
-        {/foreach}
+        {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
+        <div class="panel panel-default">
+            {foreach $questions as $content}
+                <div class="list-group-item anchor clickable" href="question_page.php">
+                    {include file="question_overview.tpl"}
+                </div>
+            {/foreach}
+        </div>
     </div>
 </div>
 
@@ -83,3 +87,4 @@
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
 <script src="javascript/search_results_page.js"></script>
+<script src="javascript/clickable_div.js"></script>
