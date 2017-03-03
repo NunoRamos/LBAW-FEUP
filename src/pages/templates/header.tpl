@@ -93,7 +93,7 @@
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" placeholder="Password">
                         </div>
-                        <button type="submit" class="btn btn-primary col-xs-12">Sign In</button>
+                        <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12">
                         <div class="form-group input-group">
@@ -112,7 +112,7 @@
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" placeholder="Repeat your password">
                         </div>
-                        <button type="submit" class="btn btn-primary col-xs-12">Sign Up</button>
+                        <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
                 </div>
             </div>
