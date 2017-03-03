@@ -63,16 +63,14 @@
             </div>
 
             <div class="list-group">
-                {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rate" => "5"],
-                ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rate" => "-2"]]}
-                {foreach $questions as $question}
-                    {include file="question.tpl"}
+                {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+                ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
+                {foreach $questions as $content}
+                    {include file="question_overview.tpl"}
                 {/foreach}
             </div>
         </div>
 
     </div>
-
-</div>
 </div>
 {include file="footer.tpl"}

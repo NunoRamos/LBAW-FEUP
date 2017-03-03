@@ -50,20 +50,19 @@
                     <a id="dLabel" role="button" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
-                    <ul class="notification dropdown-menu dropdown-responsive">
-                        <li><a href="notifications_page.php">Dave Lister commented on DWARF-13 - Maintenance</a></li>
+                    <ul class="dropdown-menu dropdown-responsive notification-dropdown">
+                        <li role="separator" class="visible-xs divider"></li>
+                        <li><a href="notifications_page.php"><span>Dave Lister commented on DWARF-13 - Maintenance</span></a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php">Nuno Ramos liked your comment on DWARF-13 - Maintenance</a></li>
+                        <li><a href="notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php">Dave Lister liked DWARF-13 - Maintenance</a></li>
-
+                        <li><a href="notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a></li>
                     </ul>
                 </li>
                 <li class="pull-right">
-                    <a  role="button" href="create_question.php">
+                    <a role="button" href="create_question.php">
                         <i class="glyphicon glyphicon-plus"></i>
                     </a>
-
                 </li>
             {else}
                 <li class="pull-right">
@@ -100,7 +99,7 @@
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" placeholder="Password">
                         </div>
-                        <button type="submit" class="btn btn-primary col-xs-12">Sign In</button>
+                        <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12">
                         <div class="form-group input-group">
@@ -119,7 +118,7 @@
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" placeholder="Repeat your password">
                         </div>
-                        <button type="submit" class="btn btn-primary col-xs-12">Sign Up</button>
+                        <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
                 </div>
             </div>

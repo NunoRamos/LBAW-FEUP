@@ -3,11 +3,9 @@
 <div id="footer" class="container-fluid">
     <div>
         <p class="">
-            <a href="#">Home</a>
+            <a href="landing_page.php">Home</a>
             ·
             <a href="about_page.php">About Us</a>
-            ·
-            <a href="#">FAQ</a>
         </p>
 
         <p>Reply Planet &copy; 2017</p>
