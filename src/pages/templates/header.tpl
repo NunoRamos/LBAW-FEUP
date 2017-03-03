@@ -56,14 +56,12 @@
                         <li><a href="notifications_page.php">Nuno Ramos liked your comment on DWARF-13 - Maintenance</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="notifications_page.php">Dave Lister liked DWARF-13 - Maintenance</a></li>
-
                     </ul>
                 </li>
                 <li class="pull-right">
-                    <a  role="button" href="create_question.php">
+                    <a role="button" href="create_question.php">
                         <i class="glyphicon glyphicon-plus"></i>
                     </a>
-
                 </li>
             {else}
                 <li class="pull-right">
