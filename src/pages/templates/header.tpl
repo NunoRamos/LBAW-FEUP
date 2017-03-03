@@ -50,12 +50,13 @@
                     <a id="dLabel" role="button" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
-                    <ul class="notification dropdown-menu dropdown-responsive">
-                        <li><a href="notifications_page.php">Dave Lister commented on DWARF-13 - Maintenance</a></li>
+                    <ul class="dropdown-menu dropdown-responsive notification-dropdown">
+                        <li role="separator" class="visible-xs divider"></li>
+                        <li><a href="notifications_page.php"><span>Dave Lister commented on DWARF-13 - Maintenance</span></a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php">Nuno Ramos liked your comment on DWARF-13 - Maintenance</a></li>
+                        <li><a href="notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php">Dave Lister liked DWARF-13 - Maintenance</a></li>
+                        <li><a href="notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a></li>
                     </ul>
                 </li>
                 <li class="pull-right">

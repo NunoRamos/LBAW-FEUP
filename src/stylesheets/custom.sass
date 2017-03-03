@@ -47,13 +47,21 @@ body
   white-space: nowrap
 // prevent links from randomly breaking onto new lines
 
-.notification
-  min-width: 400px
+.notification-dropdown
+  width: 350px
+  span, p
+    white-space: normal
+
+@media (max-width: $screen-xs-max)
+  .notification-dropdown
+    width: 100%
+
+
 #sign-in-image
   max-height: 30px
   cursor: pointer
 
-@media (max-width: 767px)
+@media (max-width: $screen-xs-max)
   ul.nav.navbar-nav > li
     display: inline-block
 
