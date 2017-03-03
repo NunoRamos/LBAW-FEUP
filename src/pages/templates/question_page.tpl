@@ -1,39 +1,24 @@
 {include file="header.tpl"}
 <link rel="stylesheet" href="../../trumbowyg/ui/trumbowyg.min.css">
 
-{$question=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
-"rate" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?"]}
+{$content=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
+"rating" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?", "indentation" => "0"]}
 
 <div class="container col-xs-12 col-md-8">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{$question["title"]}</h3>
+            <h3 class="panel-title">{$content["title"]}</h3>
         </div>
         <div class="panel-body">
-            <div class="list-group small-bottom-margin">
-                <div class="list-group-item">
-                    <div class="row no-gutter no-right-margin">
-                        <div class="col-xs-2 col-sm-1 center-text">
-                            <div class="glyphicon glyphicon-triangle-top" aria-hidden="true"></div>
-                            <div>{$question["rate"]}</div>
-                            <div class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></div>
-                        </div>
-                        <div class="col-xs-10 col-sm-11 no-gutter">
-                            <div class="question-text col-xs-12 col-sm-9">{$question["text"]}</div>
-                            <div class="col-xs-12 col-sm-3 text-align-right text-align-left-xs no-gutter">
-                                <a class="col-xs-6 col-sm-12 pull-right pull-left-xs align-left-xs" href="#">{$question["author"]}</a>
-                                <span class="col-xs-6 col-sm-12 pull-right">{$question["date"]}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="small-bottom-margin">
+                {include file="content.tpl"}
             </div>
 
-            {$answers=[["id" => "1", "text" => "Deixa de ser um noob", "date" => "20/02/2017","author" => "Bernardo Belchior", "indentation" => "1", "rate" => "5"],
-            ["id" => "2", "text" => "Tambem nao precisas de ficar chateado", "date" => "25/02/2017","author" => "Nuno Ramos", "indentation" => "2", "rate" => "-25"],
-            ["id" => "3", "text" => "Isso é trivial, meu caro", "date" => "20/02/2017","author" => "João Gomes", "indentation" => "1", "rate" => "-10"]]}
-            {foreach $answers as $answer}
-                {include file="answer.tpl"}
+            {$answers=[["id" => "1", "text" => "Deixa de ser um noob", "date" => "20/02/2017","author" => "Bernardo Belchior", "indentation" => "1", "rating" => "5"],
+            ["id" => "2", "text" => "Tambem nao precisas de ficar chateado", "date" => "25/02/2017","author" => "Nuno Ramos", "indentation" => "2", "rating" => "-25"],
+            ["id" => "3", "text" => "Isso é trivial, meu caro", "date" => "20/02/2017","author" => "João Gomes", "indentation" => "1", "rating" => "-10"]]}
+            {foreach $answers as $content}
+                {include file="content.tpl"}
             {/foreach}
             <div class="col-xs-offset-1">
                 <div class="leave-answer-text">Leave your answer</div>
@@ -45,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="container col-xs-12 col-md-4 visible-lg visible-md" data-toogle="collapse">
+<div class="container col-xs-12 col-md-4">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Suggested Tags</h3>
