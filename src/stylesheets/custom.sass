@@ -6,6 +6,7 @@
   max-width: 1200px
   margin-right: auto
   margin-left: auto
+  padding: 0
 
 body
   margin-top: 70px
@@ -46,16 +47,20 @@ body
   white-space: nowrap
 // prevent links from randomly breaking onto new lines
 
-.notification
-  min-width: 400px
+.notification-dropdown
+  width: 350px
+  span, p
+    white-space: normal
+
+@media (max-width: $screen-xs-max)
+  .notification-dropdown
+    width: 100%
+
 #sign-in-image
   max-height: 30px
   cursor: pointer
 
-@media (max-width: 767px)
-  ul.nav.navbar-nav > li
-    display: inline-block
-
+@media (max-width: $screen-xs-max)
   .navbar-nav .dropdown.open .dropdown-responsive.dropdown-menu
     position: fixed
     left: 0
@@ -156,6 +161,10 @@ img.our-team-img
 .no-right-margin
   margin-right: 0
 
+
+.medium-left-padding
+  padding-left: 15px
+
 .inline
   display: inline
 
@@ -195,20 +204,9 @@ img.our-team-img
 .image-padding
   margin-left: 1em
 
-.text-align-right
-  text-align: right
-
 a.no-style
   text-decoration: none
   color: $text-color
-
-@media (max-width: $screen-xs-max)
-  .text-align-left-xs
-    .align-left-xs
-      text-align: left
-
-  .pull-left-xs
-    float: left !important
 
 //No gutter cols
 .no-gutter > [class*='col-']
@@ -219,8 +217,23 @@ a.no-style
   position: relative
   bottom: 0
 
+.inline
+  display: inline-block
+
+@media (max-width: $screen-xs-max)
+  .full-screen-xs
+    padding-left: 0
+    padding-right: 0
+
+    & > div.panel
+      border-right: 0
+      border-left: 0
+
+      & > div.panel-body
+        padding-right: 0
+        padding-left: 0
+
 //Admin page
 @media (max-width: $screen-sm)
   .search-text-size
-    font-size: 12px
- 
+    font-size: 12px 
