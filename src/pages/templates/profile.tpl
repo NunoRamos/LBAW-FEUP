@@ -46,17 +46,16 @@
               <ul class="list-group">
                 <li class="list-group-item padding-bio">
                   <cite title="Porto, Portugal"><i class="glyphicon glyphicon-map-marker">
-                          </i>Porto, Portugal</cite>
+                          </i>              Porto, Portugal</cite>
                 </li>
                <li class="list-group-item padding-bio">
-                    <i class="glyphicon glyphicon-envelope"></i> gomes@example.com
+                    <i class="glyphicon glyphicon-envelope"></i>              gomes@example.com
 
                   <li class="list-group-item padding-bio">
                       <i class="glyphicon glyphicon-globe"></i>
-                      <a href="http://www.jquery2dotnet.com">
-                          www.jquery2dotnet.com</a> </li>
+                      <a href="http://www.jquery2dotnet.com">              www.jquery2dotnet.com</a> </li>
                   <li class="list-group-item padding-bio">
-                    <i class="glyphicon glyphicon-gift"></i>June 02, 1996</li>
+                    <i class="glyphicon glyphicon-gift"></i>              June 02, 1996</li>
               </ul>
             </div>
         </div>
