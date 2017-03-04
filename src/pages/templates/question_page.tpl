@@ -3,14 +3,19 @@
 
 {$content=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
 "rating" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?", "indentation" => "0"]}
+{$is_moderator=true}
 
-<div class="container col-xs-12 col-md-8">
+<div class="container col-xs-12 col-md-8 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{$content["title"]}</h3>
+            <h3 class="panel-title inline">{$content["title"]}</h3>
+            {if $is_moderator}
+                <button class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-trash"></span>
+                </button>
+            {/if}
         </div>
         <div class="panel-body">
-            <div class="small-bottom-margin">
+            <div class="small-bottom-margin medium-left-padding">
                 {include file="content.tpl"}
             </div>
 
@@ -20,10 +25,9 @@
             {foreach $answers as $content}
                 {include file="content.tpl"}
             {/foreach}
-            <div class="col-xs-offset-1">
-                <div class="leave-answer-text">Leave your answer</div>
+            <div class="col-xs-12">
                 <form class="form-horizontal">
-                    <textarea id="reply-text" class="form-control" rows="3" placeholder="Help Me"></textarea>
+                    <textarea id="reply-text" class="form-control" rows="3" placeholder="Answer"></textarea>
                     <input class="btn btn-default submit-answer-btn" type="submit" value="Post Answer">
                 </form>
             </div>
@@ -36,9 +40,9 @@
             <h3 class="panel-title">Suggested Tags</h3>
         </div>
         <div class="panel-body list-group">
-            <a href="#" class="list-group-item">Android</a>
-            <a href="#" class="list-group-item">iOS</a>
-            <a href="#" class="list-group-item">Windows Phone</a>
+            <a href="search_results.php" class="list-group-item">Android</a>
+            <a href="search_results.php" class="list-group-item">iOS</a>
+            <a href="search_results.php" class="list-group-item">Windows Phone</a>
         </div>
     </div>
 </div>

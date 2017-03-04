@@ -12,11 +12,11 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span>Result Type</span>
-                <button class="btn btn-default btn-xs pull-right visible-xs" data-toggle="collapse"
+                <button class="btn btn-default btn-xs pull-right" data-toggle="collapse"
                         data-target=".results-collapse">
                     <span class="collapse in results-collapse no-animation"><i
                                 class="glyphicon glyphicon-resize-small"></i></span>
-                    <span class="collapse results-collapse no-animation"><i class="glyphicon glyphicon-resize-full"></i></span>
+                    <span class="collapse results-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
             </div>
             <div class="list-group collapse in results-collapse">
                 <button type="button" class="list-group-item">Questions</button>
@@ -28,9 +28,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span>Filters</span>
-                <button class="btn btn-default btn-xs pull-right visible-xs" data-toggle="collapse"
+                <button class="btn btn-default btn-xs pull-right" data-toggle="collapse"
                         data-target=".filters-collapse">
-                    <span class="collapse in filters-collapse no-animation"><i
+                    <span class="collapse in filters-collapse"><i
                                 class="glyphicon glyphicon-resize-small"></i></span>
                     <span class="collapse filters-collapse no-animation"><i
                                 class="glyphicon glyphicon-resize-full"></i></span>
@@ -70,11 +70,50 @@
             </div>
         </form>
 
-        {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rate" => "5"],
-        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rate" => "-2"]]}
-        {foreach $questions as $question}
-            {include file="question.tpl"}
-        {/foreach}
+        {$questions=[
+        ["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
+        ["id" => "3", "title" => "Can't Log In", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "4", "title" => "My lawnmower has stopped working!", "author" => "Nuno Ramos", "date" => "20/03/2017", "rating" => "5"],
+        ["id" => "5", "title" => "How to open a Word file?", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "6", "title" => "I want to know this music", "author" => "Nuno Ramos", "date" => "20/02/2016", "rating" => "5"],
+        ["id" => "7", "title" => "Is Facebook down?", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "8", "title" => "How to plant carrots in Farmville?", "author" => "Vasco Ribeiro", "date" => "12/02/2017", "rating" => "-2"],
+        ["id" => "9", "title" => "Is Fernando Torres dead?", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
+        ["id" => "10", "title" => "What is the best smartphone for 150€?", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
+        ["id" => "11", "title" => "My mouse has stopped working...", "author" => "Vasco Ribeiro", "date" => "13/02/2017", "rating" => "-2"],
+        ["id" => "12", "title" => "My leg hurts", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-23"]
+        ]}
+        <div class="panel panel-default">
+            {for $i=0 to 9}
+                {$content=$questions[$i]}
+                <div class="list-group-item anchor clickable" href="question_page.php">
+                    {include file="question_overview.tpl"}
+                </div>
+            {/for}
+        </div>
+
+        {if count($questions) > 10}
+            <nav aria-label="Page navigation" class="text-center">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        {/if}
     </div>
 </div>
 
@@ -83,3 +122,4 @@
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
 <script src="javascript/search_results_page.js"></script>
+<script src="javascript/clickable_div.js"></script>

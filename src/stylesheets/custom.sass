@@ -1,6 +1,8 @@
 @import "colors"
 @import "bootstrap/variables"
 
+$footer-height: 120px
+
 .wrapper
   width: 100%
   max-width: 1200px
@@ -8,16 +10,25 @@
   margin-left: auto
   padding: 0
 
+html
+  height: 100%
+
 body
   margin-top: 70px
+  position: relative
+  padding-bottom: $footer-height
   min-height: 100%
 
-.question-title
-  font-size: 20px
-  margin: 5px 0
+#footer
+  width: 100%
+  position: absolute
+  bottom: 0
+  padding: 35px
+  height: $footer-height
+  background-color: $navbar-default-bg
+  color: $navbar-default-link-color
+  text-align: center
 
-.question-author
-  font-size: 10px
 
 /******************************
  * Navbar
@@ -56,15 +67,11 @@ body
   .notification-dropdown
     width: 100%
 
-
 #sign-in-image
   max-height: 30px
   cursor: pointer
 
 @media (max-width: $screen-xs-max)
-  ul.nav.navbar-nav > li
-    display: inline-block
-
   .navbar-nav .dropdown.open .dropdown-responsive.dropdown-menu
     position: fixed
     left: 0
@@ -74,12 +81,6 @@ body
 /******************************
  * Question Page
  ******************************/
-
-.answer-author
-  font-size: 10px
-
-.answer-date
-  font-size: 10px
 
 .leave-answer-text
   font-size: 20px
@@ -163,6 +164,14 @@ img.our-team-img
   max-width: 200px
 
 /******************************
+ * Admin Page
+ ******************************/
+
+@media (max-width: $screen-sm)
+  .search-text-size
+    font-size: 12px
+
+/******************************
  * Miscellaneous
  ******************************/
 
@@ -173,11 +182,17 @@ img.our-team-img
 .large-bottom-margin
   margin-bottom: 20px
 
+.medium-bottom-margin
+  margin-bottom: 10px
+
 .small-bottom-margin
   margin-bottom: 5px
 
 .small-right-margin
   margin-right: 5px
+
+.small-left-margin
+  margin-left: 5px
 
 .no-side-margin
   margin-left: 0
@@ -185,6 +200,9 @@ img.our-team-img
 
 .no-right-margin
   margin-right: 0
+
+.medium-left-padding
+  padding-left: 15px
 
 .inline
   display: inline
@@ -209,14 +227,6 @@ img.our-team-img
   .modal-dialog
     width: 500px
 
-#footer
-  width: 100%
-  padding: 2em
-  margin-top: 25px
-  background-color: $navbar-default-bg
-  color: $navbar-default-link-color
-  text-align: center
-
 .align-right
   display: block
   margin-left: auto
@@ -225,20 +235,9 @@ img.our-team-img
 .image-padding
   margin-left: 1em
 
-.text-align-right
-  text-align: right
-
 a.no-style
   text-decoration: none
   color: $text-color
-
-@media (max-width: $screen-xs-max)
-  .text-align-left-xs
-    .align-left-xs
-      text-align: left
-
-  .pull-left-xs
-    float: left !important
 
 //No gutter cols
 .no-gutter > [class*='col-']
@@ -248,3 +247,35 @@ a.no-style
 .stick-to-bottom
   position: relative
   bottom: 0
+
+.inline
+  display: inline-block
+
+@media (max-width: $screen-xs-max)
+  .full-screen-xs
+    padding-left: 0
+    padding-right: 0
+
+    & > div.panel
+      border-right: 0
+      border-left: 0
+
+      & > div.panel-body
+        padding-right: 0
+        padding-left: 0
+
+.small-text
+  font-size: 10px
+
+.large-text
+  font-size: 18px
+
+.clickable
+  cursor: pointer
+
+@media (max-width: $screen-xs-max)
+  .dropdown .dropdown-header
+    color: azure
+
+.no-animation.collapsing
+  display: none
