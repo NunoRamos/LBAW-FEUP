@@ -70,50 +70,50 @@
             </div>
         </form>
 
-        {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
-        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
+        {$questions=[
+        ["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
+        ["id" => "3", "title" => "Can't Log In", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "4", "title" => "My lawnmower has stopped working!", "author" => "Nuno Ramos", "date" => "20/03/2017", "rating" => "5"],
+        ["id" => "5", "title" => "How to open a Word file?", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "6", "title" => "I want to know this music", "author" => "Nuno Ramos", "date" => "20/02/2016", "rating" => "5"],
+        ["id" => "7", "title" => "Is Facebook down?", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+        ["id" => "8", "title" => "How to plant carrots in Farmville?", "author" => "Vasco Ribeiro", "date" => "12/02/2017", "rating" => "-2"],
+        ["id" => "9", "title" => "Is Fernando Torres dead?", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
+        ["id" => "10", "title" => "What is the best smartphone for 150€?", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
+        ["id" => "11", "title" => "My mouse has stopped working...", "author" => "Vasco Ribeiro", "date" => "13/02/2017", "rating" => "-2"],
+        ["id" => "12", "title" => "My leg hurts", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-23"]
+        ]}
         <div class="panel panel-default">
-            {foreach $questions as $content}
+            {for $i=0 to 9}
+                {$content=$questions[$i]}
                 <div class="list-group-item anchor clickable" href="question_page.php">
                     {include file="question_overview.tpl"}
                 </div>
-            {/foreach}
-            {foreach $questions as $content}
-                <div class="list-group-item anchor clickable" href="question_page.php">
-                    {include file="question_overview.tpl"}
-                </div>
-            {/foreach}
-            {foreach $questions as $content}
-                <div class="list-group-item anchor clickable" href="question_page.php">
-                    {include file="question_overview.tpl"}
-                </div>
-            {/foreach}
-            {foreach $questions as $content}
-                <div class="list-group-item anchor clickable" href="question_page.php">
-                    {include file="question_overview.tpl"}
-                </div>
-            {/foreach}
+            {/for}
         </div>
 
-        <nav aria-label="Page navigation" class="text-center">
-            <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        {if count($questions) > 10}
+            <nav aria-label="Page navigation" class="text-center">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        {/if}
     </div>
 </div>
 
