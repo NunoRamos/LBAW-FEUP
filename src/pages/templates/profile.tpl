@@ -1,82 +1,63 @@
 {include file="header.tpl"}
 
-<div class="container">
-    <div class="row row-centered">
-        <div class="col-sm-12 col-xs-12 well">
-
-            <div class="col-sm-3"><img src="../img/user-default.png" width="200em" height="200em"
-                                       class="img-circle img-responsive img-profile">
-            </div>
-            <div class="col-sm-9 col-xs-12">
-                <h1 class="name-center"><strong>João Gomes</strong>
-                    <a href="#" class="btn btn-primary btn-danger button-right img-profile">Ban User</a>
-            </div>
-
-            <div class="col-sm-8 col-xs-12 divider">
-                <div class="col-xs-4 col-sm-4 emphasis text-center">
-                    <h2><strong>200</strong></h2>
-                    <p>
-                        <small>Followers</small>
-                    </p>
-                </div>
-                <div class="col-xs-4 col-sm-4 emphasis text-center">
-                    <h2><strong>245</strong></h2>
-                    <p>
-                        <small>Questions</small>
-                    </p>
-
-                </div>
-                <div class="col-xs-4 col-sm-4 emphasis text-center">
-                    <h2><strong>43</strong></h2>
-                    <p>
-                        <small>Answers</small>
-                    </p>
-                </div>
-            </div>
-
-        </div>
-
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="inline">Profile</h4>
+        <a href="#" class="btn btn-primary btn-danger pull-right">Ban User</a>
     </div>
-    <div class="row row-centered">
-        <div class="col-sm-4 ">
-            <div class="panel panel-default ">
-                <div class="panel-heading center-text">
-                    <h1 class="panel-title">Bio</h1>
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-4">
+            <img class="center-block img-circle img-responsive img-profile" src="../img/user-default.png">
+        </div>
+        <div class="col-xs-12 col-sm-8">
+            <h1 class="large-padding-bottom">Joao Gomes</h1>
+            <div id="bio" class="panel panel-default">
+                <div class="panel-heading">Bio</div>
+                <div class="well no-bottom-margin">
+                    <i class="glyphicon glyphicon-map-marker"> </i> Porto, Portugal<br>
+                    <i class="glyphicon glyphicon-envelope"></i> gomes@example.com<br>
+                    <i class="glyphicon glyphicon-globe"></i> www.jquery2dotnet.com<br>
+                    <i class="glyphicon glyphicon-gift"></i> June 02, 1996
                 </div>
-              <ul class="list-group">
-                <li class="list-group-item padding-bio">
-                  <cite title="Porto, Portugal"><i class="glyphicon glyphicon-map-marker">
-                          </i>              Porto, Portugal</cite>
-                </li>
-               <li class="list-group-item padding-bio">
-                    <i class="glyphicon glyphicon-envelope"></i>              gomes@example.com
-
-                  <li class="list-group-item padding-bio">
-                      <i class="glyphicon glyphicon-globe"></i>
-                      <a href="http://www.jquery2dotnet.com">              www.jquery2dotnet.com</a> </li>
-                  <li class="list-group-item padding-bio">
-                    <i class="glyphicon glyphicon-gift"></i>              June 02, 1996</li>
-              </ul>
             </div>
         </div>
-        <div class="col-sm-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <ul class="nav nav-tabs">
-                        <li><a href="#">Questions</a></li>
-                        <li><a href="#">Answers</a></li>
-                    </ul>
-                </div>
+    </div>
+</div>
 
-                <div class="list-group">
-                    {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
-                    ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
-                    {foreach $questions as $content}
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5>Questions Made</h5>
+            </div>
+            <div class="list-group">
+                {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+                ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
+                {foreach $questions as $content}
+                    <div class="list-group-item anchor clickable" href="question_page.php">
                         {include file="question_overview.tpl"}
-                    {/foreach}
-                </div>
+                    </div>
+                {/foreach}
             </div>
-
         </div>
     </div>
-    {include file="footer.tpl"}
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5>Answers Given</h5>
+            </div>
+            <div class="list-group">
+                {$questions=[["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
+                ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"]]}
+                {foreach $questions as $content}
+                    <div class="list-group-item anchor clickable" href="question_page.php">
+                        {include file="question_overview.tpl"}
+                    </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer.tpl"}
+<script src="javascript/clickable_div.js"></script>
