@@ -1,6 +1,8 @@
 @import "colors"
 @import "bootstrap/variables"
 
+$footer-height: 120px
+
 .wrapper
   width: 100%
   max-width: 1200px
@@ -8,16 +10,25 @@
   margin-left: auto
   padding: 0
 
+html
+  height: 100%
+
 body
   margin-top: 70px
+  position: relative
+  padding-bottom: $footer-height
   min-height: 100%
 
-.question-title
-  font-size: 20px
-  margin: 5px 0
+#footer
+  width: 100%
+  position: absolute
+  bottom: 0
+  padding: 35px
+  height: $footer-height
+  background-color: $navbar-default-bg
+  color: $navbar-default-link-color
+  text-align: center
 
-.question-author
-  font-size: 10px
 
 /******************************
  * Navbar
@@ -195,14 +206,6 @@ img.our-team-img
   .modal-dialog
     width: 500px
 
-#footer
-  width: 100%
-  padding: 2em
-  margin-top: 25px
-  background-color: $navbar-default-bg
-  color: $navbar-default-link-color
-  text-align: center
-
 .align-right
   display: block
   margin-left: auto
@@ -253,6 +256,5 @@ a.no-style
   .dropdown .dropdown-header
     color: azure
 
-.footer-text-center
-  text-align: center
-
+.no-animation.collapsing
+  display: none

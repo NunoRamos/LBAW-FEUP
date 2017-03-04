@@ -12,11 +12,11 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span>Result Type</span>
-                <button class="btn btn-default btn-xs pull-right visible-xs" data-toggle="collapse"
+                <button class="btn btn-default btn-xs pull-right" data-toggle="collapse"
                         data-target=".results-collapse">
                     <span class="collapse in results-collapse no-animation"><i
                                 class="glyphicon glyphicon-resize-small"></i></span>
-                    <span class="collapse results-collapse no-animation"><i class="glyphicon glyphicon-resize-full"></i></span>
+                    <span class="collapse results-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
             </div>
             <div class="list-group collapse in results-collapse">
                 <button type="button" class="list-group-item">Questions</button>
@@ -28,9 +28,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span>Filters</span>
-                <button class="btn btn-default btn-xs pull-right visible-xs" data-toggle="collapse"
+                <button class="btn btn-default btn-xs pull-right" data-toggle="collapse"
                         data-target=".filters-collapse">
-                    <span class="collapse in filters-collapse no-animation"><i
+                    <span class="collapse in filters-collapse"><i
                                 class="glyphicon glyphicon-resize-small"></i></span>
                     <span class="collapse filters-collapse no-animation"><i
                                 class="glyphicon glyphicon-resize-full"></i></span>
@@ -78,7 +78,42 @@
                     {include file="question_overview.tpl"}
                 </div>
             {/foreach}
+            {foreach $questions as $content}
+                <div class="list-group-item anchor clickable" href="question_page.php">
+                    {include file="question_overview.tpl"}
+                </div>
+            {/foreach}
+            {foreach $questions as $content}
+                <div class="list-group-item anchor clickable" href="question_page.php">
+                    {include file="question_overview.tpl"}
+                </div>
+            {/foreach}
+            {foreach $questions as $content}
+                <div class="list-group-item anchor clickable" href="question_page.php">
+                    {include file="question_overview.tpl"}
+                </div>
+            {/foreach}
         </div>
+
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination">
+                <li>
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 
