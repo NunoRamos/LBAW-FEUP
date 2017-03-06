@@ -56,21 +56,25 @@
                     </ul>
                 </li>
                 <li class="pull-right dropdown">
-                    <a id="dLabel" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                    <a id="dLabel" role="button" class="dropdown-toggle small-padding-xs" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-responsive notification-dropdown">
                         <li class="dropdown-header">Notifications</li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php"><span>Dave Lister commented on DWARF-13 - Maintenance</span></a></li>
+                        <li>
+                            <a href="notifications_page.php"><span>Dave Lister commented on DWARF-13 - Maintenance</span></a>
+                        </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a></li>
+                        <li><a href="notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a>
+                        </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a></li>
+                        <li><a href="notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a>
+                        </li>
                     </ul>
                 </li>
                 <li class="pull-right">
-                    <a role="button" href="create_question.php">
+                    <a role="button" class="small-padding-xs" href="create_question.php">
                         <i class="glyphicon glyphicon-plus"></i>
                     </a>
                 </li>
@@ -81,6 +85,11 @@
                     </button>
                 </li>
             {/if}
+            <li class="pull-right">
+                <a role="button" class="small-padding-xs" href="search_results.php">
+                    <i class="glyphicon glyphicon-search"></i>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
