@@ -1,5 +1,5 @@
 {include file="header.tpl"}
-<link rel="stylesheet" href="../../trumbowyg/ui/trumbowyg.min.css">
+<link rel="stylesheet" href="../trumbowyg/ui/trumbowyg.min.css">
 
 {$content=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
 "rating" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?", "indentation" => "0"]}
@@ -34,7 +34,7 @@
         </div>
     </div>
 </div>
-<div class="container col-xs-12 col-md-4">
+<div class="container col-xs-12 col-md-4 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Suggested Tags</h3>
@@ -48,5 +48,5 @@
 </div>
 
 {include file="footer.tpl"}
-<script src="../../trumbowyg/trumbowyg.min.js"></script>
+<script src="../trumbowyg/trumbowyg.min.js"></script>
 <script src="javascript/question_page.js"></script>

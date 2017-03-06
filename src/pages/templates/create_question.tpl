@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/select2/4.0.3/css/select2.min.css"
       integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous">
 <link rel="stylesheet" href="../../stylesheets/select2.css">
-<link rel="stylesheet" href="../../trumbowyg/ui/trumbowyg.min.css">
+<link rel="stylesheet" href="../trumbowyg/ui/trumbowyg.min.css">
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -18,7 +18,8 @@
         </div>
 
         <div class="form-group">
-            <label id="question-text-label" class="col-xs-12 col-sm-2 control-label" for="question-text">Question</label>
+            <label id="question-text-label" class="col-xs-12 col-sm-2 control-label"
+                   for="question-text">Question</label>
             <div class="col-xs-12 col-sm-9">
                 <textarea class="form-control" id="question-text" rows="8"></textarea>
             </div>
@@ -49,5 +50,5 @@
 
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
-<script src="../../trumbowyg/trumbowyg.min.js"></script>
+<script src="../trumbowyg/trumbowyg.min.js"></script>
 <script src="javascript/create_question.js"></script>

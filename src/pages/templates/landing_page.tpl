@@ -1,5 +1,5 @@
 {include file="header.tpl"}
-<div class="container col-xs-12 col-md-8">
+<div class="container col-xs-12 col-md-8 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading panel-style">
             <h3 class="panel-title">Top Questions</h3>
@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<div class="container col-xs-12 col-md-4">
+<div class="container col-xs-12 col-md-4 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Suggested Tags</h3>

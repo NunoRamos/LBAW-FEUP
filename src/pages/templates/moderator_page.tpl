@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-<div class="col-xs-12">
+<div class="col-xs-12 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
             Suggested Tags
