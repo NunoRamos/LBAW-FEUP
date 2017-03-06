@@ -4,7 +4,7 @@
     https://github.com/select2/select2 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/select2/4.0.3/css/select2.min.css"
       integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous">
-<link rel="stylesheet" href="../../stylesheets/select2.css">
+<link rel="stylesheet" href="../stylesheets/select2.css">
 
 <div class="container-fluid">
     <div class="col-xs-12 col-sm-4 col-md-3">
