@@ -85,7 +85,7 @@
                     </button>
                 </li>
             {/if}
-            <li class="pull-right">
+            <li class="pull-right visible-xs">
                 <a role="button" class="small-padding-xs" href="search_results.php">
                     <i class="glyphicon glyphicon-search"></i>
                 </a>
