@@ -2,8 +2,11 @@
 .idea/*
 
 # Smarty Cache
-src/pages/templates_c/*
+src/templates_c/*
 
 # Sass
 *.min.css
 *.min.css.map
+
+# Framework Config
+config/init.php
