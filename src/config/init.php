@@ -1,11 +1,11 @@
 <?php
-session_set_cookie_params(3600, '/~lbaw1612');
+//session_set_cookie_params(3600, '/~lbaw1612');
 session_start();
 
 error_reporting(E_ERROR | E_WARNING); // E_NOTICE by default
 
-$BASE_DIR = '/home/bernardo/Documents/lbaw-feup/src/';
-$BASE_URL = '/proto/';
+$BASE_DIR = '/home/nuno/Documents/GitHub/LBAW-FEUP/src/';
+$BASE_URL = '/';
 
 $conn = new PDO('pgsql:host=dbm.fe.up.pt;dbname=lbaw1612', 'lbaw1612', 'ls84wu43');
 $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -24,9 +24,12 @@ $smarty->assign('ERROR_MESSAGES', $_SESSION['error_messages']);
 $smarty->assign('FIELD_ERRORS', $_SESSION['field_errors']);
 $smarty->assign('SUCCESS_MESSAGES', $_SESSION['success_messages']);
 $smarty->assign('FORM_VALUES', $_SESSION['form_values']);
-$smarty->assign('USERNAME', $_SESSION['username']);
+$smarty->assign('EMAIL', $_SESSION['email']);
+$smarty->assign('NAME', $_SESSION['name']);
+$smarty->assign('PRIVILEGELEVELID', $_SESSION['privilegeLevelId']);
 
 unset($_SESSION['success_messages']);
 unset($_SESSION['error_messages']);
 unset($_SESSION['field_errors']);
 unset($_SESSION['form_values']);
+

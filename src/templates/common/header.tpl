@@ -7,6 +7,8 @@
     <title>Reply Planet</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/custom.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/javascript/register.js"></script>
 </head>
 <body>
 
@@ -31,28 +33,25 @@
                     </form>
                 </li>
             {/if}
-            {$logged_in=true}
-            {if $logged_in}
+            {if $EMAIL && $NAME}
                 <li class="pull-right dropdown">
                     <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right image-padding"
                          data-toggle="dropdown" src="/images/user-default.png" alt="User Image">
                     <ul class="dropdown-menu dropdown-responsive">
 
                         <li class="hidden-xs"><span>Signed in as</span></li>
-                        <li class="hidden-xs"><span><strong>Nuno Ramos</strong></span></li>
+                        <li class="hidden-xs"><span><strong>{$NAME}</strong></span></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="../users/profile_page.php">Profile</a></li>
-                        {$is_admin=true}
-                        {$is_moderator=true}
-                        {if $is_admin}
+                        {if $PRIVILEGELEVELID == 3}
                             <li><a href="../users/admin_page.php">Admin Page</a></li>
                         {/if}
-                        {if $is_moderator}
+                        {if $PRIVILEGELEVELID == 2}
                             <li><a href="../users/moderator_page.php">Moderator Page</a></li>
                         {/if}
                         <li role="separator" class="divider"></li>
                         <li><a href="../users/settings_page.php">Settings</a></li>
-                        <li><a href="#">Sign Out</a></li>
+                        <li><a href="{$BASE_DIR}/actions/logout.php">Sign Out</a></li>
                     </ul>
                 </li>
                 <li class="pull-right dropdown">
@@ -112,7 +111,7 @@
                     <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
-                            <input type="text" class="form-control" placeholder="Username">
+                            <input type="text" class="form-control" placeholder="Email">
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
@@ -120,23 +119,25 @@
                         </div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>
-                    <form id="sign-up" class="modal-form tab-pane fade col-xs-12">
+                    <form id="sign-up" class="modal-form tab-pane fade col-xs-12"
+                          method="post" action="{$BASE_URL}actions/register.php"  onsubmit="return validateForm()">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
-                            <input type="text" class="form-control" placeholder="Username">
+                            <input type="text" class="form-control" name="name" placeholder="Real Name" required>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-envelope"></div>
-                            <input type="email" class="form-control" placeholder="Email">
+                            <input type="email" class="form-control" name="email" placeholder="Email" required>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
-                            <input type="password" class="form-control" placeholder="Repeat your password">
+                            <input id="repeat-password" type="password" class="form-control" name="repeat-password" placeholder="Repeat your password" required>
                         </div>
+                        <div id="register-failed" class="alert alert-danger text-center" role="alert" style="display:none;"></div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
                 </div>
