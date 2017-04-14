@@ -9,8 +9,8 @@ if (!$_POST['email'] || !$_POST['password']) {
     exit;
 }
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+$email = htmlspecialchars($_POST['email']);
+$password = htmlspecialchars($_POST['password']);
 
 $result = getUser($email);
 

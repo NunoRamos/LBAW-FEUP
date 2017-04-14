@@ -9,9 +9,9 @@ if (!$_POST['name'] || !$_POST['email'] || !$_POST['password']) {
     exit;
 }
 
-$name = $_POST['name'];
-$email = $_POST['email'];
-$password = $_POST['password'];
+$name = htmlspecialchars($_POST['name']);
+$email = htmlspecialchars($_POST['email']);
+$password = htmlspecialchars($_POST['password']);
 $privilegeLevelId = 1;
 
 $password_hash = password_hash($password,PASSWORD_DEFAULT);
