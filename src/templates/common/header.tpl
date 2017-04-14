@@ -108,14 +108,15 @@
             </div>
             <div class="modal-body">
                 <div class="tab-content row">
-                    <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12">
+                    <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12"
+                            method="post" action="{$BASE_URL}actions/login.php">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
-                            <input type="text" class="form-control" placeholder="Email">
+                            <input type="text" class="form-control" name="email" placeholder="Email" required>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>

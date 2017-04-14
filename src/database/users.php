@@ -7,3 +7,12 @@ function createUser($email,$password,$name,$privilegeLevelId){
     $stmt->execute(array($email,$password,$name,$privilegeLevelId));
 
 }
+
+function getUser($email) {
+    global $conn;
+    $stmt = $conn->prepare('SELECT * 
+                            FROM "User" 
+                            WHERE email = ?');
+    $stmt->execute(array($email));
+    return $stmt->fetch();
+}
