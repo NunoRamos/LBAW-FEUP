@@ -1,10 +1,11 @@
 <?php
+//FIXME: Change the name of this file to "init.php"
 //session_set_cookie_params(3600, '/~lbaw1612');
 session_start();
 
 error_reporting(E_ERROR | E_WARNING); // E_NOTICE by default
 
-$BASE_DIR = '/home/nuno/Documents/GitHub/LBAW-FEUP/src/'; //FIXME:
+$BASE_DIR = '/home/bernardo/Documents/lbaw-feup/src/'; //FIXME:
 $BASE_URL = '/';
 
 $conn = new PDO('pgsql:host=dbm.fe.up.pt;dbname=lbaw1612', 'lbaw1612', 'PASSWORD'); //FIXME:
