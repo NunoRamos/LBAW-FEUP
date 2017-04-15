@@ -1,7 +1,7 @@
 <?php
 //FIXME: Change the name of this file to "init.php"
 //session_set_cookie_params(3600, '/~lbaw1612');
-session_start();
+session_start(['cookie_httponly' => true]);
 
 error_reporting(E_ERROR | E_WARNING); // E_NOTICE by default
 

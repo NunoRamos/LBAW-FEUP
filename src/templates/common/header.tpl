@@ -33,7 +33,7 @@
                     </form>
                 </li>
             {/if}
-            {if $EMAIL && $NAME}
+            {if $USERID}
                 <li class="pull-right dropdown">
                     <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right image-padding"
                          data-toggle="dropdown" src="/images/user-default.png" alt="User Image">
@@ -68,7 +68,8 @@
                         <li><a href="../content/notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="../content/notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a>
+                        <li>
+                            <a href="../content/notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a>
                         </li>
                     </ul>
                 </li>
@@ -109,7 +110,7 @@
             <div class="modal-body">
                 <div class="tab-content row">
                     <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12"
-                            method="post" action="{$BASE_URL}actions/login.php">
+                          method="post" action="{$BASE_URL}actions/login.php">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" name="email" placeholder="Email" required>
@@ -121,7 +122,7 @@
                         <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12"
-                          method="post" action="{$BASE_URL}actions/register.php"  onsubmit="return validateForm()">
+                          method="post" action="{$BASE_URL}actions/register.php" onsubmit="return validateForm()">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" name="name" placeholder="Real Name" required>
@@ -132,13 +133,16 @@
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
-                            <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
+                            <input id="password" type="password" class="form-control" name="password"
+                                   placeholder="Password" required>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
-                            <input id="repeat-password" type="password" class="form-control" name="repeat-password" placeholder="Repeat your password" required>
+                            <input id="repeat-password" type="password" class="form-control" name="repeat-password"
+                                   placeholder="Repeat your password" required>
                         </div>
-                        <div id="register-failed" class="alert alert-danger text-center" role="alert" style="display:none;"></div>
+                        <div id="register-failed" class="alert alert-danger text-center" role="alert"
+                             style="display:none;"></div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
                 </div>

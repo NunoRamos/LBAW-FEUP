@@ -12,13 +12,15 @@ if (!$_POST['email'] || !$_POST['password']) {
 $email = htmlspecialchars($_POST['email']);
 $password = htmlspecialchars($_POST['password']);
 
-$result = getUser($email);
+$user = getUser($email);
 
-if($result){
-    if(password_verify($password,$result['password'])){
-        $_SESSION['email'] = $result['email'];
-        $_SESSION['name'] = $result['name'];
-        $_SESSION['privilegeLevelId'] = $result['privilegeLevelId'];
+if($user){
+    if(password_verify($password,$user['password'])){
+        session_regenerate_id(true);
+        $_SESSION['userId'] = $user['id'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['name'] = $user['name'];
+        $_SESSION['privilegeLevelId'] = $user['privilegeLevelId'];
         $_SESSION['success_messages'][] = 'Login successful';
     } else {
         $_SESSION['error_messages'][] = 'Login failed';

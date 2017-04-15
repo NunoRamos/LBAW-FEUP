@@ -9,11 +9,11 @@
     <div class="panel-heading">
         Ask A Question
     </div>
-    <form class="panel-body form-horizontal">
+    <form class="panel-body form-horizontal" method="post" action="../../actions/create_question.php">
         <div class="form-group clearfix">
             <label class="col-xs-12 col-sm-2 control-label" for="question-title">Title</label>
             <div class="col-xs-12 col-sm-9">
-                <input type="text" placeholder="Title" id="question-title" class="form-control">
+                <input type="text" placeholder="Title" id="question-title" class="form-control" name="title">
             </div>
         </div>
 
@@ -21,7 +21,7 @@
             <label id="question-text-label" class="col-xs-12 col-sm-2 control-label"
                    for="question-text">Question</label>
             <div class="col-xs-12 col-sm-9">
-                <textarea class="form-control" id="question-text" rows="8"></textarea>
+                <div class="form-control" id="question-text" name="text"></div>
             </div>
         </div>
 
@@ -29,12 +29,11 @@
             <label class="col-xs-12 col-sm-2 control-label" for="question-tags">Tags</label>
             <div class="col-xs-12 col-sm-9">
                 <!-- Inline width is MANDATORY for responsiveness. https://select2.github.io/examples.html#responsive -->
-                <select id="question-tags" multiple="multiple" style="width: 100%;">
-                    <!-- Add these options dinamically  -->
-                    <option value="android">Android</option>
-                    <option value="ios">iOS</option>
-                    <option value="java">Java</option>
-                    <option value="bootstrap">Bootstrap</option>
+                {$tags = getAllTags()}
+                <select id="question-tags" name="tags[]" multiple="multiple" style="width: 100%;">
+                    {foreach $tags as $tag}
+                        <option value="{$tag.id}">{$tag.name}</option>
+                    {/foreach}
                 </select>
             </div>
         </div>
