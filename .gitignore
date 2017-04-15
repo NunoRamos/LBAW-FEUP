@@ -9,4 +9,4 @@ src/templates_c/*
 *.min.css.map
 
 # Framework Config
-config/init.php
+src/config/init.php
