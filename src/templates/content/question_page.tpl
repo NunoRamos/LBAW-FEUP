@@ -3,13 +3,12 @@
 
 {$content=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
 "rating" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?", "indentation" => "0"]}
-{$is_moderator=true}
 
 <div class="container col-xs-12 col-md-8 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title inline">{$content["title"]}</h3>
-            {if $is_moderator}
+            {if canDeleteOwnContent() || canDeleteAnyContent()}
                 <button class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-trash"></span>
                 </button>
             {/if}

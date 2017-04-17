@@ -1,6 +1,7 @@
 <?php
 include_once '../config/init.php';
 include_once '../database/users.php';
+include_once '../database/permissions.php';
 
 $userId = $smarty->getTemplateVars('USERID');
 
@@ -16,7 +17,7 @@ if (is_array($tags)) {
 }
 
 
-if (isset($userId) && canCreateQuestion($userId)) {
+if (canCreateQuestion($userId)) {
     $questionId = createQuestion($userId, (new \DateTime())->format('Y-m-d H:i:s'), $text, $title, $tags);
     header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'pages/content/question_page.php?id=' . $questionId);
 } else {

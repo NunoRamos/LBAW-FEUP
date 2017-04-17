@@ -32,5 +32,5 @@
         </div>
     </div>
 </div>
-{include file="common/footer.tpl"}
-<script src="/javascript/clickable_div.js"></script>
+{include file="{$BASE_DIR}common/footer.tpl"}
+<script src="{$BASE_DIR}javascript/clickable_div.js"></script>
