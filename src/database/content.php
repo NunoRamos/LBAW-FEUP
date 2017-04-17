@@ -29,6 +29,14 @@ function getContentOwnerId($contentId)
     return $stmt->fetch()['creatorId'];
 }
 
+function getMostRecentQuestions($limit)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
+    $stmt->execute([$limit]);
+    return $stmt->fetchAll();
+}
+
 function canDeleteContent($userId, $contentId)
 {
     if (isset($userId) && isset($contentId)) {

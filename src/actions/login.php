@@ -12,7 +12,7 @@ if (!$_POST['email'] || !$_POST['password']) {
 $email = htmlspecialchars($_POST['email']);
 $password = htmlspecialchars($_POST['password']);
 
-$user = getUser($email);
+$user = getUserByEmail($email);
 
 if($user){
     if(password_verify($password,$user['password'])){

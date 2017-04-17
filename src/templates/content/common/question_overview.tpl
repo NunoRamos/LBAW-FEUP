@@ -4,8 +4,9 @@
     </div>
     <div class="col-xs-11">
         <div class="col-xs-12">
-            <a class="small-text" href="../users/profile_page.php"><span>{$content["author"]}</span></a>
-            <span class="small-text">| {$content["date"]}</span>
+            <a class="small-text"
+               href="../users/profile_page.php?id={$content["creatorId"]}"><span>{getUserNameById($content["creatorId"])}</span></a>
+            <span class="small-text">{$content["creationDate"]}</span>
         </div>
         <span class="large-text col-xs-12">{$content["title"]}</span>
     </div>

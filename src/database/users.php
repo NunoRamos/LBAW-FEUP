@@ -8,7 +8,7 @@ function createUser($email, $password, $name, $privilegeLevelId)
     $stmt->execute([$email, $password, $name, $privilegeLevelId]);
 }
 
-function getUser($email)
+function getUserByEmail($email)
 {
     global $conn;
     $stmt = $conn->prepare('SELECT * FROM "User" WHERE "User".email = ?');
@@ -16,7 +16,7 @@ function getUser($email)
     return $stmt->fetch();
 }
 
-function getUserName($id)
+function getUserNameById($id)
 {
     global $conn;
     $stmt = $conn->prepare('SELECT "User"."name" FROM "User" WHERE "User".id = ?');
