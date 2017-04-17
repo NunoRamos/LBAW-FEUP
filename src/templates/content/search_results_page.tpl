@@ -60,9 +60,9 @@
         </div>
     </div>
     <div class="col-xs-12 col-sm-8 col-md-9">
-        <form action="">
+        <form id="Search-Question-Panel-Sister" action="">
             <div class="input-group form-group">
-                <input type="text" name="search" class="form-control" placeholder="Search"/>
+                <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search"/>
                 <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
@@ -84,7 +84,7 @@
         ["id" => "11", "title" => "My mouse has stopped working...", "author" => "Vasco Ribeiro", "date" => "13/02/2017", "rating" => "-2"],
         ["id" => "12", "title" => "My leg hurts", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-23"]
         ]}
-        <div class="panel panel-default">
+        <div id="Search-Question-Panel" class="panel panel-default">
             {for $i=0 to 9}
                 {$content=$questions[$i]}
                 <div class="list-group-item anchor clickable" href="question_page.php">
