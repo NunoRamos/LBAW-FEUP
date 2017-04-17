@@ -1,5 +1,5 @@
 {include file="common/header.tpl"}
-<link rel="stylesheet" href="/lib/trumbowyg/ui/trumbowyg.min.css">
+<link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
 
 {$content=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
 "rating" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?", "indentation" => "0"]}
@@ -47,5 +47,5 @@
 </div>
 
 {include file="common/footer.tpl"}
-<script src="/lib/trumbowyg/trumbowyg.min.js"></script>
-<script src="/javascript/question_page.js"></script>
+<script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
+<script src="{$BASE_URL}javascript/question_page.js"></script>

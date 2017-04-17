@@ -2,8 +2,8 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/select2/4.0.3/css/select2.min.css"
       integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous">
-<link rel="stylesheet" href="/css/select2.css">
-<link rel="stylesheet" href="/lib/trumbowyg/ui/trumbowyg.min.css">
+<link rel="stylesheet" href="{$BASE_URL}css/select2.css">
+<link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -49,5 +49,5 @@
 
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
-<script src="/lib/trumbowyg/trumbowyg.min.js"></script>
-<script src="/javascript/create_question.js"></script>
+<script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
+<script src="{$BASE_URL}javascript/create_question.js"></script>

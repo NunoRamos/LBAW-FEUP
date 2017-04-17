@@ -4,7 +4,7 @@
     https://github.com/select2/select2 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/select2/4.0.3/css/select2.min.css"
       integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous">
-<link rel="stylesheet" href="/css/select2.css">
+<link rel="stylesheet" href="{$BASE_URL}css/select2.css">
 
 <div class="container-fluid">
     <div class="col-xs-12 col-sm-4 col-md-3">
@@ -121,5 +121,5 @@
 
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
-<script src="/javascript/search_results_page.js"></script>
-<script src="/javascript/clickable_div.js"></script>
+<script src="{$BASE_URL}javascript/search_results_page.js"></script>
+<script src="{$BASE_URL}javascript/clickable_div.js"></script>

@@ -60,4 +60,4 @@
 </div>
 
 {include file="../common/footer.tpl"}
-<script src="/javascript/clickable_div.js"></script>
+<script src="{$BASE_URL}javascript/clickable_div.js"></script>
