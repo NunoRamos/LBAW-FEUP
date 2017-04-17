@@ -24,49 +24,6 @@ function getUserNameById($id)
     return $stmt->fetch()["name"];
 }
 
-function createContent($creatorId, $creationDate, $text)
-{
-    global $conn;
-    $stmt = $conn->prepare('INSERT INTO "Content"("creatorId", "creationDate", "text") VALUES (?, ?, ?) RETURNING id');
-    $stmt->execute([$creatorId, $creationDate, $text]);
-    return $stmt->fetch()['id'];
-}
-
-function createQuestion($creatorId, $creationDate, $text, $title, $tags)
-{
-    global $conn;
-    $contentId = createContent($creatorId, $creationDate, $text);
-    $stmt = $conn->prepare('INSERT INTO "Question" VALUES(?, ?, FALSE)');
-    $stmt->execute([$contentId, $title]);
-
-    $stmt = $conn->prepare('INSERT INTO "QuestionTags" VALUES(?, ?)');
-    foreach ($tags as $tagId) {
-        $stmt->execute([$contentId, $tagId]);
-    }
-
-    return $contentId;
-}
-
-function createReply($creatorId, $creationDate, $text, $parendId)
-{
-    global $conn;
-    $contentId = createContent($creatorId, $creationDate, $text);
-    $stmt = $conn->prepare('INSERT INTO "Reply" VALUES(?, ?)');
-    $stmt->execute([$contentId, $parendId]);
-
-    return $contentId;
-}
-
-
-function getAllTags()
-{
-    global $conn;
-
-    $stmt = $conn->prepare('SELECT * FROM "Tag"');
-    $stmt->execute();
-    return $stmt->fetchAll();
-}
-
 function getUserById($userId){
     global $conn;
 

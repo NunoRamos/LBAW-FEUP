@@ -1,5 +1,6 @@
 {include file="common/header.tpl"}
 <link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
+{assign $content $question}
 
 <div class="container col-xs-12 col-md-8 full-screen-xs">
     <div class="panel panel-default">
@@ -16,6 +17,7 @@
             {/foreach}
             <div class="col-xs-12">
                 <form class="form-horizontal" method="post" action="../../actions/create_reply.php">
+                    <input type="hidden" name="parent-id" value="{$question.id}">
                     <div id="reply-text" class="form-control" name ="text" placeholder="Answer"></div>
                     <input class="btn btn-default submit-answer-btn" type="submit" value="Post Answer">
                 </form>
