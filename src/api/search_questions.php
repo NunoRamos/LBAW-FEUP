@@ -2,6 +2,7 @@
 include_once('../config/init.php');
 include_once($BASE_DIR .'database/questions.php');
 include_once($BASE_DIR .'database/users.php');
+include_once($BASE_DIR .'database/content.php');
 
 if (!$_GET['inputString']) {
     $_SESSION['error_messages'][] = 'All fields are mandatory';
