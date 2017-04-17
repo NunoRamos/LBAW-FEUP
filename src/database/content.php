@@ -3,7 +3,7 @@
 function getQuestion($questionId)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = ?');
+    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id');
     $stmt->execute([$questionId]);
     return $stmt->fetch();
 }

@@ -1,12 +1,12 @@
 {include file="common/header.tpl"}
 <link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
-{assign $content $question}
 
 <div class="container col-xs-12 col-md-8 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title inline">{$content["title"]}</h3>
             {assign $content.indentation 0}
+            {assign "questionId" $content["id"]}
         </div>
         <div class="panel-body">
             <div class="small-bottom-margin medium-left-padding">
@@ -17,8 +17,8 @@
             {/foreach}
             <div class="col-xs-12">
                 <form class="form-horizontal" method="post" action="../../actions/create_reply.php">
-                    <input type="hidden" name="parent-id" value="{$question.id}">
-                    <div id="reply-text" class="form-control" name ="text" placeholder="Answer"></div>
+                    <input type="hidden" name="parent-id" value="{$questionId}">
+                    <div id="reply-text" class="form-control" name="text" placeholder="Answer"></div>
                     <input class="btn btn-default submit-answer-btn" type="submit" value="Post Answer">
                 </form>
             </div>

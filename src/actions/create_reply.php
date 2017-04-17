@@ -7,7 +7,7 @@ include_once '../database/permissions.php';
 $userId = $smarty->getTemplateVars('USERID');
 
 $text = htmlspecialchars($_POST['reply-text']);
-$parentId = intval(htmlspecialchars($_GET['parent-id']));
+$parentId = intval(htmlspecialchars($_POST['parent-id']));
 
 if (canReply($userId))
     createReply($userId, (new \DateTime())->format('Y-m-d H:i:s'), $text, $parentId);

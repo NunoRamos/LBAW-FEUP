@@ -12,7 +12,7 @@ $questionId = intval(htmlspecialchars($_GET['id']));
 if ($questionId == 0) {
     http_response_code(400);
 } else {
-    $smarty->assign('question', getQuestion($questionId));
+    $smarty->assign('content', getQuestion($questionId));
     $smarty->assign('answers', getDescendantsOfContent($questionId));
     $smarty->display('content/question_page.tpl');
 }
