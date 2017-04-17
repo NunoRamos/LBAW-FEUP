@@ -21,3 +21,11 @@ function canDeleteAnyContent($userId) {
     $stmt->execute([$userId]);
     return $stmt->fetch();
 }
+
+function canReply($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "canReply" FROM "User", "PrivilegeLevel" WHERE "User".id = ? AND "User"."privilegeLevelId" = "PrivilegeLevel".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch();
+}
