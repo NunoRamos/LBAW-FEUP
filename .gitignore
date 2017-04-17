@@ -5,8 +5,8 @@
 src/templates_c/*
 
 # Sass
-*.min.css
-*.min.css.map
+src/css/**/*.min.css
+src/css/**/*.min.css.map
 
 # Framework Config
 src/config/init.php
