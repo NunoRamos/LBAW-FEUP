@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Reply Planet</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/custom.min.css">
+    <link rel="stylesheet" href="{$BASE_URL}css/bootstrap.min.css">
+    <link rel="stylesheet" href="{$BASE_URL}css/custom.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="/javascript/register.js"></script>
+    <script src="{$BASE_URL}javascript/register.js"></script>
 </head>
 <body>
 
@@ -16,11 +16,11 @@
     <div class="wrapper">
         <ul class="nav navbar-nav full-width">
             <li>
-                <a class="navbar-brand" href="../../index.php">Reply Planet</a>
+                <a class="navbar-brand" href="{$BASE_URL}index.php">Reply Planet</a>
             </li>
             {if $smarty.server.SCRIPT_NAME !== "/pages/content/search_results.php"}
                 <li>
-                    <form class="navbar-form navbar-collapse collapse" action="/pages/content/search_results.php">
+                    <form class="navbar-form navbar-collapse collapse" action="{$BASE_URL}pages/content/search_results.php">
                         <div class="input-group">
                             <input type="text" name="search"
                                    class="form-control full-width"
@@ -36,7 +36,7 @@
             {if $USERID}
                 <li class="pull-right dropdown">
                     <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right image-padding"
-                         data-toggle="dropdown" src="/images/user-default.png" alt="User Image">
+                         data-toggle="dropdown" src="{$BASE_URL}images/user-default.png" alt="User Image">
                     <ul class="dropdown-menu dropdown-responsive">
 
                         <li class="hidden-xs"><span>Signed in as</span></li>
@@ -51,7 +51,7 @@
                         {/if}
                         <li role="separator" class="divider"></li>
                         <li><a href="../users/settings_page.php">Settings</a></li>
-                        <li><a href="{$BASE_DIR}/actions/logout.php">Sign Out</a></li>
+                        <li><a href="{$BASE_URL}actions/logout.php">Sign Out</a></li>
                     </ul>
                 </li>
                 <li class="pull-right dropdown">
