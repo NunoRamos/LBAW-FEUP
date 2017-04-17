@@ -1,26 +1,16 @@
 {include file="common/header.tpl"}
 <link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
 
-{$content=["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017",
-"rating" => "5", "text" => "Quando tento aceder à rede não consigo, porque será?", "indentation" => "0"]}
-
 <div class="container col-xs-12 col-md-8 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title inline">{$content["title"]}</h3>
-            {if canDeleteOwnContent() || canDeleteAnyContent()}
-                <button class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-trash"></span>
-                </button>
-            {/if}
+            {assign $content.indentation 0}
         </div>
         <div class="panel-body">
             <div class="small-bottom-margin medium-left-padding">
                 {include file="content/common/content.tpl"}
             </div>
-
-            {$answers=[["id" => "1", "text" => "Deixa de ser um noob", "date" => "20/02/2017","author" => "Bernardo Belchior", "indentation" => "1", "rating" => "5"],
-            ["id" => "2", "text" => "Tambem nao precisas de ficar chateado", "date" => "25/02/2017","author" => "Nuno Ramos", "indentation" => "2", "rating" => "-25"],
-            ["id" => "3", "text" => "Isso é trivial, meu caro", "date" => "20/02/2017","author" => "João Gomes", "indentation" => "1", "rating" => "-10"]]}
             {foreach $answers as $content}
                 {include file="content/common/content.tpl"}
             {/foreach}

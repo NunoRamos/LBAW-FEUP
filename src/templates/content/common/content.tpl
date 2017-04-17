@@ -6,15 +6,15 @@
         <div class="col-xs-11 no-gutter">
             <div class="col-xs-11 no-gutter">
                 <div class="col-xs-12 text-left">
-                    <a class="small-text" href="#">{$content["author"]}</a>
-                    <span class="small-text">| {$content["date"]}</span>
+                    <a class="small-text" href="#">{getUserName($content.creatorId)}</a>
+                    <span class="small-text">{$content["creationDate"]}</span>
                 </div>
                 <div>
                     {$content["text"]}
                 </div>
             </div>
             <div class="col-xs-1 text-align-right no-gutter">
-                {if $is_moderator}
+                {if canDeleteContent($USERID, $content.id)}
                     <button class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-trash"></span>
                     </button>
                 {/if}

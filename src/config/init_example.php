@@ -16,8 +16,8 @@ $conn->exec('SET SCHEMA \'public\'');
 include_once($BASE_DIR . 'lib/smarty/Smarty.class.php');
 
 $smarty = new Smarty;
-$smarty->template_dir = $BASE_DIR . 'templates/';
-$smarty->compile_dir = $BASE_DIR . 'templates_c/';
+$smarty->setTemplateDir($BASE_DIR . 'templates/');
+$smarty->setCompileDir($BASE_DIR . 'templates_c/');
 $smarty->assign('BASE_URL', $BASE_URL);
 
 $smarty->assign('ERROR_MESSAGES', $_SESSION['error_messages']);

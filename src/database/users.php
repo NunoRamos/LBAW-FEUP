@@ -5,23 +5,23 @@ function createUser($email, $password, $name, $privilegeLevelId)
     global $conn;
 
     $stmt = $conn->prepare('INSERT INTO "User" (email,password,name,"privilegeLevelId") VALUES (?,?,?,?)');
-    $stmt->execute(array($email, $password, $name, $privilegeLevelId));
+    $stmt->execute([$email, $password, $name, $privilegeLevelId]);
 }
 
 function getUser($email)
 {
     global $conn;
     $stmt = $conn->prepare('SELECT * FROM "User" WHERE "User".email = ?');
-    $stmt->execute(array($email));
+    $stmt->execute([$email]);
     return $stmt->fetch();
 }
 
-function canCreateQuestion($userId)
+function getUserName($id)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT "canCreateQuestion" FROM "User", "PrivilegeLevel" WHERE "User".id = ? AND "User"."privilegeLevelId" = "PrivilegeLevel".id');
-    $stmt->execute([$userId]);
-    return $stmt->fetch();
+    $stmt = $conn->prepare('SELECT "User"."name" FROM "User" WHERE "User".id = ?');
+    $stmt->execute([$id]);
+    return $stmt->fetch()["name"];
 }
 
 function createContent($creatorId, $creationDate, $text)
