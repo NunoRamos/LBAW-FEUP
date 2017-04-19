@@ -102,7 +102,7 @@ function getQuestionHierarchy($questionId)
 
 function getContentById($id){
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = ?');
+    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = "contentId" AND "id" = ?');
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
