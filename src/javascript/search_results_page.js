@@ -37,7 +37,7 @@ function buildSearchResults(response){
     else {
         let i = 0;
         for(let question of json['questions']){
-            $('#Search-Question-Panel').append(
+                $('#Search-Question-Panel').append(
             '<div class="list-group-item anchor clickable" href="question_page.php">'+
                 '<div class="row no-gutter no-side-margin">'+
                 '<div class="col-xs-1">'+
@@ -47,7 +47,7 @@ function buildSearchResults(response){
                 '</div>'+
                 '<div class="col-xs-11">'+
                 '<div class="col-xs-12">'+
-                '<a class="small-text" href="../users/profile_page.php"><span>'+json['users'][i].name+' </span></a>'+
+                '<a class="small-text" href="../users/profile_page.php?id='+json['users'][i].id+'"><span>'+json['users'][i].name+' </span></a>'+
                 '<span class="small-text">| '+ question.creationDate+'</span>'+
                 '</div>'+
                 '<span class="large-text col-xs-12">'+question.title+'</span>'+
