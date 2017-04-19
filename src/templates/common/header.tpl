@@ -20,11 +20,12 @@
             </li>
             {if $smarty.server.SCRIPT_NAME !== "/pages/content/search_results.php"}
                 <li>
-                    <form class="navbar-form navbar-collapse collapse" action="{$BASE_URL}pages/content/search_results.php">
+                    <form class="navbar-form navbar-collapse collapse"
+                          method="get" action="{$BASE_URL}pages/content/search_results.php">
                         <div class="input-group">
-                            <input type="text" name="search"
+                            <input id="header-search-bar" type="text" name="inputString"
                                    class="form-control full-width"
-                                   placeholder="Search"/>
+                                   placeholder="Search" required/>
                             <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>

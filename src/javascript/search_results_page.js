@@ -1,21 +1,29 @@
 $(document).ready(function () {
     $('#tags-select').select2();
 
-    $('#search-bar').on('input', function() {
+    ajaxRequest();
 
-        var input = $('#search-bar').val();
+    $('#search-bar').on('input', ajaxRequest);
 
-        $('#Search-Question-Panel').children().remove();
-
-        console.log(input);
-
-        $.ajax({
-            method: "GET",
-            url: "../../api/search_questions.php",
-            data: { inputString: input }
-        }).done(buildSearchResults);
-    });
 });
+
+function ajaxRequest() {
+
+    var input = $('#search-bar').val();
+
+    if(input == '')
+        return;
+
+    $('#Search-Question-Panel').children().remove();
+
+    console.log(input);
+
+    $.ajax({
+        method: "GET",
+        url: "../../api/search_questions.php",
+        data: { inputString: input }
+    }).done(buildSearchResults);
+}
 
 function buildSearchResults(response){
 

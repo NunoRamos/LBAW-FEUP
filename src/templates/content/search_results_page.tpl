@@ -62,7 +62,7 @@
     <div class="col-xs-12 col-sm-8 col-md-9">
         <form id="Search-Question-Panel-Sister" action="">
             <div class="input-group form-group">
-                <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search"/>
+                <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search" value="{$inputString}"/>
                 <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
@@ -70,28 +70,7 @@
             </div>
         </form>
 
-        {$questions=[
-        ["id" => "1", "title" => "Network Problems", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
-        ["id" => "2", "title" => "Internet Problems", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
-        ["id" => "3", "title" => "Can't Log In", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
-        ["id" => "4", "title" => "My lawnmower has stopped working!", "author" => "Nuno Ramos", "date" => "20/03/2017", "rating" => "5"],
-        ["id" => "5", "title" => "How to open a Word file?", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
-        ["id" => "6", "title" => "I want to know this music", "author" => "Nuno Ramos", "date" => "20/02/2016", "rating" => "5"],
-        ["id" => "7", "title" => "Is Facebook down?", "author" => "Nuno Ramos", "date" => "20/02/2017", "rating" => "5"],
-        ["id" => "8", "title" => "How to plant carrots in Farmville?", "author" => "Vasco Ribeiro", "date" => "12/02/2017", "rating" => "-2"],
-        ["id" => "9", "title" => "Is Fernando Torres dead?", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
-        ["id" => "10", "title" => "What is the best smartphone for 150€?", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-2"],
-        ["id" => "11", "title" => "My mouse has stopped working...", "author" => "Vasco Ribeiro", "date" => "13/02/2017", "rating" => "-2"],
-        ["id" => "12", "title" => "My leg hurts", "author" => "Vasco Ribeiro", "date" => "19/02/2017", "rating" => "-23"]
-        ]}
-        <div id="Search-Question-Panel" class="panel panel-default">
-            {for $i=0 to 9}
-                {$content=$questions[$i]}
-                <div class="list-group-item anchor clickable" href="question_page.php">
-                    {include file="content/common/question_overview.tpl"}
-                </div>
-            {/for}
-        </div>
+        <div id="Search-Question-Panel" class="panel panel-default"></div>
 
         {if count($questions) > 10}
             <nav aria-label="Page navigation" class="text-center">
