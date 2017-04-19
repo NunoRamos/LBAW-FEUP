@@ -5,7 +5,11 @@ include_once($BASE_DIR .'database/users.php');
 if (!$_POST['name'] || !$_POST['email'] || !$_POST['password']) {
     $_SESSION['error_messages'][] = 'All fields are mandatory';
     $_SESSION['form_values'] = $_POST;
-    header("Location:" . $_SERVER['HTTP_REFERER']);
+    if(empty($_SERVER['HTTP_REFERER']))
+        header('Location: ../pages/misc/landing_page.php');
+    else
+        header("Location:" . $_SERVER['HTTP_REFERER']);
+    exit;
     exit;
 }
 
