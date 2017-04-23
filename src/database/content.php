@@ -62,16 +62,55 @@ function createContent($creatorId, $creationDate, $text)
 function createQuestion($creatorId, $creationDate, $text, $title, $tags)
 {
     global $conn;
-    $contentId = createContent($creatorId, $creationDate, $text);
-    $stmt = $conn->prepare('INSERT INTO "Question" VALUES(?, ?, FALSE)');
-    $stmt->execute([$contentId, $title]);
+    try {
+        $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        $conn->beginTransaction();
 
-    $stmt = $conn->prepare('INSERT INTO "QuestionTags" VALUES(?, ?)');
-    foreach ($tags as $tagId) {
-        $stmt->execute([$contentId, $tagId]);
+        $stmt = $conn->prepare('INSERT INTO "Content" ("creatorId", "creationDate", "text") VALUES(?, ?, ?) RETURNING id');
+        $stmt->execute([$creatorId, $creationDate, $text]);
+        $contentId = $stmt->fetch()["id"];
+
+        $stmt = $conn->prepare('INSERT INTO "Question"("contentId", "title") VALUES(?, ?)');
+        $stmt->execute([$contentId, $title]);
+
+        $stmt = $conn->prepare('INSERT INTO "QuestionTags"("contentId", "tagId")
+                                            SELECT * FROM (SELECT ?::integer) AS content_id, unnest(?::integer[]) AS unnest');
+        $stmt->execute([$contentId, "{" . join(",", $tags) . "}"]);
+
+        $conn->commit();
+        return $contentId;
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
     }
+}
 
-    return $contentId;
+function editQuestion($contentId, $text, $title, $tags)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "Content" SET "text" = ? WHERE "id" = ?');
+        $stmt->execute([$text, $contentId]);
+
+
+        $stmt = $conn->prepare('UPDATE "Question" SET "title" = ? WHERE "contentId" = ?');
+        $stmt->execute([$title, $contentId]);
+
+        $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ? AND "tagId" NOT IN(SELECT * FROM unnest(?::INTEGER[]) AS unnest)');
+        $stmt->execute([$contentId, $tags]);
+
+        $stmt = $conn->prepare('INSERT INTO "QuestionTags" SELECT * FROM(SELECT ?) AS content_id, unnest(?::INTEGER[]) AS unnest WHERE unnest NOT IN(SELECT "tagId" FROM "QuestionTags" WHERE "contentId" = ?)');
+        $stmt->execute([$contentId, $tags, $contentId]);
+
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
 }
 
 function createReply($creatorId, $creationDate, $text, $parentId)
@@ -100,17 +139,19 @@ function getQuestionHierarchy($questionId)
     return $question;
 }
 
-function getContentById($id){
+function getContentById($id)
+{
     global $conn;
     $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = "contentId" AND "id" = ?');
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
 
-function getQuestionByString($inputString){
+function getQuestionByString($inputString)
+{
     global $conn;
 
-    $expression = '%'.$inputString.'%';
+    $expression = '%' . $inputString . '%';
 
     $stmt = $conn->prepare('SELECT "contentId" FROM "Question" WHERE "title" LIKE ?');
     $stmt->execute([$expression]);
@@ -118,7 +159,7 @@ function getQuestionByString($inputString){
 
     $lookALikeQuestions = array();
 
-    foreach ($questions as $question){
+    foreach ($questions as $question) {
         $lookALikeQuestions[] = getContentById($question['contentId']);
     }
 
