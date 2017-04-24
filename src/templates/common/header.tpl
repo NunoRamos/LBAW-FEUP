@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{$BASE_URL}css/bootstrap.min.css">
     <link rel="stylesheet" href="{$BASE_URL}css/custom.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="{$BASE_URL}javascript/register.js"></script>
+    <script src="{$BASE_URL}javascript/header.js"></script>
 </head>
 <body>
 
@@ -105,7 +105,7 @@
                             aria-hidden="true">&times;</span></button>
                 <ul class="nav nav-tabs nav-justified">
                     <li role="presentation" class="active"><a href="#sign-in" data-toggle="tab">Sign In</a></li>
-                    <li role="presentation"><a href="#sign-up" data-toggle="tab">Sign Up</a></li>
+                    <li role="presentation"><a id="sign-up-tab" href="#sign-up" data-toggle="tab">Sign Up</a></li>
                 </ul>
             </div>
             <div class="modal-body">

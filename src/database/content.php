@@ -113,12 +113,26 @@ function editQuestion($contentId, $text, $title, $tags)
     }
 }
 
-function createReply($creatorId, $creationDate, $text, $parentId)
+function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
 {
     global $conn;
-    $contentId = createContent($creatorId, $creationDate, $text);
-    $stmt = $conn->prepare('INSERT INTO "Reply" VALUES(?, ?)');
-    $stmt->execute([$contentId, $parentId]);
+    try {
+        $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare('INSERT INTO "Content" ("creatorId", "creationDate", "text") VALUES(?, ?, ?) RETURNING id');
+        $stmt->execute([$creatorId, $creationDate, $text]);
+        $contentId = $stmt->fetch()["id"];
+
+        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId", "topContentId") VALUES(?, ?, ?)');
+        $stmt->execute([$contentId, $parentId, $topContentId]);
+
+        $conn->commit();
+        return $contentId;
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
 
     return $contentId;
 }

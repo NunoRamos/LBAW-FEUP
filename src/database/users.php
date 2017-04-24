@@ -1,11 +1,16 @@
 <?php
 
-function createUser($email, $password, $name, $privilegeLevelId)
+function register($email, $password, $name)
 {
     global $conn;
 
-    $stmt = $conn->prepare('INSERT INTO "User" (email,password,name,"privilegeLevelId") VALUES (?,?,?,?)');
-    $stmt->execute([$email, $password, $name, $privilegeLevelId]);
+    $hashed_password = password_hash($password);
+    $stmt = $conn->prepare('INSERT INTO "User" (email,password,name,"privilegeLevelId") VALUES (?,?,?,?) RETURNING "id", "email", "name", "privilegeLevelId"');
+    $stmt->execute([$email, $hashed_password, $name, 1]);
+
+    login($email, $hashed_password);
+
+    return $stmt->fetch();
 }
 
 function login($email, $password)

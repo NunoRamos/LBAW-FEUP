@@ -1,7 +1,18 @@
+$(document).ready(function() {
+  if(window.location.href.indexOf('#signup') != -1) {
+    $('#sign-in-modal').modal('show');
+    console.log($('#sign-up'));
+    $('#sign-up-tab').tab('show');
+  }
+
+  if(window.location.href.indexOf('#signin') != -1) {
+    $('#sign-in-modal').modal('show');
+  }
+});
+
 function validateForm(){
-    console.log("entrei");
     let password = $("#password").val();
-    let repeat_password = $("#repeat-password").val();
+    let repeatPassword = $("#repeat-password").val();
 
     if(password.length < 8){
         $("#register-failed").text("Password needs to be greater or equal to 8 characters");
@@ -10,7 +21,7 @@ function validateForm(){
     }else if($('#register-failed').is(':visible'))
         $("#register-failed").hide();
 
-    if(repeat_password != password){
+    if(repeatPassword !== password){
         $("#register-failed").text("Passwords do not match");
         $("#register-failed").show();
         return false;
