@@ -51,14 +51,6 @@ function canDeleteContent($userId, $contentId)
     return false;
 }
 
-function createContent($creatorId, $creationDate, $text)
-{
-    global $conn;
-    $stmt = $conn->prepare('INSERT INTO "Content"("creatorId", "creationDate", "text") VALUES (?, ?, ?) RETURNING id');
-    $stmt->execute([$creatorId, $creationDate, $text]);
-    return $stmt->fetch()['id'];
-}
-
 function createQuestion($creatorId, $creationDate, $text, $title, $tags)
 {
     global $conn;
