@@ -21,9 +21,9 @@ if (($user = login($email, $password)) !== false) {
     $_SESSION['email'] = $user['email'];
     $_SESSION['name'] = $user['name'];
     $_SESSION['privilegeLevelId'] = $user['privilegeLevelId'];
-    $_SESSION['success_messages'][] = 'Login successful';
+    $_SESSION['success_messages'][] = 'Sign in successful';
 } else {
-    $_SESSION['error_messages'][] = 'Login failed';
+    $_SESSION['error_messages'][] = 'Sign in failed';
 }
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);

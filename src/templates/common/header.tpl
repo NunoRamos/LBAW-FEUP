@@ -143,7 +143,8 @@
                                    placeholder="Repeat your password" required>
                         </div>
                         <div id="register-failed" class="alert alert-danger text-center" role="alert"
-                             style="display:none;"></div>
+                             style="display:none;">
+                             </div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
                 </div>

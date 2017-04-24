@@ -18,15 +18,13 @@ function validateForm(){
         $("#register-failed").text("Password needs to be greater or equal to 8 characters");
         $("#register-failed").show();
         return false;
-    }else if($('#register-failed').is(':visible'))
-        $("#register-failed").hide();
+    }
 
     if(repeatPassword !== password){
         $("#register-failed").text("Passwords do not match");
         $("#register-failed").show();
         return false;
-    }else if($('#register-failed').is(':visible'))
-        $("#register-failed").hide();
+    }
 
     return true;
 }
