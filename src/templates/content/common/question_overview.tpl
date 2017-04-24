@@ -2,7 +2,7 @@
     <div class="col-xs-1">
         {include file="content/common/rating.tpl"}
     </div>
-    <div class="col-xs-11">
+    <div class="col-xs-11 anchor clickable" href="../content/question_page.php?id={$content.id}">
         <div class="col-xs-12">
             <a class="small-text"
                href="../users/profile_page.php?id={$content["creatorId"]}"><span>{getUserNameById($content["creatorId"])}</span></a>

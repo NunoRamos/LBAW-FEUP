@@ -6,7 +6,7 @@
         </div>
         <div class="list-group">
             {foreach $questions as $content}
-                <div class="list-group-item anchor clickable" href="../content/question_page.php?id={$content.id}">
+                <div class="list-group-item">
                     {include file="content/common/question_overview.tpl"}
                 </div>
             {/foreach}

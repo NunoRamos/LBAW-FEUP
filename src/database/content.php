@@ -179,3 +179,11 @@ function getQuestionByString($inputString)
     return $lookALikeQuestions;
 
 }
+
+function addVote($userId,$contentId,$vote){
+    global $conn;
+
+
+    $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
+    $stmt->execute([$userId,$contentId,$vote]);
+}
