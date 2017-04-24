@@ -60,15 +60,15 @@
         </div>
     </div>
     <div class="col-xs-12 col-sm-8 col-md-9">
-        <form id="Search-Question-Panel-Sister" action="">
+        <div id="Search-Question-Panel-Sister">
             <div class="input-group form-group">
-                <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search" value="{$inputString}"/>
+                <input id="Search-Bar" type="text" name="search" class="form-control" placeholder="Search" value="{$inputString}"/>
                 <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i
+                        <button id="Search-Results-Button" class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
             </span>
             </div>
-        </form>
+        </div>
 
         <div id="Search-Question-Panel" class="panel panel-default"></div>
 

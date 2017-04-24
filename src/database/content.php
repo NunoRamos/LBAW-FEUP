@@ -159,8 +159,14 @@ function getQuestionByString($inputString)
 
     $expression = '%' . $inputString . '%';
 
-    $stmt = $conn->prepare('SELECT "contentId" FROM "Question" WHERE "title" LIKE ?');
-    $stmt->execute([$expression]);
+    /*$stmt = $conn->prepare('SELECT "contentId" FROM "Question" WHERE "title" LIKE ?');
+    $stmt->execute([$expression]);*/
+    $stmt = $conn->prepare('SELECT "contentId", ts_rank_cd(text_search, query) AS rank
+                                  FROM "Content","Question", to_tsvector(\'portuguese\',text) text_search,
+                                    to_tsquery(\'portuguese\',?) query
+                                  WHERE "contentId" = id AND (text_search @@ query OR title LIKE ?)
+                                  ORDER BY rank DESC;');
+    $stmt->execute([$inputString,$expression]);
     $questions = $stmt->fetchAll();
 
     $lookALikeQuestions = array();

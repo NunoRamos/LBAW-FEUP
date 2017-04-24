@@ -3,13 +3,14 @@ $(document).ready(function () {
 
     ajaxRequest();
 
-    $('#search-bar').on('input', ajaxRequest);
+    $('#Search-Bar').on('input', ajaxRequest);
 
+    $('#Search-Results-Button').on('click',ajaxRequest);
 });
 
 function ajaxRequest() {
 
-    var input = $('#search-bar').val();
+    var input = $('#Search-Bar').val();
 
     if(input == '')
         return;
@@ -38,7 +39,7 @@ function buildSearchResults(response){
         let i = 0;
         for(let question of json['questions']){
                 $('#Search-Question-Panel').append(
-            '<div class="list-group-item anchor clickable" href="question_page.php">'+
+            '<div class="list-group-item anchor clickable" href="question_page.php?id='+question.id+'">'+
                 '<div class="row no-gutter no-side-margin">'+
                 '<div class="col-xs-1">'+
                 '<div class="text-center"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>'+
@@ -57,6 +58,7 @@ function buildSearchResults(response){
             );
             i++;
         }
+        clickEvent();
     }
 
 }
