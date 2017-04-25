@@ -154,7 +154,7 @@
 
 <div class="wrapper container-fluid">
     {if $ERROR_MESSAGES}
-    <div class="container">
-        <div class="alert alert-danger col-xs-12 text-center" role="alert">{$ERROR_MESSAGES[0]}</div>
-    </div>
-{/if}
+        <div class="container">
+            <div class="alert alert-danger col-xs-12 text-center" role="alert">{$ERROR_MESSAGES[0]}</div>
+        </div>
+    {/if}
