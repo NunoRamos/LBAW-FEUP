@@ -95,7 +95,6 @@
     </div>
 </nav>
 
-
 <!-- Sign in/up modal -->
 <div class="modal fade" id="sign-in-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -144,7 +143,7 @@
                         </div>
                         <div id="register-failed" class="alert alert-danger text-center" role="alert"
                              style="display:none;">
-                             </div>
+                        </div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
                 </div>
@@ -154,3 +153,8 @@
 </div>
 
 <div class="wrapper container-fluid">
+    {if $ERROR_MESSAGES}
+    <div class="container">
+        <div class="alert alert-danger col-xs-12 text-center" role="alert">{$ERROR_MESSAGES[0]}</div>
+    </div>
+{/if}
