@@ -39,14 +39,14 @@ function buildSearchResults(response){
         let i = 0;
         for(let question of json['questions']){
                 $('#Search-Question-Panel').append(
-            '<div class="list-group-item anchor clickable" href="question_page.php?id='+question.id+'">'+
+            '<div class="list-group-item">'+
                 '<div class="row no-gutter no-side-margin">'+
                 '<div class="col-xs-1">'+
-                '<div class="text-center"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>'+
+                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId='+question.id+'&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>'+
                 '<div class="text-center"><span>'+ question.rating +'</span></div>'+
-                '<div class="text-center"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>'+
+                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId='+question.id+'&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>'+
                 '</div>'+
-                '<div class="col-xs-11">'+
+                '<div class="col-xs-11 anchor clickable" href="question_page.php?id='+question.id+'">'+
                 '<div class="col-xs-12">'+
                 '<a class="small-text" href="../users/profile_page.php?id='+json['users'][i].id+'"><span>'+json['users'][i].name+' </span></a>'+
                 '<span class="small-text">| '+ question.creationDate+'</span>'+
