@@ -38,5 +38,5 @@ foreach ($lookALikeQuestions as $lookALikeQuestion){
 }
 
 echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
-    'numberOfPages' => $numberOfPages,'inputString' => $inputString,'atualPage' => $atualPage]);
+    'numberOfPages' => $numberOfPages,'inputString' => $inputString]);
 

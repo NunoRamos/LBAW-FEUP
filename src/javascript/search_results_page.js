@@ -108,8 +108,12 @@ function buildSearchResults(response){
                 '</nav>');
 
             for(i=numberOfPages; i>0;i--){
-                $('#Previous-Item').after('<li>' +
-                    '<span onclick="paginationRequest('+i+')" class="Pages clickable">'+i+'</span>' +
+                var classes = "";
+                if(atualPage == i)
+                    classes = "active";
+
+                $('#Previous-Item').after('<li class="'+classes+'">' +
+                    '<span onclick="paginationRequest('+i+')" class="clickable">'+i+'</span>' +
                     '</li>');
             }
         }
