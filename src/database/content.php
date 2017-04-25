@@ -105,7 +105,7 @@ function editQuestion($contentId, $text, $title, $tags)
     }
 }
 
-function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
+function createReply($creatorId, $creationDate, $text, $parentId)
 {
     global $conn;
     try {
@@ -116,8 +116,8 @@ function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
         $stmt->execute([$creatorId, $creationDate, $text]);
         $contentId = $stmt->fetch()["id"];
 
-        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId", "topContentId") VALUES(?, ?, ?)');
-        $stmt->execute([$contentId, $parentId, $topContentId]);
+        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId") VALUES(?, ?)');
+        $stmt->execute([$contentId, $parentId]);
 
         $conn->commit();
         return $contentId;
@@ -125,8 +125,6 @@ function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
         $conn->rollBack();
         throw $exception;
     }
-
-    return $contentId;
 }
 
 function getAllTags()
@@ -157,10 +155,6 @@ function getQuestionByString($inputString)
 {
     global $conn;
 
-    $expression = '%' . $inputString . '%';
-
-    /*$stmt = $conn->prepare('SELECT "contentId" FROM "Question" WHERE "title" LIKE ?');
-    $stmt->execute([$expression]);*/
     $stmt = $conn->prepare('SELECT "contentId", ts_rank_cd(text_search, text_query) AS rank
                                     FROM "Content","Question", 
                                       to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
@@ -182,7 +176,6 @@ function getQuestionByString($inputString)
 
 function addVote($userId,$contentId,$vote){
     global $conn;
-
 
     $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
     $stmt->execute([$userId,$contentId,$vote]);
