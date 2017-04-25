@@ -15,14 +15,6 @@
             {foreach $answers as $content}
                 {include file="content/common/content.tpl"}
             {/foreach}
-            <div class="col-xs-12">
-                <form class="form-horizontal" method="post" action="../../actions/create_reply.php">
-                    <input type="hidden" name="parent-id" value="{$questionId}">
-                    <input type="hidden" name="top-content-id" value="{$questionId}">
-                    <div id="reply-text" class="form-control" name="text" placeholder="Answer"></div>
-                    <input class="btn btn-default submit-answer-btn" type="submit" value="Post Answer">
-                </form>
-            </div>
         </div>
     </div>
 </div>

@@ -105,7 +105,7 @@ function editQuestion($contentId, $text, $title, $tags)
     }
 }
 
-function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
+function createReply($creatorId, $creationDate, $text, $parentId)
 {
     global $conn;
     try {
@@ -116,8 +116,8 @@ function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
         $stmt->execute([$creatorId, $creationDate, $text]);
         $contentId = $stmt->fetch()["id"];
 
-        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId", "topContentId") VALUES(?, ?, ?)');
-        $stmt->execute([$contentId, $parentId, $topContentId]);
+        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId") VALUES(?, ?)');
+        $stmt->execute([$contentId, $parentId]);
 
         $conn->commit();
         return $contentId;
@@ -125,8 +125,6 @@ function createReply($creatorId, $creationDate, $text, $parentId, $topContentId)
         $conn->rollBack();
         throw $exception;
     }
-
-    return $contentId;
 }
 
 function getAllTags()
@@ -156,6 +154,7 @@ function getContentById($id)
 function getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage){
     global $conn;
 
+
     $stmt = $conn->prepare('
     SELECT "id", "rating", "title", "creatorId", "creationDate"
     FROM "Content","Question", 
@@ -184,23 +183,8 @@ function getNumberOfSimilarQuestions($inputString){
     return sizeof($stmt->fetchAll());
 }
 
-function getQuestionByString($inputString)
-{
-    global $conn;
-
-    $expression = '%' . $inputString . '%';
-
-    $stmt = $conn->prepare('SELECT "id", "rating", "title", "creatorId", "creationDate"
-    FROM "Content","Question" WHERE "contentId" = id AND "title" LIKE ?');
-    $stmt->execute([$expression]);
-
-    return $stmt->fetchAll();
-
-}
-
 function addVote($userId,$contentId,$vote){
     global $conn;
-
 
     $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
     $stmt->execute([$userId,$contentId,$vote]);
