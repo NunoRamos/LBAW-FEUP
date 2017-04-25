@@ -59,6 +59,8 @@ function buildSearchResults(response){
             i++;
         }
         clickEvent();
+
+
     }
 
 }

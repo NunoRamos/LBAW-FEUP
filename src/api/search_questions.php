@@ -14,9 +14,24 @@ if (!$_GET['inputString']) {
     exit;
 }
 
+//Lets see number of results
+$numberOfResults = getNumberOfSimilarQuestions($inputString);
+
+$resultsPerPage = 10;
+
+$numberOfPages = ceil($numberOfResults/$resultsPerPage);
+
 $inputString = htmlspecialchars($_GET['inputString']);
 
-$lookALikeQuestions = getQuestionByString($inputString);
+if(isset($_GET['page']))
+    $atualPage = $_GET['page'];
+else $atualPage = 1;
+
+$thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
+
+$lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);// getQuestionByString($inputString);
+
+$smarty->assign('numberOfPages', $numberOfPages);
 
 $creator = array();
 

@@ -72,7 +72,7 @@
 
         <div id="Search-Question-Panel" class="panel panel-default"></div>
 
-        {if count($questions) > 10}
+        {if $numberOfPages > 1}
             <nav aria-label="Page navigation" class="text-center">
                 <ul class="pagination">
                     <li>
@@ -80,11 +80,14 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
+                    {for $page= 1 to $numberOfPages}
+                        <li><a href="#">{$page}</a></li>
+                        <!-- <li><a href="#">1</a></li>
+                         <li><a href="#">2</a></li>
+                         <li><a href="#">3</a></li>
+                         <li><a href="#">4</a></li>
+                         <li><a href="#">5</a></li>-->
+                    {/for}
                     <li>
                         <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
