@@ -173,7 +173,7 @@ function getNumberOfSimilarQuestions($inputString){
     global $conn;
 
     $stmt = $conn->prepare('
-    SELECT "id", "rating", "title", "creatorId", "creationDate"
+    SELECT "id" 
     FROM "Content","Question", 
         to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
         to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
@@ -186,30 +186,15 @@ function getNumberOfSimilarQuestions($inputString){
 
 function getQuestionByString($inputString)
 {
-    /*global $conn;
+    global $conn;
 
     $expression = '%' . $inputString . '%';
 
-    /*$stmt = $conn->prepare('SELECT "contentId" FROM "Question" WHERE "title" LIKE ?');
-    $stmt->execute([$expression]);*/
-   /* $stmt = $conn->prepare('SELECT "contentId", ts_rank_cd(text_search, text_query) AS rank
-                                    FROM "Content","Question", 
-                                      to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-                                      to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-                                    WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-                                    ORDER BY rank DESC;');
-    $stmt->execute([$inputString,$inputString]);
-    $questions = $stmt->fetchAll();*/
+    $stmt = $conn->prepare('SELECT "id", "rating", "title", "creatorId", "creationDate"
+    FROM "Content","Question" WHERE "contentId" = id AND "title" LIKE ?');
+    $stmt->execute([$expression]);
 
-    $questions = getSimilarQuestions($inputString);
-
-    $lookALikeQuestions = array();
-
-    foreach ($questions as $question) {
-        $lookALikeQuestions[] = getContentById($question['contentId']);
-    }
-
-    return $lookALikeQuestions;
+    return $stmt->fetchAll();
 
 }
 

@@ -14,14 +14,14 @@ if (!$_GET['inputString']) {
     exit;
 }
 
+$resultsPerPage = 10;
+
+$inputString = htmlspecialchars($_GET['inputString']);
+
 //Lets see number of results
 $numberOfResults = getNumberOfSimilarQuestions($inputString);
 
-$resultsPerPage = 10;
-
 $numberOfPages = ceil($numberOfResults/$resultsPerPage);
-
-$inputString = htmlspecialchars($_GET['inputString']);
 
 if(isset($_GET['page']))
     $atualPage = $_GET['page'];
@@ -29,9 +29,7 @@ else $atualPage = 1;
 
 $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 
-$lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);// getQuestionByString($inputString);
-
-$smarty->assign('numberOfPages', $numberOfPages);
+$lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
 
 $creator = array();
 
@@ -39,5 +37,6 @@ foreach ($lookALikeQuestions as $lookALikeQuestion){
     $creator[] = getUserById($lookALikeQuestion['creatorId']);
 }
 
-echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator]);
+echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
+    'numberOfPages' => $numberOfPages,'inputString' => $inputString,'atualPage' => $atualPage]);
 

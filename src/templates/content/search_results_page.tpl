@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-8 col-md-9">
+    <div id="Main-Div" class="col-xs-12 col-sm-8 col-md-9">
         <div id="Search-Question-Panel-Sister">
             <div class="input-group form-group">
                 <input id="Search-Bar" type="text" name="search" class="form-control" placeholder="Search" value="{$inputString}"/>
@@ -72,7 +72,7 @@
 
         <div id="Search-Question-Panel" class="panel panel-default"></div>
 
-        {if $numberOfPages > 1}
+            <!--
             <nav aria-label="Page navigation" class="text-center">
                 <ul class="pagination">
                     <li>
@@ -80,27 +80,22 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    {for $page= 1 to $numberOfPages}
-                        <li><a href="#">{$page}</a></li>
-                        <!-- <li><a href="#">1</a></li>
+                         <li><a href="#">1</a></li>
                          <li><a href="#">2</a></li>
                          <li><a href="#">3</a></li>
                          <li><a href="#">4</a></li>
-                         <li><a href="#">5</a></li>-->
-                    {/for}
+                         <li><a href="#">5</a></li>
                     <li>
                         <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
-            </nav>
-        {/if}
+            </nav>-->
     </div>
 </div>
 
 {include file="common/footer.tpl"}
-
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
 <script src="{$BASE_URL}javascript/search_results_page.js"></script>
