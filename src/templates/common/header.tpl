@@ -55,23 +55,14 @@
                         <li><a href="{$BASE_URL}actions/logout.php">Sign Out</a></li>
                     </ul>
                 </li>
-                <li class="pull-right dropdown">
-                    <a id="dLabel" role="button" class="dropdown-toggle small-padding-xs" data-toggle="dropdown">
+                <li id="notification-dropdown" class="pull-right dropdown">
+                    <a id="notification-button" role="button" class="dropdown-toggle small-padding-xs"
+                       data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-responsive notification-dropdown">
-                        <li class="dropdown-header">Notifications</li>
+                    <ul id="notification-menu" class="dropdown-menu dropdown-responsive notification-dropdown">
+                        <li id="notification-header" class="dropdown-header">Notifications</li>
                         <li role="separator" class="divider"></li>
-                        <li>
-                            <a href="../content/notifications_page.php"><span>Dave Lister commented on DWARF-13 - Maintenance</span></a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="../content/notifications_page.php"><span>Nuno Ramos liked your comment on DWARF-13 - Maintenance</span></a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a href="../content/notifications_page.php"><span>Dave Lister liked DWARF-13 - Maintenance</span></a>
-                        </li>
                     </ul>
                 </li>
                 <li class="pull-right">
@@ -122,7 +113,7 @@
                         <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12"
-                          method="post" action="{$BASE_URL}actions/register.php" onsubmit="return validateForm()">
+                          method="post" action="{$BASE_URL}actions/register.php" onsubmit="return validateSignUp()">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" name="name" placeholder="Real Name" required>
@@ -154,7 +145,7 @@
 
 <div class="wrapper container-fluid">
     {if $ERROR_MESSAGES}
-        <div class="container">
-            <div class="alert alert-danger col-xs-12 text-center" role="alert">{$ERROR_MESSAGES[0]}</div>
-        </div>
-    {/if}
+    <div class="container">
+        <div class="alert alert-danger col-xs-12 text-center" role="alert">{$ERROR_MESSAGES[0]}</div>
+    </div>
+{/if}

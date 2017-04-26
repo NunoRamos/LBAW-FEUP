@@ -66,7 +66,7 @@ function createQuestion($creatorId, $creationDate, $text, $title, $tags)
         $stmt->execute([$contentId, $title]);
 
         $stmt = $conn->prepare('INSERT INTO "QuestionTags"("contentId", "tagId")
-                                            SELECT * FROM (SELECT ?::integer) AS content_id, unnest(?::integer[]) AS unnest');
+                                            SELECT * FROM (SELECT ?::INTEGER) AS content_id, unnest(?::INTEGER[]) AS unnest');
         $stmt->execute([$contentId, "{" . join(",", $tags) . "}"]);
 
         $conn->commit();
@@ -151,7 +151,8 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage){
+function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage)
+{
     global $conn;
 
 
@@ -164,11 +165,12 @@ function getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage){
     ORDER BY ts_rank_cd(text_search, text_query) DESC
     LIMIT ? OFFSET ?');
 
-    $stmt->execute([$inputString,$inputString,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
 }
 
-function getNumberOfSimilarQuestions($inputString){
+function getNumberOfSimilarQuestions($inputString)
+{
     global $conn;
 
     $stmt = $conn->prepare('
@@ -179,13 +181,23 @@ function getNumberOfSimilarQuestions($inputString){
     WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
     ORDER BY ts_rank_cd(text_search, text_query) DESC');
 
-    $stmt->execute([$inputString,$inputString]);
+    $stmt->execute([$inputString, $inputString]);
     return sizeof($stmt->fetchAll());
 }
 
-function addVote($userId,$contentId,$vote){
+function addVote($userId, $contentId, $vote)
+{
     global $conn;
 
     $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
-    $stmt->execute([$userId,$contentId,$vote]);
+    $stmt->execute([$userId, $contentId, $vote]);
+}
+
+function getVoteTarget($voteId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Vote" WHERE "id" = ?');
+    $stmt->execute([$voteId]);
+    return $stmt->fetchAll();
 }

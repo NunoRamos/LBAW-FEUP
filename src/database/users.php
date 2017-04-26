@@ -48,3 +48,12 @@ function getUserById($userId)
     $stmt->execute([$userId]);
     return $stmt->fetch();
 }
+
+function getUnreadNotifications($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Notification" WHERE "userId" = ?');
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll();
+}
