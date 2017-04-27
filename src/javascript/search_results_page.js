@@ -46,7 +46,7 @@ function ajaxRequest() {
         return;
 
     $('#Search-Question-Panel').children().remove();
-    $('#Pagination-Nav').remove();
+    $('#Pagination-Nav').children().remove();
 
     console.log(input);
 
@@ -62,6 +62,7 @@ function buildSearchResults(response){
     var json = JSON.parse(response);
 
     $('#Search-Question-Panel').children().remove();
+    $('#Pagination-Nav').children().remove();
 
     if(json['questions'].length == 0){
         $('#Search-Question-Panel').append('<div class="list-group-item">No results found</div>');
@@ -95,17 +96,15 @@ function buildSearchResults(response){
         let inputString = json['inputString'];
 
         if(numberOfPages > 1){
-            $('#Main-Div').append(
-                '<nav id="Pagination-Nav" aria-label="Page navigation" class="text-center">'+
-                    '<ul class="pagination">'+
+            $('#Pagination-Nav').append(
+                    '<ul id="Pagination-List" class="pagination">'+
                         '<li id="Previous-Item">'+
                             '<span class="clickable" onclick="previousRequest()" aria-hidden="true">&laquo;</span>'+
                         '</li>'+
                         '<li>'+
                             '<span class="clickable" onclick="nextRequest()" aria-hidden="true">&raquo;</span>'+
                         '</li>'+
-                    '</ul>'+
-                '</nav>');
+                    '</ul>');
 
             for(i=numberOfPages; i>0;i--){
                 var classes = "";

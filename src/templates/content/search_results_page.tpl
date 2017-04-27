@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div id="Main-Div" class="col-xs-12 col-sm-8 col-md-9">
+    <nav id="Main-Div" class="col-xs-12 col-sm-8 col-md-9">
         <div id="Search-Question-Panel-Sister">
             <div class="input-group form-group">
                 <input id="Search-Bar" type="text" name="search" class="form-control" placeholder="Search" value="{$inputString}"/>
@@ -71,6 +71,7 @@
         </div>
 
         <div id="Search-Question-Panel" class="panel panel-default"></div>
+        <nav id="Pagination-Nav" aria-label="Page navigation" class="text-center"></nav>
     </div>
 </div>
 
