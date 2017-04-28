@@ -27,9 +27,24 @@ if(isset($_GET['page']))
     $atualPage = $_GET['page'];
 else $atualPage = 1;
 
+//Getting the position of the first element to be searched
 $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 
-$lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
+//Getting filter to search
+if(isset($_GET['orderBy']))
+    $orderBy = $_GET['orderBy'];
+else $orderBy = 0;
+
+//Getting questions
+if($orderBy == 0){ //No order
+    $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
+}
+else if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending 2 == Order by Answers - Descending
+    $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
+}
+else {
+    $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
+}
 
 $creator = array();
 

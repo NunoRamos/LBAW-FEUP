@@ -38,7 +38,6 @@
             <div class="panel-body collapse in filters-collapse">
                 <form class="form-horizontal filter-list">
                     <h5><strong>Sort By</strong></h5>
-                    <a class="filter">Popularity</a>
                     <a class="filter">Answers - Ascending</a>
                     <a class="filter">Answers - Descending</a>
                     <a class="filter">Rating - Ascending</a>

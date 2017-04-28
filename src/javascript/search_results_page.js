@@ -3,13 +3,43 @@ $(document).ready(function () {
 
     ajaxRequest();
 
-    $('#Search-Bar').on('input', ajaxRequest);
+    $('#Search-Bar').on('input', newInput);
 
-    $('#Search-Results-Button').on('click', ajaxRequest);
+    $('#Search-Results-Button').on('click', newInput);
+
+    $('.filter').on('click', requestOrderBy);
 });
 
 var atualPage = 1;
 var numberOfPages;
+var orderBy = 0;
+
+function newInput(){
+    atualPage = 1;
+    orderBy = 0;
+
+    ajaxRequest();
+}
+
+function requestOrderBy(){
+
+    atualPage = 1;
+
+    if($(this).text() == "Answers - Ascending"){
+        orderBy = 1;
+    }
+    else if($(this).text() == "Answers - Descending"){
+        orderBy = 2;
+    }
+    else if($(this).text() == "Rating - Ascending"){
+        orderBy = 3;
+    }
+    else if($(this).text() == "Rating - Descending"){
+        orderBy = 4;
+    }
+
+    ajaxRequest();
+}
 
 function previousRequest(){
 
@@ -53,7 +83,7 @@ function ajaxRequest() {
     $.ajax({
         method: "GET",
         url: "../../api/search_questions.php",
-        data: { inputString: input, page: atualPage }
+        data: { inputString: input, page: atualPage, orderBy: orderBy }
     }).done(buildSearchResults);
 }
 
