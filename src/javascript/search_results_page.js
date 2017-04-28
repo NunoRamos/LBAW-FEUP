@@ -8,11 +8,34 @@ $(document).ready(function () {
     $('#Search-Results-Button').on('click', newInput);
 
     $('.filter').on('click', requestOrderBy);
+
+    $('.Search-Type').on('click', requestSearchType);
 });
 
 var atualPage = 1;
 var numberOfPages;
 var orderBy = 0;
+var searchType = 'Questions';
+
+function requestSearchType(){
+
+    if(searchType == $(this).text()){
+        return;
+    }
+
+    searchType = $(this).text();
+    var normalColor = '#555';
+    var activeColor = '#337ab7';
+
+    if(searchType == 'Questions'){
+        $('#Search-Type-Users').css('color', normalColor);
+        $('#Search-Type-Questions').css('color', activeColor);
+    }
+    else if(searchType == 'Users'){
+        $('#Search-Type-Questions').css('color', normalColor);
+        $('#Search-Type-Users').css('color', activeColor);
+    }
+}
 
 function newInput(){
     atualPage = 1;
@@ -105,18 +128,22 @@ function repaintingFilterToNormal(){
     if(orderBy == 0)
         return;
 
+    var orderByString = '';
+
     if(orderBy == 1){
-        $('.filter:contains("Answers - Ascending")').css('color', '#000')
+        orderByString = "Answers - Ascending";
     }
     else if(orderBy == 2){
-        $('.filter:contains("Answers - Descending")').css('color', '#000')
+        orderByString = "Answers - Descending";
     }
     else if(orderBy == 3){
-        $('.filter:contains("Rating - Ascending")').css('color', '#000')
+        orderByString = "Rating - Ascending";
     }
     else if(orderBy == 4){
-        $('.filter:contains("Rating - Descending")').css('color', '#000')
+        orderByString = "Rating - Descending";
     }
+
+    $('.filter:contains('+orderByString+')').css('color', '#000')
 }
 
 function paintingNewFilter(){
@@ -124,18 +151,22 @@ function paintingNewFilter(){
     if(orderBy == 0)
         return;
 
+    var orderByString = '';
+
     if(orderBy == 1){
-        $('.filter:contains("Answers - Ascending")').css('color', '#337ab7')
+        orderByString = "Answers - Ascending";
     }
     else if(orderBy == 2){
-        $('.filter:contains("Answers - Descending")').css('color', '#337ab7')
+        orderByString = "Answers - Descending";
     }
     else if(orderBy == 3){
-        $('.filter:contains("Rating - Ascending")').css('color', '#337ab7')
+        orderByString = "Rating - Ascending";
     }
     else if(orderBy == 4){
-        $('.filter:contains("Rating - Descending")').css('color', '#337ab7')
+        orderByString = "Rating - Descending";
     }
+
+    $('.filter:contains('+orderByString+')').css('color', '#337ab7')
 }
 
 function buildSearchResults(response){

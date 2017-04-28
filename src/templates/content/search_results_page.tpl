@@ -19,8 +19,8 @@
                     <span class="collapse results-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
             </div>
             <div class="list-group collapse in results-collapse">
-                <button type="button" class="list-group-item">Questions</button>
-                <button type="button" class="list-group-item">Users</button>
+                <button id="Search-Type-Questions" type="button" class="list-group-item Search-Type">Questions</button>
+                <button id="Search-Type-Users" type="button" class="list-group-item Search-Type">Users</button>
             </div>
         </div>
 
