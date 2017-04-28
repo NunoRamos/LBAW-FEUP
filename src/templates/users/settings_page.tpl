@@ -9,16 +9,16 @@
         <div class="col-md-3">
             <p class="lead">Bernado Belchior</p>
             <div class="list-group nav">
+                <a href="#edit-personal-info" class="list-group-item">Edit Personal Info</a>
                 <a href="#settings" class="list-group-item">Settings</a>
-                <a href="#example" class="list-group-item">Exemplo 1</a>
                 <a href="#" class="list-group-item">Exemplo 2</a>
             </div>
         </div>
 
         <div class="col-md-9">
 
-                <div id='settings' class="panel panel-default tab-content settings-tab">
-                    <div class="panel-heading">Settings</div>
+                <div id='edit-personal-info' class="panel panel-default tab-content settings-tab">
+                    <div class="panel-heading">Edit Personal Info</div>
                     <div class="panel-body">
                         <h3>Personal Details</h3>
                         <hr class="divider">
@@ -40,6 +40,13 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="bio" class="control-label col-xs-12 col-sm-3">Bio</label>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <input id="email" type="email" class="form-control" value="Sou do Portooo"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <div class="col-xs-12 col-sm-offset-3 col-sm-9">
                                         <input class="btn btn-default form-control" type="submit" value="Update Details">
                                     </div>
@@ -52,43 +59,44 @@
                                      alt="Profile picture"/>
                             </div>
                         </div>
-
-                        <h3>Change Password</h3>
-                        <hr class="divider">
-                        <form class="form-horizontal center-block">
-                            <div class="form-group">
-                                <label for="curr-password" class="control-label col-xs-12 col-sm-2">Current Password</label>
-                                <div class="col-xs-12 col-sm-4">
-                                    <input id="curr-password" class="form-control" type="password" placeholder="Current Password">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="new-password" class="control-label col-xs-12 col-sm-2">New Password</label>
-                                <div class="col-xs-12 col-sm-4">
-                                    <input id="new-password" class="form-control" type="password" placeholder="New Password">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
-                                <div class="col-xs-12 col-sm-4">
-                                    <input id="repeat-password" class="form-control" type="password"
-                                           placeholder="Repeat Password">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-xs-12 col-sm-offset-2 col-sm-4">
-                                    <input class="btn btn-default form-control" type="submit" value="Change Password">
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
-                <div id='example' class="panel panel-default tab-content settings-tab">
-                    <p>Pintated</p>
+            <div id='settings' class="panel panel-default tab-content settings-tab">
+                <div class="panel-heading">Settings</div>
+                <div class="panel-body">
+                    <h3>Change Password</h3>
+                    <hr class="divider">
+                    <form class="form-horizontal center-block">
+                        <div class="form-group">
+                            <label for="curr-password" class="control-label col-xs-12 col-sm-2">Current Password</label>
+                            <div class="col-xs-12 col-sm-4">
+                                <input id="curr-password" class="form-control" type="password" placeholder="Current Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-password" class="control-label col-xs-12 col-sm-2">New Password</label>
+                            <div class="col-xs-12 col-sm-4">
+                                <input id="new-password" class="form-control" type="password" placeholder="New Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
+                            <div class="col-xs-12 col-sm-4">
+                                <input id="repeat-password" class="form-control" type="password"
+                                       placeholder="Repeat Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-offset-2 col-sm-4">
+                                <input class="btn btn-default form-control" type="submit" value="Change Password">
+                            </div>
+                        </div>
+                    </form>
                 </div>
+            </div>
         </div>
     </div>
 </div>
