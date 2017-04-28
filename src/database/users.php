@@ -57,3 +57,25 @@ function getUnreadNotifications($userId)
     $stmt->execute([$userId]);
     return $stmt->fetchAll();
 }
+
+function getUserByName($inputString)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ?');
+    $stmt->execute([$expression]);
+    return $stmt->fetchAll();
+}
+
+function getNumberOfUsersByName($inputString)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ?');
+    $stmt->execute([$expression]);
+    return $stmt->sizeof(fetchAll());
+}

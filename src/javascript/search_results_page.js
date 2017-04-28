@@ -116,11 +116,20 @@ function ajaxRequest() {
 
     console.log(input);
 
-    $.ajax({
-        method: "GET",
-        url: "../../api/search_questions.php",
-        data: { inputString: input, page: atualPage, orderBy: orderBy }
-    }).done(buildSearchResults);
+    if(searchType == 'Questions'){
+        $.ajax({
+            method: "GET",
+            url: "../../api/search_questions.php",
+            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType }
+        }).done(buildSearchQuestionsResults);
+    }
+    else {
+        $.ajax({
+            method: "GET",
+            url: "../../api/search_questions.php",
+            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType }
+        }).done(buildSearchUserResults);
+    }
 }
 
 function repaintingFilterToNormal(){
@@ -169,7 +178,7 @@ function paintingNewFilter(){
     $('.filter:contains('+orderByString+')').css('color', '#337ab7')
 }
 
-function buildSearchResults(response){
+function buildSearchQuestionsResults(response){
 
     var json = JSON.parse(response);
 
@@ -205,29 +214,41 @@ function buildSearchResults(response){
         clickEvent();
 
         numberOfPages = json['numberOfPages'];
-        let inputString = json['inputString'];
 
         if(numberOfPages > 1){
-            $('#Pagination-Nav').append(
-                '<ul id="Pagination-List" class="pagination">'+
-                '<li id="Previous-Item">'+
-                '<span class="clickable" onclick="previousRequest()" aria-hidden="true">&laquo;</span>'+
-                '</li>'+
-                '<li>'+
-                '<span class="clickable" onclick="nextRequest()" aria-hidden="true">&raquo;</span>'+
-                '</li>'+
-                '</ul>');
-
-            for(i=numberOfPages; i>0;i--){
-                var classes = "";
-                if(atualPage == i)
-                    classes = "active";
-
-                $('#Previous-Item').after('<li class="'+classes+'">' +
-                    '<span onclick="paginationRequest('+i+')" class="clickable">'+i+'</span>' +
-                    '</li>');
-            }
+            pagination();
         }
     }
 
+}
+
+function buildSearchUserResults(response){
+    var json = JSON.parse(response);
+
+    $('#Search-Question-Panel').children().remove();
+    $('#Pagination-Nav').children().remove();
+
+
+}
+
+function pagination(){
+    $('#Pagination-Nav').append(
+        '<ul id="Pagination-List" class="pagination">'+
+        '<li id="Previous-Item">'+
+        '<span class="clickable" onclick="previousRequest()" aria-hidden="true">&laquo;</span>'+
+        '</li>'+
+        '<li>'+
+        '<span class="clickable" onclick="nextRequest()" aria-hidden="true">&raquo;</span>'+
+        '</li>'+
+        '</ul>');
+
+    for(i=numberOfPages; i>0;i--){
+        var classes = "";
+        if(atualPage == i)
+            classes = "active";
+
+        $('#Previous-Item').after('<li class="'+classes+'">' +
+            '<span onclick="paginationRequest('+i+')" class="clickable">'+i+'</span>' +
+            '</li>');
+    }
 }

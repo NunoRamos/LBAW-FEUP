@@ -18,40 +18,74 @@ $resultsPerPage = 10;
 
 $inputString = htmlspecialchars($_GET['inputString']);
 
-//Lets see number of results
-$numberOfResults = getNumberOfSimilarQuestions($inputString);
+if(isset($_GET['searchType']))
+    $searchType = $_GET['searchType'];
+else $searchType = 'Questions';
 
-$numberOfPages = ceil($numberOfResults/$resultsPerPage);
+if($searchType == 'Questions'){
+    searchQuestion();
+}
+else if($searchType == 'Users'){
+    searchUsers();
+}
 
-if(isset($_GET['page']))
-    $atualPage = $_GET['page'];
-else $atualPage = 1;
+function searchQuestion(){
+    global $inputString;
+    global $resultsPerPage;
+
+    //Lets see number of results
+    $numberOfResults = getNumberOfSimilarQuestions($inputString);
+
+    $numberOfPages = ceil($numberOfResults/$resultsPerPage);
+
+    if(isset($_GET['page']))
+        $atualPage = $_GET['page'];
+    else $atualPage = 1;
 
 //Getting the position of the first element to be searched
-$thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
+    $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 
 //Getting filter to search
-if(isset($_GET['orderBy']))
-    $orderBy = $_GET['orderBy'];
-else $orderBy = 0;
+    if(isset($_GET['orderBy']))
+        $orderBy = $_GET['orderBy'];
+    else $orderBy = 0;
 
 //Getting questions
-if($orderBy == 0){ //No order
-    $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
-}
-else if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
-    $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
-}
-else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
-    $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
+    if($orderBy == 0){ //No order
+        $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
+    }
+    else if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+        $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
+    }
+    else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
+        $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
+    }
+
+    $creator = array();
+
+    foreach ($lookALikeQuestions as $lookALikeQuestion){
+        $creator[] = getUserById($lookALikeQuestion['creatorId']);
+    }
+
+    echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
+        'numberOfPages' => $numberOfPages]);
 }
 
-$creator = array();
+function searchUsers(){
+    global $inputString;
+    global $resultsPerPage;
 
-foreach ($lookALikeQuestions as $lookALikeQuestion){
-    $creator[] = getUserById($lookALikeQuestion['creatorId']);
+    //Lets see number of results
+    $numberOfResults = getUserByName($inputString);
+
+    $numberOfPages = ceil(sizeof($numberOfResults)/$resultsPerPage);
+
+    if(isset($_GET['page']))
+        $atualPage = $_GET['page'];
+    else $atualPage = 1;
+
+//Getting the position of the first element to be searched
+    $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 }
 
-echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
-    'numberOfPages' => $numberOfPages,'inputString' => $inputString]);
 
