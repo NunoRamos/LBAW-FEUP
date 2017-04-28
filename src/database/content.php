@@ -208,6 +208,36 @@ function getSimiliarQuestionByNumberOfAnswers($inputString, $thisPageFirstResult
     return $stmt->fetchAll();
 }
 
+function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, $resultsPerPage,$orderBy)
+{
+    global $conn;
+
+    if($orderBy == 3){ // ASC
+        $stmt = $conn->prepare('
+        SELECT "id", "rating", "title", "creatorId", "creationDate"
+        FROM "Content","Question", 
+            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
+        ORDER BY "rating" ASC
+        LIMIT ? OFFSET ?');
+
+    }
+    else { // DESC
+        $stmt = $conn->prepare('
+        SELECT "id", "rating", "title", "creatorId", "creationDate"
+        FROM "Content","Question", 
+            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
+        ORDER BY "rating" DESC
+        LIMIT ? OFFSET ?');
+
+    }
+    $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
+    return $stmt->fetchAll();
+}
+
 function getNumberOfSimilarQuestions($inputString)
 {
     global $conn;

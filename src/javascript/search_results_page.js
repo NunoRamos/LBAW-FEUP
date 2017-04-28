@@ -24,7 +24,8 @@ function newInput(){
 function requestOrderBy(){
     atualPage = 1;
 
-    repaintingFilterTransparent();
+    //Coloring old filter with normal color
+    repaintingFilterToNormal();
 
     if($(this).text() == "Answers - Ascending"){
         if(orderBy == 1)
@@ -37,12 +38,18 @@ function requestOrderBy(){
         else orderBy = 2;
     }
     else if($(this).text() == "Rating - Ascending"){
-        orderBy = 3;
+        if(orderBy == 3)
+            orderBy = 0;
+        else orderBy = 3;
     }
     else if($(this).text() == "Rating - Descending"){
-        orderBy = 4;
+        if(orderBy == 4)
+            orderBy = 0;
+        else orderBy = 4;
     }
-    paintingTypeOfOrder();
+
+    //Coloring new filter with active color
+    paintingNewFilter();
 
     ajaxRequest();
 }
@@ -93,7 +100,7 @@ function ajaxRequest() {
     }).done(buildSearchResults);
 }
 
-function repaintingFilterTransparent(){
+function repaintingFilterToNormal(){
 
     if(orderBy == 0)
         return;
@@ -112,7 +119,7 @@ function repaintingFilterTransparent(){
     }
 }
 
-function paintingTypeOfOrder(){
+function paintingNewFilter(){
 
     if(orderBy == 0)
         return;

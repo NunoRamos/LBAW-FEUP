@@ -39,11 +39,11 @@ else $orderBy = 0;
 if($orderBy == 0){ //No order
     $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
 }
-else if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending 2 == Order by Answers - Descending
+else if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
     $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
 }
-else {
-    $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
+else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
+    $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
 }
 
 $creator = array();
