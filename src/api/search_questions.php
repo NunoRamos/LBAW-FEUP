@@ -42,15 +42,15 @@ function searchQuestion(){
         $atualPage = $_GET['page'];
     else $atualPage = 1;
 
-//Getting the position of the first element to be searched
+    //Getting the position of the first element to be searched
     $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 
-//Getting filter to search
+    //Getting filter to search
     if(isset($_GET['orderBy']))
         $orderBy = $_GET['orderBy'];
     else $orderBy = 0;
 
-//Getting questions
+    //Getting questions
     if($orderBy == 0){ //No order
         $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
     }
@@ -76,16 +76,21 @@ function searchUsers(){
     global $resultsPerPage;
 
     //Lets see number of results
-    $numberOfResults = getUserByName($inputString);
+    $return = getNumberOfUsersByName($inputString);
+    $numberOfResults = $return['count'];
 
-    $numberOfPages = ceil(sizeof($numberOfResults)/$resultsPerPage);
+    $numberOfPages = ceil($numberOfResults/$resultsPerPage);
 
     if(isset($_GET['page']))
         $atualPage = $_GET['page'];
     else $atualPage = 1;
 
-//Getting the position of the first element to be searched
+    //Getting the position of the first element to be searched
     $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
+
+    $users = getUserByName($inputString,$thisPageFirstResult,$resultsPerPage);
+
+    echo json_encode(['users' => $users,'numberOfPages' => $numberOfPages]);
 }
 
 

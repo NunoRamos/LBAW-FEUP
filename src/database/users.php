@@ -58,14 +58,14 @@ function getUnreadNotifications($userId)
     return $stmt->fetchAll();
 }
 
-function getUserByName($inputString)
+function getUserByName($inputString,$thisPageFirstResult, $resultsPerPage)
 {
     global $conn;
 
     $expression = '%' . $inputString . '%';
 
-    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ?');
-    $stmt->execute([$expression]);
+    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ? LIMIT ? OFFSET ?');
+    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
     return $stmt->fetchAll();
 }
 
@@ -75,7 +75,7 @@ function getNumberOfUsersByName($inputString)
 
     $expression = '%' . $inputString . '%';
 
-    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ?');
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "User" WHERE "name" LIKE ?');
     $stmt->execute([$expression]);
-    return $stmt->sizeof(fetchAll());
+    return $stmt->fetch();
 }
