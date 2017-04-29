@@ -19,7 +19,7 @@ $resultsPerPage = 10;
 $inputString = htmlspecialchars($_GET['inputString']);
 
 if(isset($_GET['searchType']))
-    $searchType = $_GET['searchType'];
+    $searchType = htmlspecialchars($_GET['searchType']);
 else $searchType = 'Questions';
 
 if($searchType == 'Questions'){
@@ -40,7 +40,7 @@ function searchQuestion(){
     $numberOfPages = ceil($numberOfResults/$resultsPerPage);
 
     if(isset($_GET['page']))
-        $atualPage = $_GET['page'];
+        $atualPage = htmlspecialchars($_GET['page']);
     else $atualPage = 1;
 
     //Getting the position of the first element to be searched
@@ -48,7 +48,7 @@ function searchQuestion(){
 
     //Getting filter to search
     if(isset($_GET['orderBy']))
-        $orderBy = $_GET['orderBy'];
+        $orderBy = htmlspecialchars($_GET['orderBy']);
     else $orderBy = 0;
 
     //Getting questions
@@ -83,7 +83,7 @@ function searchUsers(){
     $numberOfPages = ceil($numberOfResults/$resultsPerPage);
 
     if(isset($_GET['page']))
-        $atualPage = $_GET['page'];
+        $atualPage = htmlspecialchars($_GET['page']);
     else $atualPage = 1;
 
     //Getting the position of the first element to be searched

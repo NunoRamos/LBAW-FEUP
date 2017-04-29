@@ -27,9 +27,10 @@
                                    class="form-control full-width"
                                    placeholder="Search"/>
                             <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i
-                                    class="glyphicon glyphicon-search"></i></button>
-                    </span>
+                                <button class="btn btn-default" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
                         </div>
                     </form>
                 </li>
