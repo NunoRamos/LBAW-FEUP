@@ -49,10 +49,9 @@
                     <!-- Inline width is MANDATORY for responsiveness. https://select2.github.io/examples.html#responsive -->
                     <select id="tags-select" multiple="multiple" style="width: 100%;">
                         <!-- Add these options dinamically  -->
-                        <option value="android">Android</option>
-                        <option value="ios">iOS</option>
-                        <option value="java">Java</option>
-                        <option value="bootstrap">Bootstrap</option>
+                        {foreach $tags as $tag}
+                            <option value="android">{$tag['name']}</option>
+                        {/foreach}
                     </select>
                 </form>
             </div>
