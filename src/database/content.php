@@ -243,12 +243,11 @@ function getNumberOfSimilarQuestions($inputString)
     global $conn;
 
     $stmt = $conn->prepare('
-    SELECT "id" 
+    SELECT COUNT(*)
     FROM "Content","Question", 
         to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
         to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-    WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-    ORDER BY ts_rank_cd(text_search, text_query) DESC');
+    WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)');
 
     $stmt->execute([$inputString, $inputString]);
     return sizeof($stmt->fetchAll());

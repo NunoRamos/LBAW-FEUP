@@ -34,7 +34,8 @@ function searchQuestion(){
     global $resultsPerPage;
 
     //Lets see number of results
-    $numberOfResults = getNumberOfSimilarQuestions($inputString);
+    $return = getNumberOfSimilarQuestions($inputString);
+    $numberOfResults = $return['count'];
 
     $numberOfPages = ceil($numberOfResults/$resultsPerPage);
 
