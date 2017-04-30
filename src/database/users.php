@@ -69,6 +69,37 @@ function getUserByName($inputString,$thisPageFirstResult, $resultsPerPage)
     return $stmt->fetchAll();
 }
 
+function getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult, $resultsPerPage, $orderBy)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    if($orderBy == 1){ //ASC
+        $stmt = $conn->prepare('
+    SELECT * FROM "User",
+    (SELECT COUNT(*) FROM "Reply","Content"
+      WHERE id = "contentId"
+      GROUP BY "creatorId") AS "Answers" 
+    WHERE "name" LIKE ? 
+    ORDER BY "Answers" ASC
+    LIMIT ? OFFSET ?');
+    }
+    else { //DESC
+        $stmt = $conn->prepare('
+    SELECT * FROM "User",
+    (SELECT COUNT(*) FROM "Reply","Content"
+      WHERE id = "contentId"
+      GROUP BY "creatorId") AS "Answers" 
+    WHERE "name" LIKE ? 
+    ORDER BY "Answers" DESC
+    LIMIT ? OFFSET ?');
+    }
+
+    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    return $stmt->fetchAll();
+}
+
 function getNumberOfUsersByName($inputString)
 {
     global $conn;

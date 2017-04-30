@@ -73,26 +73,51 @@ function requestOrderBy(){
     //Coloring old filter with normal color
     repaintingFilterToNormal();
 
-    if($(this).text() == "Answers - Ascending"){
-        if(orderBy == 1)
-            orderBy = 0;
-        else orderBy = 1;
+    if(searchType == "Questions"){
+        if($(this).text() == "Answers - Ascending"){
+            if(orderBy == 1)
+                orderBy = 0;
+            else orderBy = 1;
+        }
+        else if($(this).text() == "Answers - Descending"){
+            if(orderBy == 2)
+                orderBy = 0;
+            else orderBy = 2;
+        }
+        else if($(this).text() == "Rating - Ascending"){
+            if(orderBy == 3)
+                orderBy = 0;
+            else orderBy = 3;
+        }
+        else if($(this).text() == "Rating - Descending"){
+            if(orderBy == 4)
+                orderBy = 0;
+            else orderBy = 4;
+        }
     }
-    else if($(this).text() == "Answers - Descending"){
-        if(orderBy == 2)
-            orderBy = 0;
-        else orderBy = 2;
+    else if(searchType == "Users"){
+        if($(this).text() == "Answers - Ascending"){
+            if(orderBy == 1)
+                orderBy = 0;
+            else orderBy = 1;
+        }
+        else if($(this).text() == "Answers - Descending"){
+            if(orderBy == 2)
+                orderBy = 0;
+            else orderBy = 2;
+        }
+        else if($(this).text() == "Questions - Ascending"){
+            if(orderBy == 3)
+                orderBy = 0;
+            else orderBy = 3;
+        }
+        else if($(this).text() == "Questions - Descending"){
+            if(orderBy == 4)
+                orderBy = 0;
+            else orderBy = 4;
+        }
     }
-    else if($(this).text() == "Rating - Ascending"){
-        if(orderBy == 3)
-            orderBy = 0;
-        else orderBy = 3;
-    }
-    else if($(this).text() == "Rating - Descending"){
-        if(orderBy == 4)
-            orderBy = 0;
-        else orderBy = 4;
-    }
+
 
     //Coloring new filter with active color
     paintingNewFilter();
@@ -150,7 +175,7 @@ function ajaxRequest() {
         $.ajax({
             method: "GET",
             url: "../../api/search_questions.php",
-            data: { inputString: input, page: atualPage, searchType: searchType }
+            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType }
         }).done(buildSearchUserResults);
     }
 }

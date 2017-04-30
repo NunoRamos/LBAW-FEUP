@@ -89,7 +89,17 @@ function searchUsers(){
     //Getting the position of the first element to be searched
     $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 
-    $users = getUserByName($inputString,$thisPageFirstResult,$resultsPerPage);
+    //Getting filter to search
+    if(isset($_GET['orderBy']))
+        $orderBy = htmlspecialchars($_GET['orderBy']);
+    else $orderBy = 0;
+
+    if($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+        $users = getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
+    }
+    else {
+        $users = getUserByName($inputString,$thisPageFirstResult,$resultsPerPage);
+    }
 
     echo json_encode(['users' => $users,'numberOfPages' => $numberOfPages]);
 }
