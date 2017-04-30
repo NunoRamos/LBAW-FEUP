@@ -97,6 +97,9 @@ function searchUsers(){
     if($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
         $users = getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
     }
+    else if($orderBy == 3 || $orderBy == 4) { // 3 == Order by Questions - Ascending | 4 == Order by Questions - Descending
+        $users = getUserByNameOrderedByQuestions($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
+    }
     else {
         $users = getUserByName($inputString,$thisPageFirstResult,$resultsPerPage);
     }
