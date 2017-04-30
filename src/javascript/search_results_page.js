@@ -17,6 +17,18 @@ var numberOfPages;
 var orderBy = 0;
 var searchType = 'Questions';
 
+function getActiveTags(){
+
+    let tags = $('.select2-selection__choice');
+    let ret = [];
+
+    for(let i=0;i<tags.length;i++){
+        ret.push(tags.get(i).title);
+    }
+
+    return ret;
+}
+
 function requestSearchType(){
 
     if(searchType == $(this).text()){
@@ -30,10 +42,16 @@ function requestSearchType(){
     if(searchType == 'Questions'){
         $('#Search-Type-Users').css('color', normalColor);
         $('#Search-Type-Questions').css('color', activeColor);
+
+        $('.user-filter').css('display','none');
+        $('.question-filter').css('display','inline');
     }
     else if(searchType == 'Users'){
         $('#Search-Type-Questions').css('color', normalColor);
         $('#Search-Type-Users').css('color', activeColor);
+
+        $('.user-filter').css('display','inline');
+        $('.question-filter').css('display','none');
     }
 
     atualPage = 1;

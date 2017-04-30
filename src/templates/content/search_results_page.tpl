@@ -36,21 +36,26 @@
                                 class="glyphicon glyphicon-resize-full"></i></span>
             </div>
             <div class="panel-body collapse in filters-collapse">
-                <form class="form-horizontal filter-list">
+                <form class="form-horizontal question-filter filter-list">
                     <h5><strong>Sort By</strong></h5>
                     <a class="filter">Answers - Ascending</a>
                     <a class="filter">Answers - Descending</a>
                     <a class="filter">Rating - Ascending</a>
                     <a class="filter">Rating - Descending</a>
                 </form>
-
-                <form class="form-horizontal filter-list">
+                <form class="form-horizontal user-filter filter-list">
+                    <h5><strong>Sort By</strong></h5>
+                    <a class="filter">Answers - Ascending</a>
+                    <a class="filter">Answers - Descending</a>
+                    <a class="filter">Questions - Ascending</a>
+                    <a class="filter">Questions - Descending</a>
+                </form>
+                <form class="form-horizontal question-filter filter-list">
                     <h5><strong>Tags</strong></h5>
                     <!-- Inline width is MANDATORY for responsiveness. https://select2.github.io/examples.html#responsive -->
                     <select id="tags-select" multiple="multiple" style="width: 100%;">
-                        <!-- Add these options dinamically  -->
                         {foreach $tags as $tag}
-                            <option value="android">{$tag['name']}</option>
+                            <option value="'+{$tag['name']}+'">{$tag['name']}</option>
                         {/foreach}
                     </select>
                 </form>
