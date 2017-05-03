@@ -155,9 +155,7 @@ function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage
 {
     global $conn;
 
-    $tags = '{'.implode(",",$tags).'}';
-
-    if(empty($tags)){
+    if(sizeof($tags) == 0){
         $stmt = $conn->prepare('
         SELECT "id", "rating", "title", "creatorId", "creationDate"
         FROM "Content","Question", 
@@ -170,6 +168,7 @@ function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage
         $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
     }
     else {
+        $tags = '{'.implode(",",$tags).'}';
         $stmt = $conn->prepare('
     SELECT * 
   FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
@@ -265,7 +264,7 @@ function getNumberOfSimilarQuestions($inputString,$tags)
 {
     global $conn;
 
-    if(empty($tags)){
+    if(sizeof($tags) == 0){
         $stmt = $conn->prepare('
     SELECT COUNT(*)
     FROM "Content","Question", 

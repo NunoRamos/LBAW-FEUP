@@ -265,7 +265,7 @@ function buildSearchQuestionsResults(response){
         clickEvent();
 
         numberOfPages = json['numberOfPages'];
-
+        console.log(numberOfPages);
         console.log(json['tags']);
 
         if(numberOfPages > 1){
