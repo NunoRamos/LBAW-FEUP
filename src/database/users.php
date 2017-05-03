@@ -57,3 +57,87 @@ function getUnreadNotifications($userId)
     $stmt->execute([$userId]);
     return $stmt->fetchAll();
 }
+
+function getUserByName($inputString,$thisPageFirstResult, $resultsPerPage)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ? LIMIT ? OFFSET ?');
+    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    return $stmt->fetchAll();
+}
+
+function getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult, $resultsPerPage, $orderBy)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    if($orderBy == 1){ //ASC
+        $stmt = $conn->prepare('
+    SELECT * FROM "User",
+    (SELECT COUNT(*) FROM "Reply","Content"
+      WHERE id = "contentId"
+      GROUP BY "creatorId") AS "Answers" 
+    WHERE "name" LIKE ? 
+    ORDER BY "Answers" ASC
+    LIMIT ? OFFSET ?');
+    }
+    else { //DESC
+        $stmt = $conn->prepare('
+    SELECT * FROM "User",
+    (SELECT COUNT(*) FROM "Reply","Content"
+      WHERE id = "contentId"
+      GROUP BY "creatorId") AS "Answers" 
+    WHERE "name" LIKE ? 
+    ORDER BY "Answers" DESC
+    LIMIT ? OFFSET ?');
+    }
+
+    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    return $stmt->fetchAll();
+}
+
+function getUserByNameOrderedByQuestions($inputString,$thisPageFirstResult, $resultsPerPage, $orderBy)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    if($orderBy == 3){ //ASC
+        $stmt = $conn->prepare('
+    SELECT * FROM "User",
+    (SELECT COUNT(*) FROM "Question","Content"
+      WHERE id = "contentId"
+      GROUP BY "creatorId") AS "Answers" 
+    WHERE "name" LIKE ? 
+    ORDER BY "Answers" ASC
+    LIMIT ? OFFSET ?');
+    }
+    else { //DESC
+        $stmt = $conn->prepare('
+    SELECT * FROM "User",
+    (SELECT COUNT(*) FROM "Question","Content"
+      WHERE id = "contentId"
+      GROUP BY "creatorId") AS "Answers" 
+    WHERE "name" LIKE ? 
+    ORDER BY "Answers" DESC
+    LIMIT ? OFFSET ?');
+    }
+
+    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    return $stmt->fetchAll();
+}
+
+function getNumberOfUsersByName($inputString)
+{
+    global $conn;
+
+    $expression = '%' . $inputString . '%';
+
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "User" WHERE "name" LIKE ?');
+    $stmt->execute([$expression]);
+    return $stmt->fetch();
+}
