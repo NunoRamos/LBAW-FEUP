@@ -151,11 +151,14 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage)
+function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage, $tags)
 {
     global $conn;
 
-    $stmt = $conn->prepare('
+    $tags = '{'.implode(",",$tags).'}';
+
+    if(empty($tags)){
+        $stmt = $conn->prepare('
         SELECT "id", "rating", "title", "creatorId", "creationDate"
         FROM "Content","Question", 
             to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
@@ -164,7 +167,27 @@ function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage
         ORDER BY ts_rank_cd(text_search, text_query) DESC
         LIMIT ? OFFSET ?');
 
-    $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
+        $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
+    }
+    else {
+        $stmt = $conn->prepare('
+    SELECT * 
+  FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
+        FROM "Content","Question", 
+            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
+        ORDER BY ts_rank_cd(text_search, text_query) DESC) AS "matches"
+  WHERE EXISTS 
+      (SELECT "tagId"  
+        FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
+        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag")
+        LIMIT ? OFFSET ?');
+
+        $stmt->execute([$inputString, $inputString, $tags, $resultsPerPage, $thisPageFirstResult]);
+    }
+
+
     return $stmt->fetchAll();
 }
 
@@ -238,18 +261,36 @@ function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, 
     return $stmt->fetchAll();
 }
 
-function getNumberOfSimilarQuestions($inputString)
+function getNumberOfSimilarQuestions($inputString,$tags)
 {
     global $conn;
 
-    $stmt = $conn->prepare('
+    if(empty($tags)){
+        $stmt = $conn->prepare('
     SELECT COUNT(*)
     FROM "Content","Question", 
         to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
         to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
     WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)');
+        $stmt->execute([$inputString, $inputString]);
+    }
+    else {
+        $tags = '{'.implode(",",$tags).'}';
+        $stmt = $conn->prepare('
+    SELECT COUNT(*)
+  FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
+        FROM "Content","Question", 
+            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
+        ORDER BY ts_rank_cd(text_search, text_query) DESC) AS "matches"
+  WHERE EXISTS 
+      (SELECT "tagId"  
+        FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
+        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag");');
+        $stmt->execute([$inputString, $inputString,$tags]);
+    }
 
-    $stmt->execute([$inputString, $inputString]);
     return $stmt->fetch();
 }
 
@@ -268,4 +309,24 @@ function getVoteTarget($voteId)
     $stmt = $conn->prepare('SELECT * FROM "Vote" WHERE "id" = ?');
     $stmt->execute([$voteId]);
     return $stmt->fetchAll();
+}
+
+function getTagsId($tags)
+{
+    global $conn;
+
+    $tags = '{'.implode(",",$tags).'}';
+
+    $stmt = $conn->prepare('
+SELECT "id" FROM "Tag", unnest(?::TEXT[]) AS "tag" 
+WHERE "Tag"."name" = "tag"');
+    $stmt->execute([$tags]);
+
+    $result = $stmt->fetchAll();
+    $return = [];
+    foreach ($result as $value){
+        array_push($return,$value['id']);
+    }
+
+    return $return;
 }

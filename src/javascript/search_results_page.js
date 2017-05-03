@@ -16,6 +16,7 @@ var atualPage = 1;
 var numberOfPages;
 var orderBy = 0;
 var searchType = 'Questions';
+var activeTags = [];
 
 function getActiveTags(){
 
@@ -63,6 +64,8 @@ function requestSearchType(){
 function newInput(){
     atualPage = 1;
     orderBy = 0;
+
+    activeTags = getActiveTags();
 
     ajaxRequest();
 }
@@ -168,7 +171,7 @@ function ajaxRequest() {
         $.ajax({
             method: "GET",
             url: "../../api/search_questions.php",
-            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType }
+            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType, tags: activeTags }
         }).done(buildSearchQuestionsResults);
     }
     else if(searchType == 'Users'){
@@ -262,6 +265,8 @@ function buildSearchQuestionsResults(response){
         clickEvent();
 
         numberOfPages = json['numberOfPages'];
+
+        console.log(json['tags']);
 
         if(numberOfPages > 1){
             pagination();

@@ -33,8 +33,15 @@ function searchQuestion(){
     global $inputString;
     global $resultsPerPage;
 
+    //Getting active tags
+    if(isset($_GET['tags'])){
+        $tags = $_GET['tags'];
+        $tagsId = getTagsId($tags);
+    }
+    else $tagsId = [];
+
     //Lets see number of results
-    $return = getNumberOfSimilarQuestions($inputString);
+    $return = getNumberOfSimilarQuestions($inputString,$tagsId);
     $numberOfResults = $return['count'];
 
     $numberOfPages = ceil($numberOfResults/$resultsPerPage);
@@ -59,7 +66,7 @@ function searchQuestion(){
         $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
     }
     else { //No order
-        $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage);
+        $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage,$tagsId);
     }
 
     $creator = array();
@@ -69,7 +76,7 @@ function searchQuestion(){
     }
 
     echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
-        'numberOfPages' => $numberOfPages]);
+        'numberOfPages' => $numberOfPages, 'tags'=> $tagsId]);
 }
 
 function searchUsers(){
