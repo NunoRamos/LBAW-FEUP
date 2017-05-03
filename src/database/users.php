@@ -40,6 +40,14 @@ function getUserNameById($id)
     return $stmt->fetch()["name"];
 }
 
+function getUserBioById($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "User"."bio" FROM "User" WHERE "User".id = ?');
+    $stmt->execute([$id]);
+    return $stmt->fetch()["bio"];
+}
+
 function getUserById($userId)
 {
     global $conn;

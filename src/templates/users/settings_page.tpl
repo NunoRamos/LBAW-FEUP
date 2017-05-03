@@ -7,42 +7,41 @@
     <div class="row">
 
         <div class="col-md-3">
-            <p class="lead">Bernado Belchior</p>
-            <div class="list-group nav">
+            <p class="lead">{$NAME}</p>
+            <div class="list-group nav " id ="edit-profile-nav">
                 <a href="#edit-personal-info" class="list-group-item">Edit Personal Info</a>
                 <a href="#settings" class="list-group-item">Settings</a>
-                <a href="#" class="list-group-item">Exemplo 2</a>
+                <a href="#ola" class="list-group-item">Exemplo 2</a>
             </div>
         </div>
 
         <div class="col-md-9">
 
-                <div id='edit-personal-info' class="panel panel-default tab-content settings-tab">
+                <div id='edit-personal-info' class="panel panel-default tab-content settings-tab ">
                     <div class="panel-heading">Edit Personal Info</div>
                     <div class="panel-body">
                         <h3>Personal Details</h3>
                         <hr class="divider">
-
                         <div class="row">
                             <form class="form-horizontal col-xs-12 col-sm-6">
                                 <div class="form-group">
                                     <label for="name" class="control-label col-xs-12 col-sm-3">Name</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="name" class="form-control" value="Bernardo Belchior"/>
+                                        <input id="name" class="form-control" value="{$NAME}"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="email" class="control-label col-xs-12 col-sm-3">Email</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="email" type="email" class="form-control" value="up201405381@fe.up.pt"/>
+                                        <input id="email" type="email" class="form-control" value="{$EMAIL}"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="bio" class="control-label col-xs-12 col-sm-3">Bio</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="email" type="email" class="form-control" value="Sou do Portooo"/>
+                                        <input id="email" type="email" class="form-control" value="{getUserBioById($USERID)}"/>
                                     </div>
                                 </div>
 
@@ -61,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-            <div id='settings' class="panel panel-default tab-content settings-tab">
+            <div id='settings' class="panel panel-default tab-content settings-tab ">
                 <div class="panel-heading">Settings</div>
                 <div class="panel-body">
                     <h3>Change Password</h3>
