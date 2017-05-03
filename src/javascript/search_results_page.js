@@ -263,8 +263,6 @@ function buildSearchQuestionsResults(response){
 
         numberOfPages = json['numberOfPages'];
 
-        console.log("pages: "+ numberOfPages);
-
         if(numberOfPages > 1){
             pagination();
         }
