@@ -250,7 +250,7 @@ function getNumberOfSimilarQuestions($inputString)
     WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)');
 
     $stmt->execute([$inputString, $inputString]);
-    return sizeof($stmt->fetchAll());
+    return $stmt->fetch();
 }
 
 function addVote($userId, $contentId, $vote)
