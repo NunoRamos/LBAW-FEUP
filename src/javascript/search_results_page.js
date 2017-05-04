@@ -10,6 +10,8 @@ $(document).ready(function () {
     $('.filter').on('click', requestOrderBy);
 
     $('.Search-Type').on('click', requestSearchType);
+
+    $('select').on('select2:select', newInput);
 });
 
 var atualPage = 1;
@@ -265,8 +267,6 @@ function buildSearchQuestionsResults(response){
         clickEvent();
 
         numberOfPages = json['numberOfPages'];
-        console.log(numberOfPages);
-        console.log(json['tags']);
 
         if(numberOfPages > 1){
             pagination();
@@ -303,8 +303,6 @@ function buildSearchUserResults(response) {
         clickEvent();
 
         numberOfPages = json['numberOfPages'];
-
-        console.log(numberOfPages);
 
         if(numberOfPages > 1){
             pagination();
