@@ -80,7 +80,7 @@ function searchQuestion(){
 }
 
 function searchUsers(){
-    global $inputString;
+    global $inputString; 
     global $resultsPerPage;
 
     //Lets see number of results
