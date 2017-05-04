@@ -269,3 +269,72 @@ function getVoteTarget($voteId)
     $stmt->execute([$voteId]);
     return $stmt->fetchAll();
 }
+
+function editName($id, $name)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+       // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "name" = ? WHERE "id" = ?;');
+        $stmt->execute([$name, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
+function editBio($id, $bio)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "bio" = ? WHERE "id" = ?;');
+        $stmt->execute([$bio, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
+function editEmail($id, $email)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "email" = ? WHERE "id" = ?;');
+        $stmt->execute([$email, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}

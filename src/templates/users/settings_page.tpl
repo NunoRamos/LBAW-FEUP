@@ -23,25 +23,25 @@
                         <h3>Personal Details</h3>
                         <hr class="divider">
                         <div class="row">
-                            <form class="form-horizontal col-xs-12 col-sm-6">
+                            <form class="form-horizontal col-xs-12 col-sm-6" method="post" action="../../actions/update_personal_info.php">
                                 <div class="form-group">
                                     <label for="name" class="control-label col-xs-12 col-sm-3">Name</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="name" class="form-control" value="{$NAME}"/>
+                                        <input id="name" class="form-control" value="{getUserNameById($USERID)}" name="name"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="email" class="control-label col-xs-12 col-sm-3">Email</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="email" type="email" class="form-control" value="{$EMAIL}"/>
+                                        <input id="email" type="email" class="form-control" value="{getUserEmailById($USERID)}" name ="email"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="bio" class="control-label col-xs-12 col-sm-3">Bio</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="email" type="email" class="form-control" value="{getUserBioById($USERID)}"/>
+                                        <input id="email" class="form-control" value="{getUserBioById($USERID)}" name = "bio"/>
                                     </div>
                                 </div>
 
