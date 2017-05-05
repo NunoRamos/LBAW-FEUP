@@ -12,6 +12,7 @@ $(document).ready(function () {
     $('.Search-Type').on('click', requestSearchType);
 
     $('select').on('select2:select', newInput);
+    $('select').on('select2:unselect', newInput);
 });
 
 var atualPage = 1;
@@ -22,11 +23,11 @@ var activeTags = [];
 
 function getActiveTags(){
 
-    let tags = $('.select2-selection__choice');
+    let tags = $('#tags-select').select2('data');
     let ret = [];
 
     for(let i=0;i<tags.length;i++){
-        ret.push(tags.get(i).title);
+        ret.push(tags[i].text);
     }
 
     return ret;
