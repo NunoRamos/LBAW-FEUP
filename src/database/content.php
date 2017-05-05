@@ -420,3 +420,38 @@ WHERE "Tag"."name" = "tag"');
 
     return $return;
 }
+
+function searchByTag($tags, $thisPageFirstResult, $resultsPerPage,$orderBy)
+{
+    global $conn;
+
+    $tags = '{'.implode(",",$tags).'}';
+
+    $stmt = $conn->prepare('
+SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
+(SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
+WHERE "tagId" = "tag") AS "results"
+WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id"
+LIMIT ? OFFSET ?');
+
+    $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
+
+    return $stmt->fetchAll();
+}
+
+function searchByTagResultsSize($tags)
+{
+    global $conn;
+
+    $tags = '{'.implode(",",$tags).'}';
+
+    $stmt = $conn->prepare('
+SELECT COUNT(*) FROM "Question","Content",
+(SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
+WHERE "tagId" = "tag") AS "results"
+WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id";');
+
+    $stmt->execute([$tags]);
+
+    return $stmt->fetch();
+}

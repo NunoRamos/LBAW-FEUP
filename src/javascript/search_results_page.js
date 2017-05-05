@@ -162,7 +162,7 @@ function ajaxRequest() {
 
     var input = $('#Search-Bar').val();
 
-    if(input == '')
+    if(input == '' && activeTags.length == 0)
         return;
 
     $('#Search-Question-Panel').children().remove();
@@ -174,7 +174,7 @@ function ajaxRequest() {
         $.ajax({
             method: "GET",
             url: "../../api/search_questions.php",
-            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType, tags: activeTags }
+            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType, activeTags: activeTags }
         }).done(buildSearchQuestionsResults);
     }
     else if(searchType == 'Users'){

@@ -3,14 +3,8 @@ include_once('../config/init.php');
 include_once($BASE_DIR .'database/users.php');
 include_once($BASE_DIR .'database/content.php');
 
-if (!$_GET['inputString']) {
-    $_SESSION['error_messages'][] = 'All fields are mandatory';
-    $_SESSION['form_values'] = $_POST;
-    if(empty($_SERVER['HTTP_REFERER']))
-        header('Location: ../pages/misc/landing_page.php');
-    else
-        header("Location:" . $_SERVER['HTTP_REFERER']);
-    exit;
+if ((!isset($_GET['inputString']) && !isset($_GET['activeTags']) ||
+    (sizeof($_GET['activeTags']) == 0 && strlen($_GET['inputString']) == 0))) {
     exit;
 }
 
@@ -34,14 +28,17 @@ function searchQuestion(){
     global $resultsPerPage;
 
     //Getting active tags
-    if(isset($_GET['tags'])){
-        $tags = $_GET['tags'];
+    if(isset($_GET['activeTags'])){
+        $tags = $_GET['activeTags'];
         $tagsId = getTagsId($tags);
     }
     else $tagsId = [];
 
     //Lets see number of results
-    $return = getNumberOfSimilarQuestions($inputString,$tagsId);
+    if(strlen($inputString) == 0)
+        $return = searchByTagResultsSize($tagsId);
+    else $return = getNumberOfSimilarQuestions($inputString,$tagsId);
+
     $numberOfResults = $return['count'];
 
     $numberOfPages = ceil($numberOfResults/$resultsPerPage);
@@ -59,15 +56,21 @@ function searchQuestion(){
     else $orderBy = 0;
 
     //Getting questions
-    if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
-        $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy,$tagsId);
+    if(strlen($inputString) == 0){ //Just search by tags
+        $lookALikeQuestions = searchByTag($tagsId,$thisPageFirstResult,$resultsPerPage,$orderBy);
     }
-    else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
-        $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy,$tagsId);
+    else {
+        if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+            $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy,$tagsId);
+        }
+        else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
+            $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy,$tagsId);
+        }
+        else { //No order
+            $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage,$tagsId);
+        }
     }
-    else { //No order
-        $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage,$tagsId);
-    }
+
 
     $creator = array();
 
@@ -76,7 +79,7 @@ function searchQuestion(){
     }
 
     echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
-        'numberOfPages' => $numberOfPages, 'tags'=> $tagsId]);
+        'numberOfPages' => $numberOfPages]);
 }
 
 function searchUsers(){
