@@ -57,6 +57,9 @@
                         {foreach $tags as $tag}
                             <option value="'+{$tag['name']}+'">{$tag['name']}</option>
                         {/foreach}
+                        {if $selectedTag|count_characters > 0}
+                            <option selected value="'+{$selectedTag}+'">{$selectedTag}</option>
+                        {/if}
                     </select>
                 </form>
             </div>

@@ -20,7 +20,7 @@
         </div>
         <div class="panel-body list-group">
         {foreach $tags as $tag}
-            <a href="../content/search_results.php" class="list-group-item">{$tag['name']}</a>
+            <a href="../content/search_results.php?activeTags={$tag['name']}" class="list-group-item">{$tag['name']}</a>
             {/foreach}
         </div>
     </div>

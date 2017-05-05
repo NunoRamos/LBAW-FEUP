@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('#tags-select').select2();
 
+    activeTags = getActiveTags();
     ajaxRequest();
 
     $('#Search-Bar').on('input', newInput);
