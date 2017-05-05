@@ -57,7 +57,16 @@ function searchQuestion(){
 
     //Getting questions
     if(strlen($inputString) == 0){ //Just search by tags
-        $lookALikeQuestions = searchByTag($tagsId,$thisPageFirstResult,$resultsPerPage,$orderBy);
+        if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+            $lookALikeQuestions = searchByTagOrderedByNumberOfAnswers($tagsId,$thisPageFirstResult,$resultsPerPage,$orderBy);
+        }
+        else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
+            $lookALikeQuestions = searchByTagOrderedByRating($tagsId,$thisPageFirstResult,$resultsPerPage,$orderBy);
+        }
+        else { //No order
+            $lookALikeQuestions = searchByTag($tagsId,$thisPageFirstResult,$resultsPerPage);
+        }
+
     }
     else {
         if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending

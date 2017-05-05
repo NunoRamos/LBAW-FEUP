@@ -421,7 +421,7 @@ WHERE "Tag"."name" = "tag"');
     return $return;
 }
 
-function searchByTag($tags, $thisPageFirstResult, $resultsPerPage,$orderBy)
+function searchByTag($tags, $thisPageFirstResult, $resultsPerPage)
 {
     global $conn;
 
@@ -433,6 +433,78 @@ SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Con
 WHERE "tagId" = "tag") AS "results"
 WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id"
 LIMIT ? OFFSET ?');
+
+    $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
+
+    return $stmt->fetchAll();
+}
+
+function searchByTagOrderedByRating($tags, $thisPageFirstResult, $resultsPerPage, $orderBy)
+{
+    global $conn;
+
+    $tags = '{'.implode(",",$tags).'}';
+
+    if($orderBy == 3){ //ASC
+        $stmt = $conn->prepare('
+SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
+(SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
+WHERE "tagId" = "tag") AS "results"
+WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id"
+ORDER BY "rating" ASC 
+LIMIT ? OFFSET ?');
+    }
+    else { //DESC
+        $stmt = $conn->prepare('
+SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
+(SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
+WHERE "tagId" = "tag") AS "results"
+WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id"
+ORDER BY "rating" DESC 
+LIMIT ? OFFSET ?');
+    }
+
+    $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
+
+    return $stmt->fetchAll();
+}
+
+function searchByTagOrderedByNumberOfAnswers($tags, $thisPageFirstResult, $resultsPerPage, $orderBy)
+{
+    global $conn;
+
+    $tags = '{'.implode(",",$tags).'}';
+
+    if($orderBy == 1){ //ASC
+        $stmt = $conn->prepare('
+SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
+          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( 
+SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
+(SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
+WHERE "tagId" = "tag") AS "results"
+WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id") AS "Results" 
+          LEFT JOIN "Reply"
+          ON "Results"."id" = "topContentId"
+          GROUP BY "Results"."id") AS "Results", "Question", "Content"
+        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
+        ORDER BY "NumberOfAnswers" ASC
+        LIMIT ? OFFSET ?');
+    }
+    else { //DESC
+        $stmt = $conn->prepare('
+SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
+          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( 
+SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
+(SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
+WHERE "tagId" = "tag") AS "results"
+WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id") AS "Results" 
+          LEFT JOIN "Reply"
+          ON "Results"."id" = "topContentId"
+          GROUP BY "Results"."id") AS "Results", "Question", "Content"
+        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
+        ORDER BY "NumberOfAnswers" DESC
+        LIMIT ? OFFSET ?');
+    }
 
     $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
 
