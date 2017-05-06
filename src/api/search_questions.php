@@ -2,6 +2,7 @@
 include_once('../config/init.php');
 include_once($BASE_DIR .'database/users.php');
 include_once($BASE_DIR .'database/content.php');
+include_once($BASE_DIR .'lib/order.php');
 
 if ((!isset($_GET['inputString']) && !isset($_GET['activeTags']) ||
     (sizeof($_GET['activeTags']) == 0 && strlen($_GET['inputString']) == 0))) {

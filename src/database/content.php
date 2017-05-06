@@ -151,26 +151,76 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage, $tags)
+function getSimilarQuestions($inputString, $questionOffset, $resultsPerPage, $tags)
+{
+    global $conn;
+    $textLanguage = "'english'";
+
+    $tags = '{' . implode(",", $tags) . '}';
+
+    $stmt = $conn->prepare('
+        WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
+        SELECT "id", "rating", "title", "creatorId", "creationDate"
+        FROM "Content","Question", 
+            plainto_tsquery(' . $textLanguage . ',?) AS search_query,
+            to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector 
+        WHERE "contentId" = "id" AND search_vector @@ search_query AND 
+            (NOT EXISTS(SELECT * FROM selected_tags) 
+            OR
+             EXISTS(
+                SELECT selected_tags."tagId"
+                    FROM "QuestionTags", selected_tags 
+                    WHERE "QuestionTags"."contentId" = "id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
+        ORDER BY ts_rank_cd(search_vector, search_query) DESC
+        LIMIT ? OFFSET ?');
+
+    $stmt->execute([$tags, $inputString, $resultsPerPage, $questionOffset]);
+    return $stmt->fetchAll();
+}
+
+function getSimiliarQuestionByNumberOfAnswers($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy, $tags)
 {
     global $conn;
 
-    if(sizeof($tags) == 0){
-        $stmt = $conn->prepare('
-        SELECT "id", "rating", "title", "creatorId", "creationDate"
-        FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-        ORDER BY ts_rank_cd(text_search, text_query) DESC
+    if (sizeof($tags) == 0) { //Without tags
+        if ($orderBy == 1) { //ASC
+            $stmt = $conn->prepare('
+        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
+          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
+            FROM "Content","Question", 
+              to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+              to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+            WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
+          LEFT JOIN "Reply"
+          ON "Results"."id" = "topContentId"
+          GROUP BY "Results"."id") AS "Results", "Question", "Content"
+        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
+        ORDER BY "NumberOfAnswers" ASC
+        LIMIT ? OFFSET ?');
+        } else { //DESC
+            $stmt = $conn->prepare('
+        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
+          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
+            FROM "Content","Question", 
+              to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+              to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+            WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
+          LEFT JOIN "Reply"
+          ON "Results"."id" = "topContentId"
+          GROUP BY "Results"."id") AS "Results", "Question", "Content"
+        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
+        ORDER BY "NumberOfAnswers" DESC
         LIMIT ? OFFSET ?');
 
+        }
+
         $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
-    }
-    else {
-        $tags = '{'.implode(",",$tags).'}';
-        $stmt = $conn->prepare('
-    SELECT * 
+    } else { //With tags
+        $tags = '{' . implode(",", $tags) . '}';
+        if ($orderBy == 1) { //ASC
+            $stmt = $conn->prepare('
+        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
+          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT * 
   FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
         FROM "Content","Question", 
             to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
@@ -180,8 +230,35 @@ function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage
   WHERE EXISTS 
       (SELECT "tagId"  
         FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
-        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag")
+        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag")) AS "Results" 
+          LEFT JOIN "Reply"
+          ON "Results"."id" = "topContentId"
+          GROUP BY "Results"."id") AS "Results", "Question", "Content"
+        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
+        ORDER BY "NumberOfAnswers" ASC
         LIMIT ? OFFSET ?');
+        } else { //DESC
+            $stmt = $conn->prepare('
+        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
+          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT * 
+  FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
+        FROM "Content","Question", 
+            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
+            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
+        ORDER BY ts_rank_cd(text_search, text_query) DESC) AS "matches"
+  WHERE EXISTS 
+      (SELECT "tagId"  
+        FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
+        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag")) AS "Results" 
+          LEFT JOIN "Reply"
+          ON "Results"."id" = "topContentId"
+          GROUP BY "Results"."id") AS "Results", "Question", "Content"
+        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
+        ORDER BY "NumberOfAnswers" DESC
+        LIMIT ? OFFSET ?');
+
+        }
 
         $stmt->execute([$inputString, $inputString, $tags, $resultsPerPage, $thisPageFirstResult]);
     }
@@ -190,103 +267,12 @@ function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage
     return $stmt->fetchAll();
 }
 
-function getSimiliarQuestionByNumberOfAnswers($inputString, $thisPageFirstResult, $resultsPerPage,$orderBy,$tags){
-    global $conn;
-
-    if(sizeof($tags) == 0){ //Without tags
-        if($orderBy == 1){ //ASC
-            $stmt = $conn->prepare('
-        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
-            FROM "Content","Question", 
-              to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-              to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-            WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
-          LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
-          GROUP BY "Results"."id") AS "Results", "Question", "Content"
-        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
-        ORDER BY "NumberOfAnswers" ASC
-        LIMIT ? OFFSET ?');
-        }
-        else { //DESC
-            $stmt = $conn->prepare('
-        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
-            FROM "Content","Question", 
-              to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-              to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-            WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
-          LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
-          GROUP BY "Results"."id") AS "Results", "Question", "Content"
-        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
-        ORDER BY "NumberOfAnswers" DESC
-        LIMIT ? OFFSET ?');
-
-        }
-
-        $stmt->execute([$inputString, $inputString , $resultsPerPage, $thisPageFirstResult]);
-    }
-    else { //With tags
-        $tags = '{'.implode(",",$tags).'}';
-        if($orderBy == 1){ //ASC
-            $stmt = $conn->prepare('
-        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT * 
-  FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
-        FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-        ORDER BY ts_rank_cd(text_search, text_query) DESC) AS "matches"
-  WHERE EXISTS 
-      (SELECT "tagId"  
-        FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
-        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag")) AS "Results" 
-          LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
-          GROUP BY "Results"."id") AS "Results", "Question", "Content"
-        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
-        ORDER BY "NumberOfAnswers" ASC
-        LIMIT ? OFFSET ?');
-        }
-        else { //DESC
-            $stmt = $conn->prepare('
-        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT * 
-  FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
-        FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-        ORDER BY ts_rank_cd(text_search, text_query) DESC) AS "matches"
-  WHERE EXISTS 
-      (SELECT "tagId"  
-        FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
-        WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag")) AS "Results" 
-          LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
-          GROUP BY "Results"."id") AS "Results", "Question", "Content"
-        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
-        ORDER BY "NumberOfAnswers" DESC
-        LIMIT ? OFFSET ?');
-
-        }
-
-        $stmt->execute([$inputString, $inputString , $tags, $resultsPerPage, $thisPageFirstResult]);
-    }
-
-
-    return $stmt->fetchAll();
-}
-
-function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, $resultsPerPage,$orderBy, $tags)
+function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy, $tags)
 {
     global $conn;
 
-    if(sizeof($tags) == 0){ //Without tags
-        if($orderBy == 3){ //ASC
+    if (sizeof($tags) == 0) { //Without tags
+        if ($orderBy == 3) { //ASC
             $stmt = $conn->prepare('
         SELECT "id", "rating", "title", "creatorId", "creationDate"
         FROM "Content","Question", 
@@ -296,8 +282,7 @@ function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, 
         ORDER BY "rating" ASC
         LIMIT ? OFFSET ?');
 
-        }
-        else { //DESC
+        } else { //DESC
             $stmt = $conn->prepare('
         SELECT "id", "rating", "title", "creatorId", "creationDate"
         FROM "Content","Question", 
@@ -309,10 +294,9 @@ function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, 
 
         }
         $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
-    }
-    else { //With tags
-        $tags = '{'.implode(",",$tags).'}';
-        if($orderBy == 3){ //ASC
+    } else { //With tags
+        $tags = '{' . implode(",", $tags) . '}';
+        if ($orderBy == 3) { //ASC
             $stmt = $conn->prepare('
         SELECT * 
   FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
@@ -328,8 +312,7 @@ function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, 
         ORDER BY "rating" ASC
         LIMIT ? OFFSET ?');
 
-        }
-        else { //DESC
+        } else { //DESC
             $stmt = $conn->prepare('
        SELECT * 
   FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
@@ -352,33 +335,32 @@ function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, 
     return $stmt->fetchAll();
 }
 
-function getNumberOfSimilarQuestions($inputString,$tags)
+function getNumberOfSimilarQuestions($inputString, $tags)
 {
     global $conn;
 
-    if(sizeof($tags) == 0){
+    if (sizeof($tags) == 0) {
         $stmt = $conn->prepare('
     SELECT COUNT(*)
     FROM "Content","Question", 
-        to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-        to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+        to_tsvector(\'english\',text) text_search, plainto_tsquery(\'english\',?) text_query,
+        to_tsvector(\'english\',title) title_search, plainto_tsquery(\'english\',?) title_query
     WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)');
         $stmt->execute([$inputString, $inputString]);
-    }
-    else {
-        $tags = '{'.implode(",",$tags).'}';
+    } else {
+        $tags = '{' . implode(",", $tags) . '}';
         $stmt = $conn->prepare('
     SELECT COUNT(*)
   FROM (SELECT "id", "rating", "title", "creatorId", "creationDate"
         FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
+            to_tsvector(\'english\',text) text_search, plainto_tsquery(\'english\',?) text_query,
+            to_tsvector(\'english\',title) title_search, plainto_tsquery(\'english\',?) title_query
         WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "matches"
   WHERE EXISTS 
       (SELECT "tagId"  
         FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag" 
         WHERE "QuestionTags"."contentId" = "matches"."id" AND "tagId" = "tag");');
-        $stmt->execute([$inputString, $inputString,$tags]);
+        $stmt->execute([$inputString, $inputString, $tags]);
     }
 
     return $stmt->fetch();
@@ -405,7 +387,7 @@ function getTagsId($tags)
 {
     global $conn;
 
-    $tags = '{'.implode(",",$tags).'}';
+    $tags = '{' . implode(",", $tags) . '}';
 
     $stmt = $conn->prepare('
 SELECT "id" FROM "Tag", unnest(?::TEXT[]) AS "tag" 
@@ -414,8 +396,8 @@ WHERE "Tag"."name" = "tag"');
 
     $result = $stmt->fetchAll();
     $return = [];
-    foreach ($result as $value){
-        array_push($return,$value['id']);
+    foreach ($result as $value) {
+        array_push($return, $value['id']);
     }
 
     return $return;
@@ -425,7 +407,7 @@ function searchByTag($tags, $thisPageFirstResult, $resultsPerPage)
 {
     global $conn;
 
-    $tags = '{'.implode(",",$tags).'}';
+    $tags = '{' . implode(",", $tags) . '}';
 
     $stmt = $conn->prepare('
 SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
@@ -434,7 +416,7 @@ WHERE "tagId" = "tag") AS "results"
 WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id"
 LIMIT ? OFFSET ?');
 
-    $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$tags, $resultsPerPage, $thisPageFirstResult]);
 
     return $stmt->fetchAll();
 }
@@ -443,9 +425,9 @@ function searchByTagOrderedByRating($tags, $thisPageFirstResult, $resultsPerPage
 {
     global $conn;
 
-    $tags = '{'.implode(",",$tags).'}';
+    $tags = '{' . implode(",", $tags) . '}';
 
-    if($orderBy == 3){ //ASC
+    if ($orderBy == 3) { //ASC
         $stmt = $conn->prepare('
 SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
 (SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
@@ -453,8 +435,7 @@ WHERE "tagId" = "tag") AS "results"
 WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Content"."id"
 ORDER BY "rating" ASC 
 LIMIT ? OFFSET ?');
-    }
-    else { //DESC
+    } else { //DESC
         $stmt = $conn->prepare('
 SELECT "id", "rating", "title", "creatorId", "creationDate" FROM "Question","Content",
 (SELECT "contentId" FROM "QuestionTags", unnest(?::INTEGER[]) AS "tag"
@@ -464,7 +445,7 @@ ORDER BY "rating" DESC
 LIMIT ? OFFSET ?');
     }
 
-    $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$tags, $resultsPerPage, $thisPageFirstResult]);
 
     return $stmt->fetchAll();
 }
@@ -473,9 +454,9 @@ function searchByTagOrderedByNumberOfAnswers($tags, $thisPageFirstResult, $resul
 {
     global $conn;
 
-    $tags = '{'.implode(",",$tags).'}';
+    $tags = '{' . implode(",", $tags) . '}';
 
-    if($orderBy == 1){ //ASC
+    if ($orderBy == 1) { //ASC
         $stmt = $conn->prepare('
 SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
           (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( 
@@ -489,8 +470,7 @@ WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Conte
         WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
         ORDER BY "NumberOfAnswers" ASC
         LIMIT ? OFFSET ?');
-    }
-    else { //DESC
+    } else { //DESC
         $stmt = $conn->prepare('
 SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
           (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( 
@@ -506,7 +486,7 @@ WHERE "Question"."contentId" = "Content"."id" AND "results"."contentId" = "Conte
         LIMIT ? OFFSET ?');
     }
 
-    $stmt->execute([$tags,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$tags, $resultsPerPage, $thisPageFirstResult]);
 
     return $stmt->fetchAll();
 }
@@ -515,7 +495,7 @@ function searchByTagResultsSize($tags)
 {
     global $conn;
 
-    $tags = '{'.implode(",",$tags).'}';
+    $tags = '{' . implode(",", $tags) . '}';
 
     $stmt = $conn->prepare('
 SELECT COUNT(*) FROM "Question","Content",
