@@ -1,8 +1,8 @@
 {include file="common/header.tpl"}
 <link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
 
-<div class="container col-xs-12 col-md-8 full-screen-xs">
-    <div class="panel panel-default">
+<div id="question" class="container col-xs-12 col-md-8 full-screen-xs">
+    <div id="{$content["id"]}" class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title inline">{$content["title"]}</h3>
             {assign $content.indentation 0}

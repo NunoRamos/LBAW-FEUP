@@ -15,9 +15,10 @@ if (!isset($userId)){
 
 $text = htmlspecialchars($_POST['reply-text']);
 $parentId = intval(htmlspecialchars($_POST['parent-id']));
+$questionId = intval(htmlspecialchars($_POST['question-id']));
 
 if (canReply($userId))
-    createReply($userId, (new \DateTime())->format('Y-m-d H:i:s'), $text, $parentId);
+    createReply($userId, (new \DateTime())->format('Y-m-d H:i:s'), $text, $parentId, $questionId);
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);
 

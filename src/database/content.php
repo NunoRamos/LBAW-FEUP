@@ -105,7 +105,7 @@ function editQuestion($contentId, $text, $title, $tags)
     }
 }
 
-function createReply($creatorId, $creationDate, $text, $parentId)
+function createReply($creatorId, $creationDate, $text, $parentId, $questionId)
 {
     global $conn;
     try {
@@ -116,8 +116,8 @@ function createReply($creatorId, $creationDate, $text, $parentId)
         $stmt->execute([$creatorId, $creationDate, $text]);
         $contentId = $stmt->fetch()["id"];
 
-        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId") VALUES(?, ?)');
-        $stmt->execute([$contentId, $parentId]);
+        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId", "questionId") VALUES(?, ?, ?)');
+        $stmt->execute([$contentId, $parentId, $questionId]);
 
         $conn->commit();
         return $contentId;
