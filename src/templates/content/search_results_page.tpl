@@ -55,11 +55,8 @@
                     <!-- Inline width is MANDATORY for responsiveness. https://select2.github.io/examples.html#responsive -->
                     <select id="tags-select" multiple="multiple" style="width: 100%;">
                         {foreach $tags as $tag}
-                            <option value="'+{$tag['name']}+'">{$tag['name']}</option>
+                            <option value="{$tag['id']}">{$tag['name']}</option>
                         {/foreach}
-                        {if $selectedTag|count_characters > 0}
-                            <option selected value="'+{$selectedTag}+'">{$selectedTag}</option>
-                        {/if}
                     </select>
                 </form>
             </div>
@@ -68,7 +65,8 @@
     <nav id="Main-Div" class="col-xs-12 col-sm-8 col-md-9">
         <div id="Search-Question-Panel-Sister">
             <div class="input-group form-group">
-                <input id="Search-Bar" type="text" name="search" class="form-control" placeholder="Search" value="{$inputString}"/>
+                <input id="Search-Bar" type="text" name="search" class="form-control" placeholder="Search"
+                       value="{$inputString}"/>
                 <span class="input-group-btn">
                         <button id="Search-Results-Button" class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
@@ -78,7 +76,7 @@
 
         <div id="Search-Question-Panel" class="panel panel-default"></div>
         <nav id="Pagination-Nav" aria-label="Page navigation" class="text-center"></nav>
-    </div>
+</div>
 </div>
 
 {include file="common/footer.tpl"}

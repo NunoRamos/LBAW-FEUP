@@ -1,108 +1,105 @@
 <?php
 include_once('../config/init.php');
-include_once($BASE_DIR .'database/users.php');
-include_once($BASE_DIR .'database/content.php');
-include_once($BASE_DIR .'lib/order.php');
+include_once($BASE_DIR . 'database/users.php');
+include_once($BASE_DIR . 'database/content.php');
+include_once($BASE_DIR . 'lib/order.php');
+include_once($BASE_DIR . 'lib/search_type.php');
 
-if ((!isset($_GET['inputString']) && !isset($_GET['activeTags']) ||
-    (sizeof($_GET['activeTags']) == 0 && strlen($_GET['inputString']) == 0))) {
-    exit;
-}
-
-$resultsPerPage = 10;
 
 $inputString = htmlspecialchars($_GET['inputString']);
 
-if(isset($_GET['searchType']))
-    $searchType = htmlspecialchars($_GET['searchType']);
-else $searchType = 'Questions';
-
-if($searchType == 'Questions'){
-    searchQuestion();
-}
-else if($searchType == 'Users'){
-    searchUsers();
+$selectedTags = [];
+echo $_GET['activeTags'];
+foreach ($_GET['activeTags'] as $tag) {
+    $selectedTags[] = intval(htmlspecialchars($tag));
 }
 
-function searchQuestion(){
+if ((sizeof($selectedTags) == 0 && strlen($inputString) == 0))
+    echo json_encode(['questions' => [], 'users' => [], 'numberOfPages' => 0]);
+
+
+$resultsPerPage = intval(htmlspecialchars($_GET['resultsPerPage']));
+if (!is_integer($resultsPerPage) || $resultsPerPage < 1)
+    $resultsPerPage = 10;
+
+$searchType = $_GET['searchType'];
+if (!SearchType::isValid($searchType))
+    $searchType = SearchType::QUESTIONS;
+
+echo json_encode(['question' => $selectedTags, 'users' => [], 'numberOfPages' => 0]);
+
+function searchQuestion()
+{
     global $inputString;
     global $resultsPerPage;
-
-    //Getting active tags
-    if(isset($_GET['activeTags'])){
-        $tags = $_GET['activeTags'];
-        $tagsId = getTagsId($tags);
-    }
-    else $tagsId = [];
+    global $selectedTags;
 
     //Lets see number of results
-    if(strlen($inputString) == 0)
-        $return = searchByTagResultsSize($tagsId);
-    else $return = getNumberOfSimilarQuestions($inputString,$tagsId);
+    if (strlen($inputString) == 0)
+        $return = searchByTagResultsSize($selectedTags);
+    else $return = getNumberOfSimilarQuestions($inputString, $selectedTags);
 
     $numberOfResults = $return['count'];
 
-    $numberOfPages = ceil($numberOfResults/$resultsPerPage);
+    $numberOfPages = ceil($numberOfResults / $resultsPerPage);
 
-    if(isset($_GET['page']))
-        $atualPage = htmlspecialchars($_GET['page']);
-    else $atualPage = 1;
+    $currentPage = htmlspecialchars($_GET['page']);
+
+    if (!is_integer($currentPage) || $currentPage < 1 || $currentPage > $numberOfPages)
+        $currentPage = 1;
 
     //Getting the position of the first element to be searched
-    $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
+    $resultsOffset = ($currentPage - 1) * $resultsPerPage;
 
     //Getting filter to search
-    if(isset($_GET['orderBy']))
-        $orderBy = htmlspecialchars($_GET['orderBy']);
-    else $orderBy = 0;
+    $orderBy = htmlspecialchars($_GET['orderBy']);
+    if (!is_integer($orderBy))
+        $orderBy = Order::SIMILARITY;
+
+    $lookALikeQuestions = getSimilarQuestions($inputString, $resultsOffset, $resultsPerPage, $selectedTags, $orderBy);
 
     //Getting questions
-    if(strlen($inputString) == 0){ //Just search by tags
-        if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
-            $lookALikeQuestions = searchByTagOrderedByNumberOfAnswers($tagsId,$thisPageFirstResult,$resultsPerPage,$orderBy);
-        }
-        else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
-            $lookALikeQuestions = searchByTagOrderedByRating($tagsId,$thisPageFirstResult,$resultsPerPage,$orderBy);
-        }
-        else { //No order
-            $lookALikeQuestions = searchByTag($tagsId,$thisPageFirstResult,$resultsPerPage);
+    /*if (strlen($inputString) == 0) { //Just search by tags
+        if ($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+            $lookALikeQuestions = searchByTagOrderedByNumberOfAnswers($tagsId, $resultsOffset, $resultsPerPage, $orderBy);
+        } else if ($orderBy == 3 || $orderBy == 4) { // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
+            $lookALikeQuestions = searchByTagOrderedByRating($tagsId, $resultsOffset, $resultsPerPage, $orderBy);
+        } else { //No order
+            $lookALikeQuestions = searchByTag($tagsId, $resultsOffset, $resultsPerPage);
         }
 
-    }
-    else {
-        if($orderBy == 1 || $orderBy == 2){ // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
-            $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy,$tagsId);
+    } else {
+        if ($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+            $lookALikeQuestions = getSimiliarQuestionByNumberOfAnswers($inputString, $resultsOffset, $resultsPerPage, $orderBy, $tagsId);
+        } else if ($orderBy == 3 || $orderBy == 4) { // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
+            $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString, $resultsOffset, $resultsPerPage, $orderBy, $tagsId);
+        } else { //No order
+            $lookALikeQuestions = getSimilarQuestions($inputString, $resultsOffset, $resultsPerPage, $tagsId);
         }
-        else if($orderBy == 3 || $orderBy == 4){ // 3 == Order by Rating - Ascending | 4 == Order by Rating - Descending
-            $lookALikeQuestions = getSimilarQuestionsOrderedByRating($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy,$tagsId);
-        }
-        else { //No order
-            $lookALikeQuestions = getSimilarQuestions($inputString,$thisPageFirstResult,$resultsPerPage,$tagsId);
-        }
-    }
+    }*/
 
+    $creator = [];
 
-    $creator = array();
-
-    foreach ($lookALikeQuestions as $lookALikeQuestion){
+    foreach ($lookALikeQuestions as $lookALikeQuestion) {
         $creator[] = getUserById($lookALikeQuestion['creatorId']);
     }
 
-    echo json_encode(['questions' => $lookALikeQuestions,'users' => $creator,
+    echo json_encode(['questions' => $lookALikeQuestions, 'users' => $creator,
         'numberOfPages' => $numberOfPages]);
 }
 
-function searchUsers(){
-    global $inputString; 
+function searchUsers()
+{
+    global $inputString;
     global $resultsPerPage;
 
     //Lets see number of results
     $return = getNumberOfUsersByName($inputString);
     $numberOfResults = $return['count'];
 
-    $numberOfPages = ceil($numberOfResults/$resultsPerPage);
+    $numberOfPages = ceil($numberOfResults / $resultsPerPage);
 
-    if(isset($_GET['page']))
+    if (isset($_GET['page']))
         $atualPage = htmlspecialchars($_GET['page']);
     else $atualPage = 1;
 
@@ -110,21 +107,19 @@ function searchUsers(){
     $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
 
     //Getting filter to search
-    if(isset($_GET['orderBy']))
+    if (isset($_GET['orderBy']))
         $orderBy = htmlspecialchars($_GET['orderBy']);
     else $orderBy = 0;
 
-    if($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
-        $users = getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
-    }
-    else if($orderBy == 3 || $orderBy == 4) { // 3 == Order by Questions - Ascending | 4 == Order by Questions - Descending
-        $users = getUserByNameOrderedByQuestions($inputString,$thisPageFirstResult,$resultsPerPage,$orderBy);
-    }
-    else { //No order
-        $users = getUserByName($inputString,$thisPageFirstResult,$resultsPerPage);
+    if ($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
+        $users = getUserByNameOrderedByAnswers($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy);
+    } else if ($orderBy == 3 || $orderBy == 4) { // 3 == Order by Questions - Ascending | 4 == Order by Questions - Descending
+        $users = getUserByNameOrderedByQuestions($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy);
+    } else { //No order
+        $users = getUserByName($inputString, $thisPageFirstResult, $resultsPerPage);
     }
 
-    echo json_encode(['users' => $users,'numberOfPages' => $numberOfPages]);
+    echo json_encode(['users' => $users, 'numberOfPages' => $numberOfPages]);
 }
 
 

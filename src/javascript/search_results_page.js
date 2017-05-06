@@ -1,8 +1,15 @@
+const SEARCH_FOR_QUESTIONS = 0;
+const SEARCH_FOR_USERS = 1;
+
+const RATING_ASC = 0;
+const RATING_DESC = 1;
+const NUM_REPLIES_ASC = 2;
+const NUM_REPLIES_DESC = 3;
+const SIMILARITY = 4;
+
+
 $(document).ready(function () {
     $('#tags-select').select2();
-
-    activeTags = getActiveTags();
-    ajaxRequest();
 
     $('#Search-Bar').on('input', newInput);
 
@@ -14,112 +21,102 @@ $(document).ready(function () {
 
     $('select').on('select2:select', newInput);
     $('select').on('select2:unselect', newInput);
+
+    search();
 });
 
-var atualPage = 1;
-var numberOfPages;
-var orderBy = 0;
-var searchType = 'Questions';
-var activeTags = [];
 
-function getActiveTags(){
+let currentPage = 1;
+let numberOfPages;
+let orderBy = 0;
+let searchType = 'Questions';
 
+function getActiveTags() {
     let tags = $('#tags-select').select2('data');
     let ret = [];
 
-    for(let i=0;i<tags.length;i++){
-        ret.push(tags[i].text);
+    for (let i = 0; i < tags.length; i++) {
+        ret.push(tags[i].id);
     }
 
     return ret;
 }
 
-function requestSearchType(){
-
-    if(searchType == $(this).text()){
+function requestSearchType() {
+    if (searchType === $(this).text())
         return;
-    }
 
     searchType = $(this).text();
-    var normalColor = '#555';
-    var activeColor = '#337ab7';
+    const normalColor = '#555';
+    const activeColor = '#337ab7';
 
-    if(searchType == 'Questions'){
+    if (searchType === 'Questions') {
         $('#Search-Type-Users').css('color', normalColor);
         $('#Search-Type-Questions').css('color', activeColor);
 
-        $('.user-filter').css('display','none');
-        $('.question-filter').css('display','inline');
+        $('.user-filter').css('display', 'none');
+        $('.question-filter').css('display', 'inline');
     }
-    else if(searchType == 'Users'){
+    else if (searchType === 'Users') {
         $('#Search-Type-Questions').css('color', normalColor);
         $('#Search-Type-Users').css('color', activeColor);
 
-        $('.user-filter').css('display','inline');
-        $('.question-filter').css('display','none');
+        $('.user-filter').css('display', 'inline');
+        $('.question-filter').css('display', 'none');
     }
 
-    atualPage = 1;
+    currentPage = 1;
     orderBy = 0;
 
-    ajaxRequest();
+    search();
 }
 
-function newInput(){
-    atualPage = 1;
+function newInput() {
+    currentPage = 1;
     orderBy = 0;
 
     activeTags = getActiveTags();
-
-    ajaxRequest();
+    search();
 }
 
-function requestOrderBy(){
-    atualPage = 1;
+function requestOrderBy() {
+    currentPage = 1;
 
     //Coloring old filter with normal color
     repaintingFilterToNormal();
 
-    if(searchType == "Questions"){
-        if($(this).text() == "Answers - Ascending"){
-            if(orderBy == 1)
-                orderBy = 0;
-            else orderBy = 1;
+    if (searchType === "Questions") {
+        if ($(this).text() === "Answers - Ascending") {
+            orderBy = NUM_REPLIES_ASC;
         }
-        else if($(this).text() == "Answers - Descending"){
-            if(orderBy == 2)
-                orderBy = 0;
-            else orderBy = 2;
+        else if ($(this).text() === "Answers - Descending") {
+            orderBy = NUM_REPLIES_DESC;
         }
-        else if($(this).text() == "Rating - Ascending"){
-            if(orderBy == 3)
-                orderBy = 0;
-            else orderBy = 3;
+        else if ($(this).text() === "Rating - Ascending") {
+            orderBy = RATING_ASC;
         }
-        else if($(this).text() == "Rating - Descending"){
-            if(orderBy == 4)
-                orderBy = 0;
-            else orderBy = 4;
+        else if ($(this).text() === "Rating - Descending") {
+            orderBy = RATING_DESC;
         }
     }
-    else if(searchType == "Users"){
-        if($(this).text() == "Answers - Ascending"){
-            if(orderBy == 1)
+    else if (searchType === "Users") {
+        if ($(this).text() === "Answers - Ascending") {
+            if (orderBy == 1)
                 orderBy = 0;
             else orderBy = 1;
         }
-        else if($(this).text() == "Answers - Descending"){
-            if(orderBy == 2)
+        else if ($(this).text() === "Answers - Descending") {
+            if (orderBy == 2)
                 orderBy = 0;
             else orderBy = 2;
         }
-        else if($(this).text() == "Questions - Ascending"){
-            if(orderBy == 3)
+        else if ($(this).text() === "Questions - Ascending") {
+            if (orderBy == 3)
                 orderBy = 0;
             else orderBy = 3;
         }
-        else if($(this).text() == "Questions - Descending"){
-            if(orderBy == 4)
+        else if ($(this).text() === "Questions - Descending") {
+            if (orderBy == 4)
                 orderBy = 0;
             else orderBy = 4;
         }
@@ -129,41 +126,42 @@ function requestOrderBy(){
     //Coloring new filter with active color
     paintingNewFilter();
 
-    ajaxRequest();
+    search();
 }
 
-function previousRequest(){
+function previousRequest() {
 
-    if(atualPage == 1)
+    if (currentPage === 1)
         return;
 
-    atualPage--;
+    currentPage--;
 
-    ajaxRequest();
+    search();
 }
 
-function nextRequest(){
+function nextRequest() {
 
-    if(atualPage == numberOfPages)
+    if (currentPage === numberOfPages)
         return;
 
-    atualPage++;
+    currentPage++;
 
-    ajaxRequest();
+    search();
 }
 
-function paginationRequest(page){
+function paginationRequest(page) {
 
-    atualPage = page;
+    currentPage = page;
 
-    ajaxRequest();
+    search();
 }
 
-function ajaxRequest() {
+function search() {
+    let selectedTags = getActiveTags();
 
     var input = $('#Search-Bar').val();
 
-    if(input == '' && activeTags.length == 0)
+    if (input === '' && activeTags.length === 0)
         return;
 
     $('#Search-Question-Panel').children().remove();
@@ -171,97 +169,103 @@ function ajaxRequest() {
 
     console.log(input);
 
-    if(searchType == 'Questions'){
+    if (searchType == 'Questions') {
         $.ajax({
             method: "GET",
             url: "../../api/search_questions.php",
-            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType, activeTags: activeTags }
+            data: {
+                inputString: input,
+                page: currentPage,
+                orderBy: orderBy,
+                searchType: searchType,
+                activeTags: selectedTags
+            }
         }).done(buildSearchQuestionsResults);
     }
-    else if(searchType == 'Users'){
+    else if (searchType == 'Users') {
         $.ajax({
             method: "GET",
             url: "../../api/search_questions.php",
-            data: { inputString: input, page: atualPage, orderBy: orderBy, searchType: searchType }
+            data: {inputString: input, page: currentPage, orderBy: orderBy, searchType: searchType}
         }).done(buildSearchUserResults);
     }
 }
 
-function repaintingFilterToNormal(){
+function repaintingFilterToNormal() {
 
-    if(orderBy == 0)
+    if (orderBy == 0)
         return;
 
     var orderByString = '';
 
-    if(orderBy == 1){
+    if (orderBy == 1) {
         orderByString = "Answers - Ascending";
     }
-    else if(orderBy == 2){
+    else if (orderBy == 2) {
         orderByString = "Answers - Descending";
     }
-    else if(orderBy == 3){
+    else if (orderBy == 3) {
         orderByString = "Rating - Ascending";
     }
-    else if(orderBy == 4){
+    else if (orderBy == 4) {
         orderByString = "Rating - Descending";
     }
 
-    $('.filter:contains('+orderByString+')').css('color', '#000')
+    $('.filter:contains(' + orderByString + ')').css('color', '#000')
 }
 
-function paintingNewFilter(){
+function paintingNewFilter() {
 
-    if(orderBy == 0)
+    if (orderBy == 0)
         return;
 
     var orderByString = '';
 
-    if(orderBy == 1){
+    if (orderBy == 1) {
         orderByString = "Answers - Ascending";
     }
-    else if(orderBy == 2){
+    else if (orderBy == 2) {
         orderByString = "Answers - Descending";
     }
-    else if(orderBy == 3){
+    else if (orderBy == 3) {
         orderByString = "Rating - Ascending";
     }
-    else if(orderBy == 4){
+    else if (orderBy == 4) {
         orderByString = "Rating - Descending";
     }
 
-    $('.filter:contains('+orderByString+')').css('color', '#337ab7')
+    $('.filter:contains(' + orderByString + ')').css('color', '#337ab7')
 }
 
-function buildSearchQuestionsResults(response){
+function buildSearchQuestionsResults(response) {
 
     var json = JSON.parse(response);
 
     $('#Search-Question-Panel').children().remove();
     $('#Pagination-Nav').children().remove();
 
-    if(json['questions'].length == 0){
+    if (json['questions'].length == 0) {
         $('#Search-Question-Panel').append('<div class="list-group-item">No results found</div>');
     }
     else {
         let i = 0;
-        for(let question of json['questions']){
+        for (let question of json['questions']) {
             $('#Search-Question-Panel').append(
-                '<div class="list-group-item">'+
-                '<div class="row no-gutter no-side-margin">'+
-                '<div class="col-xs-1">'+
-                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId='+question.id+'&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>'+
-                '<div class="text-center"><span>'+ question.rating +'</span></div>'+
-                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId='+question.id+'&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>'+
-                '</div>'+
-                '<div class="col-xs-11 anchor clickable" href="question_page.php?id='+question.id+'">'+
-                '<div class="col-xs-12">'+
-                '<a class="small-text" href="../users/profile_page.php?id='+json['users'][i].id+'"><span>'+json['users'][i].name+' </span></a>'+
-                '<span class="small-text">| '+ question.creationDate+'</span>'+
-                '</div>'+
-                '<span class="large-text col-xs-12">'+question.title+'</span>'+
-                '</div>'+
-                '</div>'+
+                '<div class="list-group-item">' +
+                '<div class="row no-gutter no-side-margin">' +
+                '<div class="col-xs-1">' +
+                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' + question.id + '&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>' +
+                '<div class="text-center"><span>' + question.rating + '</span></div>' +
+                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' + question.id + '&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>' +
+                '</div>' +
+                '<div class="col-xs-11 anchor clickable" href="question_page.php?id=' + question.id + '">' +
+                '<div class="col-xs-12">' +
+                '<a class="small-text" href="../users/profile_page.php?id=' + json['users'][i].id + '"><span>' + json['users'][i].name + ' </span></a>' +
+                '<span class="small-text">| ' + question.creationDate + '</span>' +
+                '</div>' +
+                '<span class="large-text col-xs-12">' + question.title + '</span>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             );
             i++;
@@ -270,7 +274,7 @@ function buildSearchQuestionsResults(response){
 
         numberOfPages = json['numberOfPages'];
 
-        if(numberOfPages > 1){
+        if (numberOfPages > 1) {
             pagination();
         }
     }
@@ -292,11 +296,11 @@ function buildSearchUserResults(response) {
                 '<div class="list-group-item">' +
                 '<div class="row no-gutter no-side-margin">' +
                 '<div class="col-xs-3">' +
-                '<img class="center-block img-circle img-responsive img-user-search" src="/images/user-default.png">'+
-                '</div>'+
+                '<img class="center-block img-circle img-responsive img-user-search" src="/images/user-default.png">' +
+                '</div>' +
                 '<div class="col-xs-9 anchor clickable user-text" href="../users/profile_page.php?id=' + user.id + '">' +
-                '<span class="large-text col-xs-12">' + user.name+ '</span>' +
-                '<span class="small-text col-xs-12">' + user.email+ '</span>' +
+                '<span class="large-text col-xs-12">' + user.name + '</span>' +
+                '<span class="small-text col-xs-12">' + user.email + '</span>' +
                 '</div>' +
                 '</div>' +
                 '</div>'
@@ -306,31 +310,31 @@ function buildSearchUserResults(response) {
 
         numberOfPages = json['numberOfPages'];
 
-        if(numberOfPages > 1){
+        if (numberOfPages > 1) {
             pagination();
         }
     }
 
 }
 
-function pagination(){
+function pagination() {
     $('#Pagination-Nav').append(
-        '<ul id="Pagination-List" class="pagination">'+
-        '<li id="Previous-Item">'+
-        '<span class="clickable" onclick="previousRequest()" aria-hidden="true">&laquo;</span>'+
-        '</li>'+
-        '<li>'+
-        '<span class="clickable" onclick="nextRequest()" aria-hidden="true">&raquo;</span>'+
-        '</li>'+
+        '<ul id="Pagination-List" class="pagination">' +
+        '<li id="Previous-Item">' +
+        '<span class="clickable" onclick="previousRequest()" aria-hidden="true">&laquo;</span>' +
+        '</li>' +
+        '<li>' +
+        '<span class="clickable" onclick="nextRequest()" aria-hidden="true">&raquo;</span>' +
+        '</li>' +
         '</ul>');
 
-    for(i=numberOfPages; i>0;i--){
+    for (i = numberOfPages; i > 0; i--) {
         var classes = "";
-        if(atualPage == i)
+        if (currentPage == i)
             classes = "active";
 
-        $('#Previous-Item').after('<li class="'+classes+'">' +
-            '<span onclick="paginationRequest('+i+')" class="clickable">'+i+'</span>' +
+        $('#Previous-Item').after('<li class="' + classes + '">' +
+            '<span onclick="paginationRequest(' + i + ')" class="clickable">' + i + '</span>' +
             '</li>');
     }
 }

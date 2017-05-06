@@ -151,16 +151,37 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function getSimilarQuestions($inputString, $questionOffset, $resultsPerPage, $tags)
+function getSimilarQuestions($inputString, $questionOffset, $resultsPerPage, $tags, $orderBy)
 {
     global $conn;
     $textLanguage = "'english'";
+    $sortingMethod = 'ts_rank_cd(search_vechtor, search_query)';
+    $sortingOrder = 'DESC';
+
+    switch ($orderBy) {
+        case Order::RATING_ASC:
+            $sortingMethod = 'rating';
+            $sortingOrder = 'ASC';
+            break;
+        case Order::RATING_DESC:
+            $sortingMethod = 'rating';
+            $sortingOrder = 'DESC';
+            break;
+        case Order::NUM_REPLIES_ASC:
+            $sortingMethod = '"numReplies"';
+            $sortingOrder = 'ASC';
+            break;
+        case Order::NUM_REPLIES_DESC:
+            $sortingMethod = '"numReplies"';
+            $sortingOrder = 'DESC';
+            break;
+    }
 
     $tags = '{' . implode(",", $tags) . '}';
 
     $stmt = $conn->prepare('
         WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
-        SELECT "id", "rating", "title", "creatorId", "creationDate"
+        SELECT "id", "rating", "title", "creatorId", "creationDate", "numReplies"
         FROM "Content","Question", 
             plainto_tsquery(' . $textLanguage . ',?) AS search_query,
             to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector 
@@ -171,8 +192,8 @@ function getSimilarQuestions($inputString, $questionOffset, $resultsPerPage, $ta
                 SELECT selected_tags."tagId"
                     FROM "QuestionTags", selected_tags 
                     WHERE "QuestionTags"."contentId" = "id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
-        ORDER BY ts_rank_cd(search_vector, search_query) DESC
-        LIMIT ? OFFSET ?');
+        ORDER BY ' . $sortingMethod . ' ' . $sortingOrder .
+        ' LIMIT ? OFFSET ?');
 
     $stmt->execute([$tags, $inputString, $resultsPerPage, $questionOffset]);
     return $stmt->fetchAll();
@@ -186,13 +207,13 @@ function getSimiliarQuestionByNumberOfAnswers($inputString, $thisPageFirstResult
         if ($orderBy == 1) { //ASC
             $stmt = $conn->prepare('
         SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
+          (SELECT "Results"."id", COUNT("questionId") AS "NumberOfAnswers" FROM ( SELECT "id"
             FROM "Content","Question", 
               to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
               to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
             WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
           LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
+          ON "Results"."id" = "questionId"
           GROUP BY "Results"."id") AS "Results", "Question", "Content"
         WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
         ORDER BY "NumberOfAnswers" ASC
@@ -200,13 +221,13 @@ function getSimiliarQuestionByNumberOfAnswers($inputString, $thisPageFirstResult
         } else { //DESC
             $stmt = $conn->prepare('
         SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
+          (SELECT "Results"."id", COUNT("questionId") AS "NumberOfAnswers" FROM ( SELECT "id"
             FROM "Content","Question", 
               to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
               to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
             WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
           LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
+          ON "Results"."id" = "questionId"
           GROUP BY "Results"."id") AS "Results", "Question", "Content"
         WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
         ORDER BY "NumberOfAnswers" DESC
