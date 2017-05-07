@@ -29,7 +29,6 @@ body
   color: $navbar-default-link-color
   text-align: center
 
-
 /******************************
  * Navbar
  ******************************/
@@ -96,8 +95,6 @@ div.trumbowyg-box, div.trumbowyg-editor
  * Search Results
  ******************************/
 
-#Search-Type-Questions
-  color: $component-active-bg
 
 .user-filter
   display: none
@@ -109,20 +106,18 @@ div.trumbowyg-box, div.trumbowyg-editor
 .user-text
   margin-top: 1em
 
-.filter-list
+a.filter
+  color: black
+  display: block
+  cursor: pointer
+  padding-left: 0.5em
 
-  a.filter
-    color: black
-    display: block
-    cursor: pointer
-    padding-left: 0.5em
+  &:hover
+    color: $component-active-bg
+    text-decoration: none
 
-    &:hover
-      color: $component-active-bg
-      text-decoration: none
-
-    .active
-      color: $component-active-bg
+  .active
+    color: $component-active-bg
 
 /******************************
  * Create Question Page
@@ -147,6 +142,7 @@ div.trumbowyg-box, div.trumbowyg-editor
 @media (max-width: $screen-xs-max)
   .name-center
     text-align: center
+
 .padding-bio
   padding: 5px 10px
 
@@ -304,3 +300,13 @@ a.no-style
   .small-padding-xs
     padding-right: 10px !important
     padding-left: 10px !important
+
+.highlight
+  &:hover
+    color: #337ab7 !important
+
+.highlight.selected
+  color: #337ab7
+
+  &:focus
+    color: #337ab7
