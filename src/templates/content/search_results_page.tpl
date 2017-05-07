@@ -19,8 +19,12 @@
                     <span class="collapse results-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
             </div>
             <div class="list-group collapse in results-collapse">
-                <button id="Search-Type-Questions" type="button" class="list-group-item Search-Type">Questions</button>
-                <button id="Search-Type-Users" type="button" class="list-group-item Search-Type">Users</button>
+                <button id="search-type-questions" type="button" value="{$SEARCH_FOR_QUESTIONS}"
+                        class="list-group-item search-type highlight selected">Questions
+                </button>
+                <button id="search-type-users" type="button" value="{$SEARCH_FOR_USERS}"
+                        class="list-group-item search-type highlight">Users
+                </button>
             </div>
         </div>
 
@@ -38,17 +42,21 @@
             <div class="panel-body collapse in filters-collapse">
                 <form class="form-horizontal question-filter filter-list">
                     <h5><strong>Sort By</strong></h5>
-                    <a class="filter">Answers - Ascending</a>
-                    <a class="filter">Answers - Descending</a>
-                    <a class="filter">Rating - Ascending</a>
-                    <a class="filter">Rating - Descending</a>
+                    <a class="filter highlight selected" value="{$SIMILARITY}">Best Match</a>
+                    <a class="filter highlight" value="{$RATING_ASC}">Rating - Ascending</a>
+                    <a class="filter highlight" value="{$RATING_DESC}">Rating - Descending</a>
+                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Answers - Ascending</a>
+                    <a class="filter highlight" value="{$NUM_REPLIES_DESC}">Answers - Descending</a>
                 </form>
                 <form class="form-horizontal user-filter filter-list">
                     <h5><strong>Sort By</strong></h5>
-                    <a class="filter">Answers - Ascending</a>
-                    <a class="filter">Answers - Descending</a>
-                    <a class="filter">Questions - Ascending</a>
-                    <a class="filter">Questions - Descending</a>
+                    <a class="filter highlight selected" value="{$NUM_REPLIES_ASC}">Best Match</a>
+                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Answers - Ascending</a>
+                    <a class="filter highlight" value="{$NUM_REPLIES_DESC}">Answers - Descending</a>
+                    <!-- FIXME: -->
+                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Questions - Ascending</a>
+                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Questions - Descending</a>
+                    <!-- FIXME: -->
                 </form>
                 <form class="form-horizontal question-filter filter-list">
                     <h5><strong>Tags</strong></h5>
@@ -62,20 +70,20 @@
             </div>
         </div>
     </div>
-    <nav id="Main-Div" class="col-xs-12 col-sm-8 col-md-9">
-        <div id="Search-Question-Panel-Sister">
+    <nav id="main-div" class="col-xs-12 col-sm-8 col-md-9">
+        <div id="search-question-panel-sister">
             <div class="input-group form-group">
-                <input id="Search-Bar" type="text" name="search" class="form-control" placeholder="Search"
+                <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search"
                        value="{$inputString}"/>
                 <span class="input-group-btn">
-                        <button id="Search-Results-Button" class="btn btn-default" type="submit"><i
+                        <button id="search-results-button" class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
             </span>
             </div>
         </div>
 
-        <div id="Search-Question-Panel" class="panel panel-default"></div>
-        <nav id="Pagination-Nav" aria-label="Page navigation" class="text-center"></nav>
+        <div id="search-question-panel" class="panel panel-default"></div>
+        <nav id="pagination-nav" aria-label="Page navigation" class="text-center"></nav>
 </div>
 </div>
 

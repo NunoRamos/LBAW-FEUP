@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    clickEvent();
+    addEventToClickableElements();
 });
 
-function clickEvent(){
+function addEventToClickableElements() {
     $('.anchor').on('click', function () {
         window.location.href = $(this).attr('href');
     });

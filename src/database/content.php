@@ -151,11 +151,11 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function getSimilarQuestions($inputString, $questionOffset, $resultsPerPage, $tags, $orderBy)
+function getSimilarQuestions($inputString, $tags, $orderBy)
 {
     global $conn;
     $textLanguage = "'english'";
-    $sortingMethod = 'ts_rank_cd(search_vechtor, search_query)';
+    $sortingMethod = 'ts_rank_cd(search_vector, search_query)';
     $sortingOrder = 'DESC';
 
     switch ($orderBy) {
@@ -181,21 +181,21 @@ function getSimilarQuestions($inputString, $questionOffset, $resultsPerPage, $ta
 
     $stmt = $conn->prepare('
         WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
-        SELECT "id", "rating", "title", "creatorId", "creationDate", "numReplies"
-        FROM "Content","Question", 
-            plainto_tsquery(' . $textLanguage . ',?) AS search_query,
-            to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector 
-        WHERE "contentId" = "id" AND search_vector @@ search_query AND 
-            (NOT EXISTS(SELECT * FROM selected_tags) 
-            OR
-             EXISTS(
-                SELECT selected_tags."tagId"
-                    FROM "QuestionTags", selected_tags 
-                    WHERE "QuestionTags"."contentId" = "id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
-        ORDER BY ' . $sortingMethod . ' ' . $sortingOrder .
-        ' LIMIT ? OFFSET ?');
+        
+        SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
+            FROM "Content", "Question", "User", 
+                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
+                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
+            WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
+                (NOT EXISTS(SELECT * FROM selected_tags) 
+                OR
+                EXISTS(
+                    SELECT selected_tags."tagId"
+                        FROM "QuestionTags", selected_tags 
+                        WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
+            ORDER BY ' . $sortingMethod . ' ' . $sortingOrder);
 
-    $stmt->execute([$tags, $inputString, $resultsPerPage, $questionOffset]);
+    $stmt->execute([$tags, $inputString]);
     return $stmt->fetchAll();
 }
 
