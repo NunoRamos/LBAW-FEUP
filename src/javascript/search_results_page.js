@@ -3,10 +3,9 @@ const SEARCH_FOR_USERS = 1;
 
 let currentPage = 1;
 let resultsPerPage = 1;
-let lastSearchResults = 1;
 let orderBy = 0;
 let searchType = 0;
-let questions = [];
+let reply = [];
 
 $(document).ready(function () {
     $('#tags-select').select2();
@@ -24,8 +23,15 @@ $(document).ready(function () {
     search();
 });
 
+function clearSearchResults() {
+    $('#search-question-panel').children().remove();
+}
 
-function getActiveTags() {
+function clearPagination() {
+    $('#pagination-list').children().remove();
+}
+
+function getSelectedTags() {
     let tags = $('#tags-select').select2('data');
     let ret = [];
 
@@ -42,27 +48,23 @@ function resultTypeChanged() {
     if (searchType === newSearchType)
         return;
 
+    clearSearchResults();
+    clearPagination();
+
     searchType = newSearchType;
     $('#search-type-users').toggleClass('selected');
     $('#search-type-questions').toggleClass('selected');
     $('.user-filter').toggle();
     $('.question-filter').toggle();
 
-    currentPage = 1;
-    orderBy = 0;
-
     search();
 }
 
 function searchBoxChanged() {
-    currentPage = 1;
-    orderBy = 0;
     search();
 }
 
 function filterChanged() {
-    currentPage = 1;
-
     $(this).siblings().removeClass('selected');
     $(this).addClass('selected');
     orderBy = $(this).attr('value');
@@ -70,28 +72,13 @@ function filterChanged() {
     search();
 }
 
-function previousPage() {
-    if (currentPage === 1)
-        return;
+function search(page) {
+    if (!page)
+        currentPage = 1;
+    else
+        currentPage = page;
 
-    currentPage--;
-
-    search();
-}
-
-function nextPage() {
-    if (currentPage === numberOfPages)
-        return;
-
-    currentPage++;
-}
-
-function changeToPage(page) {
-    currentPage = page;
-}
-
-function search() {
-    let selectedTags = getActiveTags();
+    let selectedTags = getSelectedTags();
 
     const input = $('#search-bar').val();
 
@@ -101,8 +88,8 @@ function search() {
         return;
     }
 
-    $('#search-question-panel').children().remove();
-    $('#pagination-nav').children().remove();
+    clearSearchResults();
+    clearPagination();
 
     if (searchType === SEARCH_FOR_QUESTIONS) {
         $.ajax({
@@ -112,7 +99,9 @@ function search() {
                 inputString: input,
                 orderBy: orderBy,
                 searchType: searchType,
-                selectedTags: selectedTags
+                selectedTags: selectedTags,
+                resultsOffset: currentPage - 1,
+                resultsPerPage: resultsPerPage
             }
         }).done(buildSearchQuestionsResults);
     }
@@ -123,25 +112,23 @@ function search() {
             data: {
                 inputString: input,
                 orderBy: orderBy,
-                searchType: searchType
+                searchType: searchType,
+                resultsOffset: currentPage - 1,
+                resultsPerPage: resultsPerPage
             }
         }).done(buildSearchUserResults);
     }
 }
 
 function buildSearchQuestionsResults(response) {
-    questions = JSON.parse(response);
+    reply = JSON.parse(response);
     const searchQuestionPanel = $('#search-question-panel');
 
-    searchQuestionPanel.children().remove();
-    $('#pagination-nav').children().remove();
+    clearSearchResults();
+    clearPagination();
 
-    if (questions.length === 0) {
-        insertNoResultsFound();
-    }
-    else {
-        let i = 0;
-        for (let question of questions) {
+    if (reply.numResults > 0) {
+        for (let question of reply.results) {
             searchQuestionPanel.append(
                 '<div class="list-group-item">' +
                 '<div class="row no-gutter no-side-margin">' +
@@ -152,21 +139,22 @@ function buildSearchQuestionsResults(response) {
                 '</div>' +
                 '<div class="col-xs-11 anchor clickable" href="question_page.php?id=' + question.id + '">' +
                 '<div class="col-xs-12">' +
-                '<a class="small-text" href="../users/profile_page.php?id=' + questions.creatorId + '"><span>' + question.creatorName + ' </span></a>' +
-                '<span class="small-text">| ' + question.creationDate + '</span>' +
+                '<a class="small-text" href="../users/profile_page.php?id=' + question.creatorId + '"><span>' + question.creatorName + '</span></a>' +
+                '<span class="small-text"> | ' + question.creationDate + '</span>' +
                 '</div>' +
                 '<span class="large-text col-xs-12">' + question.title + '</span>' +
                 '</div>' +
                 '</div>' +
                 '</div>'
             );
-            i++;
         }
 
         addEventToClickableElements();
+    } else {
+        insertNoResultsFound();
     }
 
-    insertPagination();
+    insertPagination(reply.numResults);
 }
 
 function insertNoResultsFound() {
@@ -177,8 +165,8 @@ function buildSearchUserResults(response) {
     const json = JSON.parse(response);
     const searchQuestionPanel = $('#search-question-panel');
 
-    searchQuestionPanel.children().remove();
-    $('#pagination-nav').children().remove();
+    clearSearchResults();
+    clearPagination();
 
     if (json['users'].length === 0) {
         insertNoResultsFound();
@@ -204,26 +192,31 @@ function buildSearchUserResults(response) {
     insertPagination();
 }
 
-function insertPagination() {
-    $('#pagination-nav').append(
-        '<ul id="pagination-list" class="pagination">' +
-        '<li id="previous-item">' +
-        '<span class="clickable" onclick="previousPage()" aria-hidden="true">&laquo;</span>' +
-        '</li>' +
-        '<li>' +
-        '<span class="clickable" onclick="nextPage()" aria-hidden="true">&raquo;</span>' +
-        '</li>' +
-        '</ul>');
+function insertPagination(numResults) {
+    if (!numResults)
+        numResults = 1;
 
-    $('#previous-item').after('<li class="active">' +
-        '<span onclick="changeToPage(1)" class="clickable">1</span>' +
-        '</li>');
+    const numberOfPages = Math.ceil(numResults / resultsPerPage);
 
-    let numberOfPages = Math.floor(lastSearchResults / resultsPerPage);
+    const paginationList = $('#pagination-list');
 
-    for (let i = numberOfPages; i > 1; i--) {
-        $('#previous-item').after('<li>' +
-            '<span onclick="changeToPage(' + i + ')" class="clickable">' + i + '</span>' +
+    paginationList.append(
+        '<li><span class="clickable" ' +
+        (currentPage !== 1 ? 'onclick="search(' + (currentPage - 1) + ')"' : '') +
+        ' aria-hidden="true">&laquo;</span></li>');
+
+
+    console.log(numberOfPages);
+    for (let i = 1; i <= numberOfPages; i++) {
+        paginationList.append('<li' +
+            (currentPage === i ? ' class="active"' : '') +
+            '><span class="clickable" onclick="search(' + i + ')">' + i + '</span>' +
             '</li>');
     }
+
+    paginationList.append(
+        '<li><span class="clickable" ' +
+        (currentPage !== numberOfPages ? 'onclick="search(' + (currentPage + 1) + ')"' : '') +
+        ' aria-hidden="true">&raquo;</span></li>');
+
 }

@@ -13,12 +13,20 @@ if (isset($_GET['selectedTags'])) {
         $selectedTags[] = intval(htmlspecialchars($tag));
 }
 
+$resultsPerPage = intval(htmlspecialchars($_GET['resultsPerPage']));
+if (!is_integer($resultsPerPage) || $resultsPerPage < 1)
+    $resultsPerPage = 10;
+
+$resultOffset = intval(htmlspecialchars($_GET['resultsOffset']));
+if (!is_integer($resultOffset) || $resultOffset < 1)
+    $resultOffset = 0;
+
 if ((sizeof($selectedTags) == 0 && strlen($searchString) == 0))
-    echo json_encode(['questions' => [], 'users' => [], 'numberOfPages' => 0]);
+    echo json_encode(['reply' => [], 'users' => [], 'numberOfPages' => 0]);
 
 switch ($_GET['searchType']) {
     case SearchType::QUESTIONS:
-        searchQuestion($searchString, $selectedTags);
+        searchQuestion($searchString, $selectedTags, $resultsPerPage, $resultOffset);
         break;
     case SearchType::USERS:
         searchUsers();
@@ -28,16 +36,14 @@ switch ($_GET['searchType']) {
         break;
 }
 
-function searchQuestion($searchString, $selectedTags)
+function searchQuestion($searchString, $selectedTags, $resultsPerPage, $resultOffset)
 {
     //Getting filter to search
     $orderBy = htmlspecialchars($_GET['orderBy']);
     if (!is_integer($orderBy))
         $orderBy = Order::SIMILARITY;
 
-    $lookALikeQuestions = getSimilarQuestions($searchString, $selectedTags, $orderBy);
-
-    echo json_encode($lookALikeQuestions);
+    echo json_encode(searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $resultOffset));
 }
 
 function searchUsers()

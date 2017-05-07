@@ -83,8 +83,11 @@
         </div>
 
         <div id="search-question-panel" class="panel panel-default"></div>
-        <nav id="pagination-nav" aria-label="Page navigation" class="text-center"></nav>
-</div>
+        <nav id="pagination-nav" aria-label="Page navigation" class="text-center">
+           <ul id="pagination-list" class="pagination">
+
+           </ul>
+        </nav>
 </div>
 
 {include file="common/footer.tpl"}
