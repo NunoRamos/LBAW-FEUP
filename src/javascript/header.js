@@ -1,11 +1,11 @@
 $(document).ready(function () {
-    if (window.location.href.indexOf('#signup') != -1) {
+    if (window.location.href.indexOf('#signup') !== -1) {
         $('#sign-in-modal').modal('show');
         console.log($('#sign-up'));
         $('#sign-up-tab').tab('show');
     }
 
-    if (window.location.href.indexOf('#signin') != -1) {
+    if (window.location.href.indexOf('#signin') !== -1) {
         $('#sign-in-modal').modal('show');
     }
 
