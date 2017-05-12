@@ -292,3 +292,20 @@ function getQuestionFromContent($contentId)
         ? $question
         : getQuestionFromReply($contentId);
 }
+
+function readNotifications($questionId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+      UPDATE "Notification" SET "read" = TRUE 
+        FROM "Reply", "Vote", "Question"
+        WHERE 
+          (("Reply"."contentId" = "Notification"."contentId" AND "Reply"."questionId" = ?) OR "Notification"."contentId" = ?)
+          OR 
+          ("Vote"."id" = "Notification"."voteId" AND 
+            (("Reply"."contentId" = "Vote"."contentId" AND "Reply"."questionId" = ?) OR "Question"."contentId" = ?))
+          ');
+
+    $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
+}

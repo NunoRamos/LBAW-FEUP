@@ -24,7 +24,7 @@ if (!isset($question['title'])) {
     exit();
 }
 
-
+readNotifications($question['contentId']);
 $replies = getDescendantsOfContent($question['contentId']);
 $question['children'] = $replies;
 

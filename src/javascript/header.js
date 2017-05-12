@@ -38,6 +38,13 @@ function getNotifications() {
     $.ajax('../../api/get_notifications.php').done(function (data) {
         let notifications = JSON.parse(data);
 
+        if (notifications.length === 0) {
+            $('#notification-menu').append(
+                '<li class="notification"><span>No unread notifications!</span></li>' +
+                '<li class="divider"></li>'
+            );
+        }
+
         for (let notification of notifications) {
             if (notification.hasOwnProperty('contentId') && notification.hasOwnProperty('text'))
                 $('#notification-menu').append(
@@ -47,7 +54,7 @@ function getNotifications() {
         }
 
     }).fail(function () {
-        $('#notification-menu').append('<li class="dropdown-header">Could not get notifications...</li>');
+        $('#notification-menu').append('<li class="dropdown-header">Could not get notifications.</li>');
     });
 }
 
