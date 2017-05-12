@@ -41,8 +41,7 @@ function getNotifications() {
         for (let notification of notifications) {
             if (notification.hasOwnProperty('contentId') && notification.hasOwnProperty('text'))
                 $('#notification-menu').append(
-                    /*'<li><a href="/pages/content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +*/
-                    '<li><a>' + notification.text + '</a></li>' +
+                    '<li class="notification"><a href="/pages/content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +
                     '<li class="divider"></li>'
                 );
         }

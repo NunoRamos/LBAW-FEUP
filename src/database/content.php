@@ -264,5 +264,31 @@ function getTagsId($tags)
 
 function stripProhibitedTags($text)
 {
+    /*FIXME: remove <strike> tag once this issue is fixed
+    * https://github.com/Alex-D/Trumbowyg/issues/544 */
     return strip_tags($text, '<p><a><strong><em><strike><s><br><sub><sup><img><ul><ol><li>');
+}
+
+function getQuestionFromReply($replyId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+        SELECT * FROM "Reply", "Content", "Question" 
+          WHERE "Reply"."contentId" = ? AND "Content".id = "Reply"."questionId" AND "Question"."contentId" = "Content"."id"
+          ');
+
+    $stmt->execute([$replyId]);
+    return $stmt->fetch();
+}
+
+/** If the id received is from a question, then return its information.
+ * Otherwise, get the information as if it were a reply, and return it. */
+function getQuestionFromContent($contentId)
+{
+    $question = getQuestion($contentId);
+
+    return ($question !== false)
+        ? $question
+        : getQuestionFromReply($contentId);
 }

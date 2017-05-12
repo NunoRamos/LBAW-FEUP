@@ -44,7 +44,7 @@ function getUserById($userId)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT id,name FROM "User" WHERE id = ?');
+    $stmt = $conn->prepare('SELECT "id", "name" FROM "User" WHERE "id" = ?');
     $stmt->execute([$userId]);
     return $stmt->fetch();
 }
