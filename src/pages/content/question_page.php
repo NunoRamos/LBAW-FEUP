@@ -11,8 +11,6 @@ $questionId = intval(htmlspecialchars($_GET['id']));
 
 if ($questionId == 0) {
     http_response_code(400);
-
-
 }
 
 $question = getQuestion($questionId);
@@ -22,9 +20,9 @@ if (!isset($question['title'])) {
     exit();
 }
 
-$answers = getDescendantsOfContent($questionId);
+$replies = getDescendantsOfContent($questionId);
+$question['children'] = $replies;
 
 $smarty->assign('content', $question);
-$smarty->assign('answers', $answers);
 $smarty->display('content/question_page.tpl');
 

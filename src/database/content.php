@@ -249,8 +249,8 @@ function getTagsId($tags)
     $tags = '{' . implode(",", $tags) . '}';
 
     $stmt = $conn->prepare('
-SELECT "id" FROM "Tag", unnest(?::TEXT[]) AS "tag" 
-WHERE "Tag"."name" = "tag"');
+      SELECT "id" FROM "Tag", unnest(?::TEXT[]) AS "tag" 
+      WHERE "Tag"."name" = "tag"');
     $stmt->execute([$tags]);
 
     $result = $stmt->fetchAll();
@@ -260,4 +260,9 @@ WHERE "Tag"."name" = "tag"');
     }
 
     return $return;
+}
+
+function stripProhibitedTags($text)
+{
+    return strip_tags($text, '<p><a><strong><em><strike><s><br><sub><sup><img><ul><ol><li>');
 }

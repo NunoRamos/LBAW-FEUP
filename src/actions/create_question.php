@@ -6,7 +6,7 @@ include_once '../database/permissions.php';
 
 $userId = $smarty->getTemplateVars('USERID');
 
-$text = htmlspecialchars($_POST['question-text']);
+$text = stripProhibitedTags($_POST['question-text']);
 $title = htmlspecialchars($_POST['title']);
 $tags = $_POST['tags'];
 
@@ -20,9 +20,9 @@ if (is_array($tags)) {
 
 if (canCreateQuestion($userId)) {
     $questionId = createQuestion($userId, (new \DateTime())->format('Y-m-d H:i:s'), $text, $title, $tags);
-    header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'pages/content/question_page.php?id=' . $questionId);
+    header('Location: ' . $smarty->getTemplateVars('BASE_URL') . 'pages/content/question_page.php?id=' . $questionId);
 } else {
-    header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'pages/content/create_question.php');
+    header('Location: ' . $smarty->getTemplateVars('BASE_URL') . 'pages/content/create_question.php');
 }
 
 
