@@ -14,6 +14,7 @@ $(document).ready(function () {
 function validatePassword() {
     let password = $("#new-password").val();
     let repeatPassword = $("#new-repeat-password").val();
+    let currPassword = $("#curr-password").val();
     let errorMessage = $("#new-password-failed");
 
     console.log("entrou");
@@ -24,5 +25,10 @@ function validatePassword() {
         return false;
     }
 
+    if (currPassword !== password) {
+        errorMessage.text("New password is the same to the current password");
+        errorMessage.show();
+        return false;
+    }
     return true;
 }
