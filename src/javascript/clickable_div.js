@@ -4,6 +4,13 @@ $(document).ready(function () {
 
 function addEventToClickableElements() {
     $('.anchor').on('click', function () {
-        window.location.href = $(this).attr('href');
+
+        let href = $(this).attr('href');
+
+        if (typeof href == 'undefined'){
+            return;
+        }
+
+        window.location.href = href;
     });
 }

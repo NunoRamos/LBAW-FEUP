@@ -27,3 +27,4 @@
 </div>
 {include file="common/footer.tpl"}
 <script src="{$BASE_URL}javascript/clickable_div.js"></script>
+<script src="{$BASE_URL}javascript/vote.js"></script>

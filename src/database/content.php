@@ -29,11 +29,19 @@ function getContentOwnerId($contentId)
     return $stmt->fetch()['creatorId'];
 }
 
-function getMostRecentQuestions($limit)
+function getMostRecentQuestions($limit,$userId)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
-    $stmt->execute([$limit]);
+    //$stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
+
+    $stmt = $conn->prepare('
+    SELECT "questions"."id","questions"."text","questions"."creatorId", "questions"."rating", "questions"."title", "questions"."creationDate","Vote"."positive"
+ FROM (SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id) AS "questions"
+ LEFT JOIN "Vote" ON "questions"."id" = "Vote"."contentId" AND "Vote"."userId" = ?
+ORDER BY "questions"."creationDate" DESC
+LIMIT ?');
+    
+    $stmt->execute([$userId,$limit]);
     return $stmt->fetchAll();
 }
 
