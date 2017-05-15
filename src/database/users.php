@@ -96,7 +96,7 @@ function getUserById($userId)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT id,name FROM "User" WHERE id = ?');
+    $stmt = $conn->prepare('SELECT "id", "name" FROM "User" WHERE "id" = ?');
     $stmt->execute([$userId]);
     return $stmt->fetch();
 }
@@ -105,29 +105,29 @@ function getUnreadNotifications($userId)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT * FROM "Notification" WHERE "userId" = ?');
+    $stmt = $conn->prepare('SELECT * FROM "Notification" WHERE "userId" = ? AND read = FALSE');
     $stmt->execute([$userId]);
     return $stmt->fetchAll();
 }
 
-function getUserByName($inputString,$thisPageFirstResult, $resultsPerPage)
+function getUserByName($inputString, $thisPageFirstResult, $resultsPerPage)
 {
     global $conn;
 
     $expression = '%' . $inputString . '%';
 
     $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ? LIMIT ? OFFSET ?');
-    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
 }
 
-function getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult, $resultsPerPage, $orderBy)
+function getUserByNameOrderedByAnswers($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy)
 {
     global $conn;
 
     $expression = '%' . $inputString . '%';
 
-    if($orderBy == 1){ //ASC
+    if ($orderBy == 1) { //ASC
         $stmt = $conn->prepare('
     SELECT * FROM "User",
     (SELECT COUNT(*) FROM "Reply","Content"
@@ -136,8 +136,7 @@ function getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult, $resul
     WHERE "name" LIKE ? 
     ORDER BY "Answers" ASC
     LIMIT ? OFFSET ?');
-    }
-    else { //DESC
+    } else { //DESC
         $stmt = $conn->prepare('
     SELECT * FROM "User",
     (SELECT COUNT(*) FROM "Reply","Content"
@@ -148,17 +147,17 @@ function getUserByNameOrderedByAnswers($inputString,$thisPageFirstResult, $resul
     LIMIT ? OFFSET ?');
     }
 
-    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
 }
 
-function getUserByNameOrderedByQuestions($inputString,$thisPageFirstResult, $resultsPerPage, $orderBy)
+function getUserByNameOrderedByQuestions($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy)
 {
     global $conn;
 
     $expression = '%' . $inputString . '%';
 
-    if($orderBy == 3){ //ASC
+    if ($orderBy == 3) { //ASC
         $stmt = $conn->prepare('
     SELECT * FROM "User",
     (SELECT COUNT(*) FROM "Question","Content"
@@ -167,8 +166,7 @@ function getUserByNameOrderedByQuestions($inputString,$thisPageFirstResult, $res
     WHERE "name" LIKE ? 
     ORDER BY "Answers" ASC
     LIMIT ? OFFSET ?');
-    }
-    else { //DESC
+    } else { //DESC
         $stmt = $conn->prepare('
     SELECT * FROM "User",
     (SELECT COUNT(*) FROM "Question","Content"
@@ -179,7 +177,7 @@ function getUserByNameOrderedByQuestions($inputString,$thisPageFirstResult, $res
     LIMIT ? OFFSET ?');
     }
 
-    $stmt->execute([$expression,$resultsPerPage,$thisPageFirstResult]);
+    $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
 }
 

@@ -1,4 +1,4 @@
-<div class="list-group small-bottom-margin col-xs-offset-{$content["indentation"]} col-xs-{"12"-$content["indentation"]}">
+<div class="content list-group small-bottom-margin">
     <div class="list-group-item row no-gutter no-side-margin">
         <div class="col-xs-1">
             {include file="content/common/rating.tpl"}
@@ -22,14 +22,18 @@
                 {/if}
                 {if canReply($USERID)}
                     <div class="btn-group pull-right">
-                        <button data-contentid="{$content.id}" class="btn btn-xs" onclick="toggleReplyBox(this)"><span class="glyphicon glyphicon-comment"></span>
+                        <button data-contentid="{$content.id}" class="btn btn-xs" onclick="toggleReplyBox(this)"><span
+                                    class="glyphicon glyphicon-comment"></span>
                         </button>
                     </div>
                 {/if}
             </div>
         </div>
     </div>
+    <div class="reply-text-box"></div>
+    <div class="reply-indentation reply-top-margin">
+        {foreach $content['children'] as $content}
+            {include file="content/common/content.tpl"}
+        {/foreach}
+    </div>
 </div>
-{foreach $content['children'] as $content}
-    {include file="content/common/content.tpl"}
-{/foreach}

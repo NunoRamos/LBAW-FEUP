@@ -29,7 +29,6 @@ body
   color: $navbar-default-link-color
   text-align: center
 
-
 /******************************
  * Navbar
  ******************************/
@@ -59,7 +58,7 @@ body
 // prevent links from randomly breaking onto new lines
 
 .notification-dropdown
-  width: 350px
+  width: 450px
   span, p
     white-space: normal
 
@@ -77,6 +76,16 @@ body
     left: 0
     top: $navbar-height
     background-color: $navbar-default-bg
+
+#notification-header
+  font-size: 125%
+
+.notification > *
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  width: 100%
+
 
 /******************************
  * Question Page
@@ -103,12 +112,28 @@ div.trumbowyg-box, div.trumbowyg-editor
     cursor: pointer
     padding-left: 0.5em
 
-    &:hover
-      color: $component-active-bg
-      text-decoration: none
+.user-filter
+  display: none
 
-    .active
-      color: $component-active-bg
+.img-user-search
+  max-width: 100px
+  width: 100%
+
+.user-text
+  margin-top: 1em
+
+a.filter
+  color: black
+  display: block
+  cursor: pointer
+  padding-left: 0.5em
+
+  &:hover
+    color: $component-active-bg
+    text-decoration: none
+
+  .active
+    color: $component-active-bg
 
 /******************************
  * Create Question Page
@@ -133,6 +158,7 @@ div.trumbowyg-box, div.trumbowyg-editor
 @media (max-width: $screen-xs-max)
   .name-center
     text-align: center
+
 .padding-bio
   padding: 5px 10px
 
@@ -290,3 +316,22 @@ a.no-style
   .small-padding-xs
     padding-right: 10px !important
     padding-left: 10px !important
+
+.highlight
+  &:hover
+    color: #337ab7 !important
+
+.highlight.selected
+  color: #337ab7
+
+  &:focus
+    color: #337ab7
+
+div.content img
+  max-width: 100%
+
+.reply-indentation
+  margin-left: 15px
+
+.reply-top-margin
+  margin-top: 5px

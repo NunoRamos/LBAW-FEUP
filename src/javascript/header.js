@@ -1,11 +1,11 @@
 $(document).ready(function () {
-    if (window.location.href.indexOf('#signup') != -1) {
+    if (window.location.href.indexOf('#signup') !== -1) {
         $('#sign-in-modal').modal('show');
         console.log($('#sign-up'));
         $('#sign-up-tab').tab('show');
     }
 
-    if (window.location.href.indexOf('#signin') != -1) {
+    if (window.location.href.indexOf('#signin') !== -1) {
         $('#sign-in-modal').modal('show');
     }
 
@@ -38,17 +38,23 @@ function getNotifications() {
     $.ajax('../../api/get_notifications.php').done(function (data) {
         let notifications = JSON.parse(data);
 
+        if (notifications.length === 0) {
+            $('#notification-menu').append(
+                '<li class="notification"><span>No unread notifications!</span></li>' +
+                '<li class="divider"></li>'
+            );
+        }
+
         for (let notification of notifications) {
             if (notification.hasOwnProperty('contentId') && notification.hasOwnProperty('text'))
                 $('#notification-menu').append(
-                    /*'<li><a href="/pages/content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +*/
-                    '<li><a>' + notification.text + '</a></li>' +
+                    '<li class="notification"><a href="/pages/content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +
                     '<li class="divider"></li>'
                 );
         }
 
     }).fail(function () {
-        $('#notification-menu').append('<li class="dropdown-header">Could not get notifications...</li>');
+        $('#notification-menu').append('<li class="dropdown-header">Could not get notifications.</li>');
     });
 }
 

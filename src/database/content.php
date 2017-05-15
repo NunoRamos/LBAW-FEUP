@@ -105,7 +105,7 @@ function editQuestion($contentId, $text, $title, $tags)
     }
 }
 
-function createReply($creatorId, $creationDate, $text, $parentId)
+function createReply($creatorId, $creationDate, $text, $parentId, $questionId)
 {
     global $conn;
     try {
@@ -116,8 +116,8 @@ function createReply($creatorId, $creationDate, $text, $parentId)
         $stmt->execute([$creatorId, $creationDate, $text]);
         $contentId = $stmt->fetch()["id"];
 
-        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId") VALUES(?, ?)');
-        $stmt->execute([$contentId, $parentId]);
+        $stmt = $conn->prepare('INSERT INTO "Reply"("contentId", "parentId", "questionId") VALUES(?, ?, ?)');
+        $stmt->execute([$contentId, $parentId, $questionId]);
 
         $conn->commit();
         return $contentId;
@@ -151,106 +151,78 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function getSimilarQuestions($inputString, $thisPageFirstResult, $resultsPerPage)
+function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $resultOffset)
 {
     global $conn;
+    $textLanguage = "'english'";
+    $sortingMethod = 'ts_rank_cd(search_vector, search_query)';
+    $sortingOrder = 'DESC';
 
-    $stmt = $conn->prepare('
-        SELECT "id", "rating", "title", "creatorId", "creationDate"
-        FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-        ORDER BY ts_rank_cd(text_search, text_query) DESC
-        LIMIT ? OFFSET ?');
-
-    $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
-    return $stmt->fetchAll();
-}
-
-function getSimiliarQuestionByNumberOfAnswers($inputString, $thisPageFirstResult, $resultsPerPage,$orderBy){
-    global $conn;
-
-    if($orderBy == 1){ //ASC
-        $stmt = $conn->prepare('
-        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
-            FROM "Content","Question", 
-              to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-              to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-            WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
-          LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
-          GROUP BY "Results"."id") AS "Results", "Question", "Content"
-        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
-        ORDER BY "NumberOfAnswers" ASC
-        LIMIT ? OFFSET ?');
-    }
-    else { //DESC
-        $stmt = $conn->prepare('
-        SELECT "Content"."id", "rating", "title", "creatorId", "creationDate" FROM 
-          (SELECT "Results"."id", COUNT("topContentId") AS "NumberOfAnswers" FROM ( SELECT "id"
-            FROM "Content","Question", 
-              to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-              to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-            WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)) AS "Results" 
-          LEFT JOIN "Reply"
-          ON "Results"."id" = "topContentId"
-          GROUP BY "Results"."id") AS "Results", "Question", "Content"
-        WHERE "Results"."id" = "Question"."contentId" AND "Question"."contentId" = "Content"."id"
-        ORDER BY "NumberOfAnswers" DESC
-        LIMIT ? OFFSET ?');
-
+    switch ($orderBy) {
+        case Order::RATING_ASC:
+            $sortingMethod = 'rating';
+            $sortingOrder = 'ASC';
+            break;
+        case Order::RATING_DESC:
+            $sortingMethod = 'rating';
+            $sortingOrder = 'DESC';
+            break;
+        case Order::NUM_REPLIES_ASC:
+            $sortingMethod = '"numReplies"';
+            $sortingOrder = 'ASC';
+            break;
+        case Order::NUM_REPLIES_DESC:
+            $sortingMethod = '"numReplies"';
+            $sortingOrder = 'DESC';
+            break;
     }
 
-    $stmt->execute([$inputString, $inputString , $resultsPerPage, $thisPageFirstResult]);
+    $tags = '{' . implode(",", $tags) . '}';
 
-    return $stmt->fetchAll();
-}
+    try {
+        $conn->beginTransaction();
 
-function getSimilarQuestionsOrderedByRating($inputString, $thisPageFirstResult, $resultsPerPage,$orderBy)
-{
-    global $conn;
+        $countStmt = $conn->prepare('
+        WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
+        
+        SELECT COUNT(*)
+            FROM "Content", "Question", "User", 
+                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
+                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
+            WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
+                (NOT EXISTS(SELECT * FROM selected_tags) 
+                OR
+                EXISTS(
+                    SELECT selected_tags."tagId"
+                        FROM "QuestionTags", selected_tags 
+                        WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))');
+        $countStmt->execute([$tags, $inputString]);
 
-    if($orderBy == 3){ // ASC
-        $stmt = $conn->prepare('
-        SELECT "id", "rating", "title", "creatorId", "creationDate"
-        FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-        ORDER BY "rating" ASC
-        LIMIT ? OFFSET ?');
 
+        $searchStmt = $conn->prepare('
+        WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
+        
+        SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
+            FROM "Content", "Question", "User", 
+                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
+                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
+            WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
+                (NOT EXISTS(SELECT * FROM selected_tags) 
+                OR
+                EXISTS(
+                    SELECT selected_tags."tagId"
+                        FROM "QuestionTags", selected_tags 
+                        WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
+            ORDER BY ' . $sortingMethod . ' ' . $sortingOrder . ' LIMIT ? OFFSET ?');
+
+        $searchStmt->execute([$tags, $inputString, $resultsPerPage, $resultOffset]);
+        $conn->commit();
+
+        return ["numResults" => $countStmt->fetchAll()[0]['count'], "results" => $searchStmt->fetchAll()];
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
     }
-    else { // DESC
-        $stmt = $conn->prepare('
-        SELECT "id", "rating", "title", "creatorId", "creationDate"
-        FROM "Content","Question", 
-            to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-            to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-        WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)
-        ORDER BY "rating" DESC
-        LIMIT ? OFFSET ?');
-
-    }
-    $stmt->execute([$inputString, $inputString, $resultsPerPage, $thisPageFirstResult]);
-    return $stmt->fetchAll();
-}
-
-function getNumberOfSimilarQuestions($inputString)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('
-    SELECT COUNT(*)
-    FROM "Content","Question", 
-        to_tsvector(\'english\',text) text_search, to_tsquery(\'english\',?) text_query,
-        to_tsvector(\'english\',title) title_search, to_tsquery(\'english\',?) title_query
-    WHERE "contentId" = id AND (text_search @@ text_query OR title_search @@ title_query)');
-
-    $stmt->execute([$inputString, $inputString]);
-    return $stmt->fetch();
 }
 
 function addVote($userId, $contentId, $vote)
@@ -268,6 +240,74 @@ function getVoteTarget($voteId)
     $stmt = $conn->prepare('SELECT * FROM "Vote" WHERE "id" = ?');
     $stmt->execute([$voteId]);
     return $stmt->fetchAll();
+}
+
+function getTagsId($tags)
+{
+    global $conn;
+
+    $tags = '{' . implode(",", $tags) . '}';
+
+    $stmt = $conn->prepare('
+      SELECT "id" FROM "Tag", unnest(?::TEXT[]) AS "tag" 
+      WHERE "Tag"."name" = "tag"');
+    $stmt->execute([$tags]);
+
+    $result = $stmt->fetchAll();
+    $return = [];
+    foreach ($result as $value) {
+        array_push($return, $value['id']);
+    }
+
+    return $return;
+}
+
+function stripProhibitedTags($text)
+{
+    /*FIXME: remove <strike> tag once this issue is fixed
+    * https://github.com/Alex-D/Trumbowyg/issues/544 */
+    return strip_tags($text, '<p><a><strong><em><strike><s><br><sub><sup><img><ul><ol><li>');
+}
+
+function getQuestionFromReply($replyId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+        SELECT * FROM "Reply", "Content", "Question" 
+          WHERE "Reply"."contentId" = ? AND "Content".id = "Reply"."questionId" AND "Question"."contentId" = "Content"."id"
+          ');
+
+    $stmt->execute([$replyId]);
+    return $stmt->fetch();
+}
+
+/** If the id received is from a question, then return its information.
+ * Otherwise, get the information as if it were a reply, and return it. */
+function getQuestionFromContent($contentId)
+{
+    $question = getQuestion($contentId);
+
+    return ($question !== false)
+        ? $question
+        : getQuestionFromReply($contentId);
+}
+
+function readNotifications($questionId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+      UPDATE "Notification" SET "read" = TRUE 
+        FROM "Reply", "Vote", "Question"
+        WHERE 
+          (("Reply"."contentId" = "Notification"."contentId" AND "Reply"."questionId" = ?) OR "Notification"."contentId" = ?)
+          OR 
+          ("Vote"."id" = "Notification"."voteId" AND 
+            (("Reply"."contentId" = "Vote"."contentId" AND "Reply"."questionId" = ?) OR "Question"."contentId" = ?))
+          ');
+
+    $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
 }
 
 
