@@ -41,7 +41,7 @@
                                 <div class="form-group">
                                     <label for="bio" class="control-label col-xs-12 col-sm-3">Bio</label>
                                     <div class="col-xs-12 col-sm-9">
-                                        <input id="email" class="form-control" value="{getUserBioById($USERID)}" name = "bio"/>
+                                        <input id="bio" class="form-control" value="{getUserBioById($USERID)}" name = "bio"/>
                                     </div>
                                 </div>
 
@@ -65,7 +65,7 @@
                 <div class="panel-body">
                     <h3>Change Password</h3>
                     <hr class="divider">
-                    <form class="form-horizontal center-block" method="post" action="../../actions/change_password.php">
+                    <form class="form-horizontal center-block" method="post" action="../../actions/change_password.php" onsubmit="return validatePassword()">
                         <div class="form-group">
                             <label for="curr-password" class="control-label col-xs-12 col-sm-2">Current Password</label>
                             <div class="col-xs-12 col-sm-4">
@@ -81,10 +81,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
+                            <label for="new-repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
                             <div class="col-xs-12 col-sm-4">
-                                <input id="repeat-password" class="form-control" type="password"
-                                       placeholder="Repeat Password" name = "repeat-password">
+                                <input id="new-repeat-password" class="form-control" type="password"
+                                       placeholder="Repeat Password" name = "new-repeat-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="new-password-failed" class="alert alert-danger text-center col-xs-12 col-sm-offset-2 col-sm-4" role="alert"
+                                 style="display:none;">
                             </div>
                         </div>
 
@@ -93,6 +99,7 @@
                                 <input class="btn btn-default form-control" type="submit" value="Change Password">
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>

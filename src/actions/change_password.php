@@ -13,9 +13,9 @@ $repeatPassword = htmlspecialchars($_POST['repeat-password']);
 
 if(checkCurrentPassword($userId,$currPassword)) {
     changePassword($userId, $newPassword);
-    header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/settings_page.php');
-}else
     header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/profile_page.php');
+}else
+    header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/settings_page.php');
 
 
 

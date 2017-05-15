@@ -14,6 +14,9 @@ editName($userId,$name);
 editBio($userId,$bio);
 editEmail($userId,$email);
 
+$_SESSION['email'] = $email;
+$_SESSION['name'] = $name;
+
 header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/settings_page.php');
 
 

@@ -10,3 +10,19 @@ $(document).ready(function () {
         $(content).siblings('.tab-content').hide();
     });
 });
+
+function validatePassword() {
+    let password = $("#new-password").val();
+    let repeatPassword = $("#new-repeat-password").val();
+    let errorMessage = $("#new-password-failed");
+
+    console.log("entrou");
+
+    if (repeatPassword !== password) {
+        errorMessage.text("Passwords do not match");
+        errorMessage.show();
+        return false;
+    }
+
+    return true;
+}
