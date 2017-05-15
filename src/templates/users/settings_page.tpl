@@ -65,18 +65,18 @@
                 <div class="panel-body">
                     <h3>Change Password</h3>
                     <hr class="divider">
-                    <form class="form-horizontal center-block">
+                    <form class="form-horizontal center-block" method="post" action="../../actions/change_password.php">
                         <div class="form-group">
                             <label for="curr-password" class="control-label col-xs-12 col-sm-2">Current Password</label>
                             <div class="col-xs-12 col-sm-4">
-                                <input id="curr-password" class="form-control" type="password" placeholder="Current Password">
+                                <input id="curr-password" class="form-control" type="password" placeholder="Current Password" name = "curr-password">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="new-password" class="control-label col-xs-12 col-sm-2">New Password</label>
                             <div class="col-xs-12 col-sm-4">
-                                <input id="new-password" class="form-control" type="password" placeholder="New Password">
+                                <input id="new-password" class="form-control" type="password" placeholder="New Password" name = "new-password">
                             </div>
                         </div>
 
@@ -84,7 +84,7 @@
                             <label for="repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
                             <div class="col-xs-12 col-sm-4">
                                 <input id="repeat-password" class="form-control" type="password"
-                                       placeholder="Repeat Password">
+                                       placeholder="Repeat Password" name = "repeat-password">
                             </div>
                         </div>
 

@@ -270,6 +270,8 @@ function getVoteTarget($voteId)
     return $stmt->fetchAll();
 }
 
+
+
 function editName($id, $name)
 {
     //FIXME: untested
