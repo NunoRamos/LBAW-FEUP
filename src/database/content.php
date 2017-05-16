@@ -39,14 +39,8 @@ function getMostRecentQuestions($limit)
 
 function canDeleteContent($userId, $contentId)
 {
-    if (isset($userId) && isset($contentId)) {
-        if (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId)
-            return true;
-        else if (canDeleteAnyContent($userId))
-            return true;
-        else
-            return false;
-    }
+    if (isset($userId) && isset($contentId))
+        return (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId) || canDeleteAnyContent($userId);
 
     return false;
 }
@@ -308,4 +302,44 @@ function readNotifications($questionId)
           ');
 
     $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
+}
+
+function deleteQuestion($questionId)
+{
+    global $conn;
+
+    try {
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Reply" WHERE "questionId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Question" WHERE "contentId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Content" WHERE "id" = ?');
+        $stmt->execute([$questionId]);
+
+        $conn->commit();
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+}
+
+function deleteReply($replyId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Reply" SET "deleted" = TRUE WHERE "contentId" = ?');
+    $stmt->execute([$replyId]);
+}
+
+function isQuestion($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Question" WHERE "contentId" = ?');
+    $stmt->execute([$contentId]);
+    return count($stmt->fetchAll()) > 0;
 }
