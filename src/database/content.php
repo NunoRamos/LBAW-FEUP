@@ -233,12 +233,24 @@ function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $result
     }
 }
 
-function addVote($userId, $contentId, $vote)
+function vote($userId, $contentId, $vote)
 {
     global $conn;
 
-    $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
-    $stmt->execute([$userId, $contentId, $vote]);
+    if($vote == -1){
+        $stmt = $conn->prepare('DELETE FROM "Vote" WHERE "contentId" = ? AND "userId" = ?');
+        $stmt->execute([$contentId, $userId]);
+    }
+    else{
+        try{
+            $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
+            $stmt->execute([$userId, $contentId, $vote]);
+        }catch (PDOException $e){
+            $stmt = $conn->prepare('UPDATE "Vote" SET "positive" = ? WHERE "contentId" = ? AND "userId" = ?');
+            $stmt->execute([$vote, $contentId, $userId]);
+        }
+    }
+
 }
 
 function getVoteTarget($voteId)

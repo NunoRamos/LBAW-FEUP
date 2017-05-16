@@ -2,23 +2,13 @@
 include_once '../config/init.php';
 include_once '../database/content.php';
 
-if (!isset($_GET['questionId']) || !isset($_GET['vote'])) {
+if (!isset($_GET['contentId']) || !isset($_GET['vote']) || !isset($_GET['userId'])) {
     exit;
 }
 
-$userId = $smarty->getTemplateVars('USERID');
-
-if (!isset($userId)){
-    exit;
-}
-
-$questionId = htmlspecialchars($_GET['questionId']);
+$questionId = htmlspecialchars($_GET['contentId']);
 $vote = htmlspecialchars($_GET['vote']);
+$userId = htmlspecialchars($_GET['userId']);
 
-if($vote == 1)
-    addVote($userId,$questionId,TRUE);
-else
-    addVote($userId,$questionId,FALSE);
-
-header("Location:" . $_SERVER['HTTP_REFERER']);
+vote($userId,$questionId,$vote);
 
