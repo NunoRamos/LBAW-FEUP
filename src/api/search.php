@@ -43,7 +43,29 @@ function searchQuestion($searchString, $selectedTags, $resultsPerPage, $resultOf
     if (!is_integer($orderBy))
         $orderBy = Order::SIMILARITY;
 
-    echo json_encode(searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $resultOffset));
+    $questions = searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $resultOffset);
+
+    $return = '';
+    foreach ($questions as $question) {
+        $return .= '<div class="list-group-item">' .
+            '<div class="row no-gutter no-side-margin">' .
+            '<div class="col-xs-1">' .
+            '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' . $question['id'] . '&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>' .
+            '<div class="text-center"><span>' . $question['rating'] . '</span></div>' .
+            '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' . $question['id'] . '&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>' .
+            '</div>' .
+            '<div class="col-xs-11 anchor clickable" href="question_page.php?id=' . $question['id'] . '">' .
+            '<div class="col-xs-12">' .
+            '<a class="small-text" href="../users/profile_page.php?id=' . $question['creatorId'] . '><span>' . $question [' creatorName '] . '</span></a>' .
+            '<span class="small-text"> | ' . $question['creationDate'] . '</span>' .
+            '</div>' .
+            '<span class="large - text col - xs - 12">' . $question ['title'] . '</span>' .
+            '</div>' .
+            '</div>' .
+            '</div>';
+    }
+
+    echo $return;
 }
 
 function searchUsers()

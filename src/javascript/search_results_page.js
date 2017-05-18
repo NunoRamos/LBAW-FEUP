@@ -97,7 +97,7 @@ function search(page) {
         return;
     }
 
-    insertLoadingIcon()
+    insertLoadingIcon();
 
     if (searchType === SEARCH_FOR_QUESTIONS) {
         $.ajax({
@@ -129,13 +129,16 @@ function search(page) {
 }
 
 function buildSearchQuestionsResults(response) {
-    reply = JSON.parse(response);
     const searchQuestionPanel = $('#search-question-panel');
     searchQuestionPanel.children().remove();
 
     clearSearchResults();
     clearPagination();
+    console.log(response);
 
+    searchQuestionPanel.append(response);
+
+    return;
     if (reply.numResults > 0) {
         for (let question of reply.results) {
             searchQuestionPanel.append(
