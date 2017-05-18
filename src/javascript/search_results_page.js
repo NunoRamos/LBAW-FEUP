@@ -72,6 +72,12 @@ function filterChanged() {
     search();
 }
 
+function insertLoadingIcon() {
+    const searchQuestionPanel = $('#search-question-panel');
+
+    searchQuestionPanel.append('<img src="/images/rolling.svg"/>');
+}
+
 function search(page) {
     if (!page)
         currentPage = 1;
@@ -82,19 +88,21 @@ function search(page) {
 
     const input = $('#search-bar').val();
 
+    clearSearchResults();
+    clearPagination();
+
     if (input === '' && selectedTags.length === 0) {
         insertNoResultsFound();
         insertPagination();
         return;
     }
 
-    clearSearchResults();
-    clearPagination();
+    insertLoadingIcon()
 
     if (searchType === SEARCH_FOR_QUESTIONS) {
         $.ajax({
             method: "GET",
-            url: "../../api/search.php",
+            url: "/api/search.php",
             data: {
                 inputString: input,
                 orderBy: orderBy,
@@ -108,7 +116,7 @@ function search(page) {
     else if (searchType === SEARCH_FOR_USERS) {
         $.ajax({
             method: "GET",
-            url: "../../api/search.php",
+            url: "/api/search.php",
             data: {
                 inputString: input,
                 orderBy: orderBy,
@@ -123,6 +131,7 @@ function search(page) {
 function buildSearchQuestionsResults(response) {
     reply = JSON.parse(response);
     const searchQuestionPanel = $('#search-question-panel');
+    searchQuestionPanel.children().remove();
 
     clearSearchResults();
     clearPagination();

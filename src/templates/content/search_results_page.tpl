@@ -82,11 +82,13 @@
             </div>
         </div>
 
-        <div id="search-question-panel" class="panel panel-default"></div>
+        <div id="search-question-panel" class="panel panel-default loading">
+            <img src="/images/rolling.svg"/>
+        </div>
         <nav id="pagination-nav" aria-label="Page navigation" class="text-center">
-           <ul id="pagination-list" class="pagination">
+            <ul id="pagination-list" class="pagination">
 
-           </ul>
+            </ul>
         </nav>
 </div>
 
