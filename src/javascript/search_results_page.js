@@ -10,25 +10,21 @@ let reply = [];
 $(document).ready(function () {
     $('#tags-select').select2();
 
-    $('#search-bar').on('input', searchBoxChanged);
+    $('#search-bar').on('input', search);
 
-    $('#search-results-button').on('click', searchBoxChanged);
+    $('#search-results-button').on('click', search);
 
     $('.filter').on('click', filterChanged);
 
     $('.search-type').on('click', resultTypeChanged);
 
-    $('select').on('select2:select', searchBoxChanged).on('select2:unselect', searchBoxChanged);
+    $('select').on('select2:select', search).on('select2:unselect', search);
 
     search();
 });
 
 function clearSearchResults() {
     $('#search-bar-container').siblings().remove();
-}
-
-function clearPagination() {
-    $('#pagination-list').children().remove();
 }
 
 function getSelectedTags() {
@@ -48,19 +44,12 @@ function resultTypeChanged() {
     if (searchType === newSearchType)
         return;
 
-    clearSearchResults();
-    clearPagination();
-
     searchType = newSearchType;
     $('#search-type-users').toggleClass('selected');
     $('#search-type-questions').toggleClass('selected');
     $('.user-filter').toggle();
     $('.question-filter').toggle();
 
-    search();
-}
-
-function searchBoxChanged() {
     search();
 }
 
@@ -73,7 +62,11 @@ function filterChanged() {
 }
 
 function insertLoadingIcon() {
-    $('#search-bar-container').after('<div class="panel panel-default"><div class="loading"><img src="/images/rolling.svg"/></div></div>');
+    $('#search-bar-container').after('<div class="panel panel-default loading"><img src="/images/rolling.svg"/></div>');
+}
+
+function searchFailed() {
+    $('#search-bar-container').after('<div class="panel panel-default text-center"><div class="list-group-item">Could not connect to server.</div></div>');
 }
 
 function search(page) {
@@ -87,11 +80,9 @@ function search(page) {
     const input = $('#search-bar').val();
 
     clearSearchResults();
-    clearPagination();
 
     if (input === '' && selectedTags.length === 0) {
-        insertNoResultsFound();
-        insertPagination();
+        emptySearch();
         return;
     }
 
@@ -109,7 +100,8 @@ function search(page) {
                 page: currentPage,
                 resultsPerPage: resultsPerPage
             }
-        }).done(insertSearchResults);
+        }).done(insertSearchResults)
+            .fail(searchFailed);
     }
     else if (searchType === SEARCH_FOR_USERS) {
         $.ajax({
@@ -122,7 +114,8 @@ function search(page) {
                 page: currentPage,
                 resultsPerPage: resultsPerPage
             }
-        }).done(insertSearchResults);
+        }).done(insertSearchResults)
+            .fail(searchFailed);
     }
 }
 
@@ -136,35 +129,6 @@ function insertSearchResults(response) {
     addEventToClickableElements();
 }
 
-function insertNoResultsFound() {
-    $('#search-bar-container').after('<div class="panel panel-default"><div class="list-group-item">No results found</div></div>');
-}
-
-function insertPagination(numResults) {
-    if (!numResults)
-        numResults = 1;
-
-    const numberOfPages = Math.ceil(numResults / resultsPerPage);
-
-    const paginationList = $('#pagination-list');
-
-    paginationList.append(
-        '<li><span class="clickable" ' +
-        (currentPage !== 1 ? 'onclick="search(' + (currentPage - 1) + ')"' : '') +
-        ' aria-hidden="true">&laquo;</span></li>');
-
-
-    console.log(numberOfPages);
-    for (let i = 1; i <= numberOfPages; i++) {
-        paginationList.append('<li' +
-            (currentPage === i ? ' class="active"' : '') +
-            '><span class="clickable" onclick="search(' + i + ')">' + i + '</span>' +
-            '</li>');
-    }
-
-    paginationList.append(
-        '<li><span class="clickable" ' +
-        (currentPage !== numberOfPages ? 'onclick="search(' + (currentPage + 1) + ')"' : '') +
-        ' aria-hidden="true">&raquo;</span></li>');
-
+function emptySearch() {
+    $('#search-bar-container').after('<div class="panel panel-default"><div class="list-group-item text-center">Search something!</div></div>');
 }

@@ -74,7 +74,7 @@ function searchQuestion($searchString, $selectedTags, $resultsPerPage, $page, $o
     $pagination = '';
 
     if ($numResults === 0)
-        $return = '<div class="list-group-item">No results found</div>';
+        $return = '<div class="list-group-item text-center">No results found</div>';
     else
         $pagination = generatePagination($numResults, $resultsPerPage, $page);
 
@@ -144,7 +144,7 @@ function searchUsers($searchString, $resultsPerPage, $page, $orderBy)
 
     $pagination = '';
     if ($numResults === 0)
-        $return = '<div class="list-group-item">No results found</div>';
+        $return = '<div class="list-group-item text-center">No results found</div>';
     else
         $pagination = generatePagination($numResults, $resultsPerPage, $page);
 
