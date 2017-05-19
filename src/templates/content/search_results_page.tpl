@@ -42,21 +42,20 @@
             <div class="panel-body collapse in filters-collapse">
                 <form class="form-horizontal question-filter filter-list">
                     <h5><strong>Sort By</strong></h5>
-                    <a class="filter highlight selected" value="{$SIMILARITY}">Best Match</a>
-                    <a class="filter highlight" value="{$RATING_ASC}">Rating - Ascending</a>
-                    <a class="filter highlight" value="{$RATING_DESC}">Rating - Descending</a>
-                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Answers - Ascending</a>
-                    <a class="filter highlight" value="{$NUM_REPLIES_DESC}">Answers - Descending</a>
+                    <a class="filter highlight selected" value="{$QUESTION_SIMILARITY}">Best Match</a>
+                    <a class="filter highlight" value="{$QUESTION_RATING_ASC}">Rating - Ascending</a>
+                    <a class="filter highlight" value="{$QUESTION_RATING_DESC}">Rating - Descending</a>
+                    <a class="filter highlight" value="{$QUESTION_NUM_REPLIES_ASC}">Answers - Ascending</a>
+                    <a class="filter highlight" value="{$QUESTION_NUM_REPLIES_DESC}">Answers - Descending</a>
                 </form>
                 <form class="form-horizontal user-filter filter-list">
                     <h5><strong>Sort By</strong></h5>
-                    <a class="filter highlight selected" value="{$NUM_REPLIES_ASC}">Best Match</a>
-                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Answers - Ascending</a>
-                    <a class="filter highlight" value="{$NUM_REPLIES_DESC}">Answers - Descending</a>
-                    <!-- FIXME: -->
-                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Questions - Ascending</a>
-                    <a class="filter highlight" value="{$NUM_REPLIES_ASC}">Questions - Descending</a>
-                    <!-- FIXME: -->
+                    <a class="filter highlight selected" value="{$USER_JOIN_DATE_DESC}">Join Date - Descending</a>
+                    <a class="filter highlight" value="{$USER_JOIN_DATE_ASC}">Join Date - Ascending</a>
+                    <a class="filter highlight" value="{$USER_NUM_QUESTIONS_ASC}">Questions - Ascending</a>
+                    <a class="filter highlight" value="{$USER_NUM_QUESTIONS_DESC}">Questions - Descending</a>
+                    <a class="filter highlight" value="{$USER_NUM_REPLIES_ASC}">Answers - Ascending</a>
+                    <a class="filter highlight" value="{$USER_NUM_REPLIES_DESC}">Answers - Descending</a>
                 </form>
                 <form class="form-horizontal question-filter filter-list">
                     <h5><strong>Tags</strong></h5>
@@ -71,25 +70,21 @@
         </div>
     </div>
     <nav id="main-div" class="col-xs-12 col-sm-8 col-md-9">
-        <div id="search-question-panel-sister">
-            <div class="input-group form-group">
-                <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search"
-                       value="{$inputString}"/>
-                <span class="input-group-btn">
+        <div id="search-bar-container" class="input-group form-group">
+            <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search"
+                   value="{$inputString}" autofocus/>
+            <span class="input-group-btn">
                         <button id="search-results-button" class="btn btn-default" type="submit"><i
                                     class="glyphicon glyphicon-search"></i></button>
             </span>
+        </div>
+
+        <div id="search-question-panel" class="panel panel-default">
+            <div class="loading">
+                <img src="/images/rolling.svg"/>
             </div>
         </div>
-
-        <div id="search-question-panel" class="panel panel-default loading">
-            <img src="/images/rolling.svg"/>
-        </div>
-        <nav id="pagination-nav" aria-label="Page navigation" class="text-center">
-            <ul id="pagination-list" class="pagination">
-
-            </ul>
-        </nav>
+    </nav>
 </div>
 
 {include file="common/footer.tpl"}

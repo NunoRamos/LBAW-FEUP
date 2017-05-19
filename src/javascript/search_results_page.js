@@ -2,33 +2,28 @@ const SEARCH_FOR_QUESTIONS = 0;
 const SEARCH_FOR_USERS = 1;
 
 let currentPage = 1;
-let resultsPerPage = 1;
+const resultsPerPage = 10;
 let orderBy = 0;
 let searchType = 0;
-let reply = [];
 
 $(document).ready(function () {
     $('#tags-select').select2();
 
-    $('#search-bar').on('input', searchBoxChanged);
+    $('#search-bar').on('input', search);
 
-    $('#search-results-button').on('click', searchBoxChanged);
+    $('#search-results-button').on('click', search);
 
     $('.filter').on('click', filterChanged);
 
     $('.search-type').on('click', resultTypeChanged);
 
-    $('select').on('select2:select', searchBoxChanged).on('select2:unselect', searchBoxChanged);
+    $('select').on('select2:select', search).on('select2:unselect', search);
 
     search();
 });
 
 function clearSearchResults() {
-    $('#search-question-panel').children().remove();
-}
-
-function clearPagination() {
-    $('#pagination-list').children().remove();
+    $('#search-bar-container').siblings().remove();
 }
 
 function getSelectedTags() {
@@ -48,19 +43,12 @@ function resultTypeChanged() {
     if (searchType === newSearchType)
         return;
 
-    clearSearchResults();
-    clearPagination();
-
     searchType = newSearchType;
     $('#search-type-users').toggleClass('selected');
     $('#search-type-questions').toggleClass('selected');
     $('.user-filter').toggle();
     $('.question-filter').toggle();
 
-    search();
-}
-
-function searchBoxChanged() {
     search();
 }
 
@@ -73,9 +61,11 @@ function filterChanged() {
 }
 
 function insertLoadingIcon() {
-    const searchQuestionPanel = $('#search-question-panel');
+    $('#search-bar-container').after('<div class="panel panel-default loading"><img src="/images/rolling.svg"/></div>');
+}
 
-    searchQuestionPanel.append('<img src="/images/rolling.svg"/>');
+function searchFailed() {
+    $('#search-bar-container').after('<div class="panel panel-default text-center"><div class="list-group-item">Could not connect to server.</div></div>');
 }
 
 function search(page) {
@@ -89,15 +79,13 @@ function search(page) {
     const input = $('#search-bar').val();
 
     clearSearchResults();
-    clearPagination();
 
     if (input === '' && selectedTags.length === 0) {
-        insertNoResultsFound();
-        insertPagination();
+        emptySearch();
         return;
     }
 
-    insertLoadingIcon()
+    insertLoadingIcon();
 
     if (searchType === SEARCH_FOR_QUESTIONS) {
         $.ajax({
@@ -108,10 +96,11 @@ function search(page) {
                 orderBy: orderBy,
                 searchType: searchType,
                 selectedTags: selectedTags,
-                resultsOffset: currentPage - 1,
+                page: currentPage,
                 resultsPerPage: resultsPerPage
             }
-        }).done(buildSearchQuestionsResults);
+        }).done(insertSearchResults)
+            .fail(searchFailed);
     }
     else if (searchType === SEARCH_FOR_USERS) {
         $.ajax({
@@ -121,111 +110,24 @@ function search(page) {
                 inputString: input,
                 orderBy: orderBy,
                 searchType: searchType,
-                resultsOffset: currentPage - 1,
+                page: currentPage,
                 resultsPerPage: resultsPerPage
             }
-        }).done(buildSearchUserResults);
+        }).done(insertSearchResults)
+            .fail(searchFailed);
     }
 }
 
-function buildSearchQuestionsResults(response) {
-    reply = JSON.parse(response);
-    const searchQuestionPanel = $('#search-question-panel');
-    searchQuestionPanel.children().remove();
+function insertSearchResults(response) {
+    const searchBarContainer = $('#search-bar-container');
+    searchBarContainer.siblings().remove();
 
     clearSearchResults();
-    clearPagination();
 
-    if (reply.numResults > 0) {
-        for (let question of reply.results) {
-            searchQuestionPanel.append(
-                '<div class="list-group-item">' +
-                '<div class="row no-gutter no-side-margin">' +
-                '<div class="col-xs-1">' +
-                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' + question.id + '&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>' +
-                '<div class="text-center"><span>' + question.rating + '</span></div>' +
-                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' + question.id + '&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>' +
-                '</div>' +
-                '<div class="col-xs-11 anchor clickable" href="question_page.php?id=' + question.id + '">' +
-                '<div class="col-xs-12">' +
-                '<a class="small-text" href="../users/profile_page.php?id=' + question.creatorId + '"><span>' + question.creatorName + '</span></a>' +
-                '<span class="small-text"> | ' + question.creationDate + '</span>' +
-                '</div>' +
-                '<span class="large-text col-xs-12">' + question.title + '</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            );
-        }
-
-        addEventToClickableElements();
-    } else {
-        insertNoResultsFound();
-    }
-
-    insertPagination(reply.numResults);
+    searchBarContainer.after(response);
+    addEventToClickableElements();
 }
 
-function insertNoResultsFound() {
-    $('#search-question-panel').append('<div class="list-group-item">No results found</div>');
-}
-
-function buildSearchUserResults(response) {
-    const json = JSON.parse(response);
-    const searchQuestionPanel = $('#search-question-panel');
-
-    clearSearchResults();
-    clearPagination();
-
-    if (json['users'].length === 0) {
-        insertNoResultsFound();
-    } else {
-        for (let user of json['users']) {
-            searchQuestionPanel.append(
-                '<div class="list-group-item">' +
-                '<div class="row no-gutter no-side-margin">' +
-                '<div class="col-xs-3">' +
-                '<img class="center-block img-circle img-responsive img-user-search" src="/images/user-default.png">' +
-                '</div>' +
-                '<div class="col-xs-9 anchor clickable user-text" href="../users/profile_page.php?id=' + user.id + '">' +
-                '<span class="large-text col-xs-12">' + user.name + '</span>' +
-                '<span class="small-text col-xs-12">' + user.email + '</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            );
-        }
-        addEventToClickableElements();
-    }
-
-    insertPagination();
-}
-
-function insertPagination(numResults) {
-    if (!numResults)
-        numResults = 1;
-
-    const numberOfPages = Math.ceil(numResults / resultsPerPage);
-
-    const paginationList = $('#pagination-list');
-
-    paginationList.append(
-        '<li><span class="clickable" ' +
-        (currentPage !== 1 ? 'onclick="search(' + (currentPage - 1) + ')"' : '') +
-        ' aria-hidden="true">&laquo;</span></li>');
-
-
-    console.log(numberOfPages);
-    for (let i = 1; i <= numberOfPages; i++) {
-        paginationList.append('<li' +
-            (currentPage === i ? ' class="active"' : '') +
-            '><span class="clickable" onclick="search(' + i + ')">' + i + '</span>' +
-            '</li>');
-    }
-
-    paginationList.append(
-        '<li><span class="clickable" ' +
-        (currentPage !== numberOfPages ? 'onclick="search(' + (currentPage + 1) + ')"' : '') +
-        ' aria-hidden="true">&raquo;</span></li>');
-
+function emptySearch() {
+    $('#search-bar-container').after('<div class="panel panel-default"><div class="list-group-item text-center">Search something!</div></div>');
 }
