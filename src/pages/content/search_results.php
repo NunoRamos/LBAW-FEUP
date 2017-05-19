@@ -35,6 +35,7 @@ $smarty->assign('USER_NUM_QUESTIONS_ASC', UserSearchOrder::NUM_QUESTIONS_ASC);
 $smarty->assign('USER_NUM_QUESTIONS_DESC', UserSearchOrder::NUM_QUESTIONS_DESC);
 $smarty->assign('USER_NUM_REPLIES_ASC', UserSearchOrder::NUM_REPLIES_ASC);
 $smarty->assign('USER_NUM_REPLIES_DESC', UserSearchOrder::NUM_REPLIES_DESC);
-$smarty->assign('USER_SIMILARITY', UserSearchOrder::SIMILARITY);
+$smarty->assign('USER_JOIN_DATE_DESC', UserSearchOrder::JOIN_DATE_DESC);
+$smarty->assign('USER_JOIN_DATE_ASC', UserSearchOrder::JOIN_DATE_ASC);
 
 $smarty->display('content/search_results_page.tpl');

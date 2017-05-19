@@ -50,7 +50,8 @@
                 </form>
                 <form class="form-horizontal user-filter filter-list">
                     <h5><strong>Sort By</strong></h5>
-                    <a class="filter highlight selected" value="{$USER_SIMILARITY}">Best Match</a>
+                    <a class="filter highlight selected" value="{$USER_JOIN_DATE_DESC}">Join Date - Descending</a>
+                    <a class="filter highlight" value="{$USER_JOIN_DATE_ASC}">Join Date - Ascending</a>
                     <a class="filter highlight" value="{$USER_NUM_QUESTIONS_ASC}">Questions - Ascending</a>
                     <a class="filter highlight" value="{$USER_NUM_QUESTIONS_DESC}">Questions - Descending</a>
                     <a class="filter highlight" value="{$USER_NUM_REPLIES_ASC}">Answers - Ascending</a>

@@ -2,10 +2,9 @@ const SEARCH_FOR_QUESTIONS = 0;
 const SEARCH_FOR_USERS = 1;
 
 let currentPage = 1;
-let resultsPerPage = 1;
+const resultsPerPage = 10;
 let orderBy = 0;
 let searchType = 0;
-let reply = [];
 
 $(document).ready(function () {
     $('#tags-select').select2();
