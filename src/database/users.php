@@ -3,11 +3,11 @@
 function register($email, $password, $name)
 {
     global $conn;
-	
+
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $conn->prepare('INSERT INTO "User" (email,password,name,"privilegeLevelId") VALUES (?,?,?,?) RETURNING "id", "email", "name", "privilegeLevelId"');
     $stmt->execute([$email, $hashed_password, $name, 1]);
-	
+
     return $stmt->fetch();
 }
 
@@ -17,7 +17,7 @@ function login($email, $password)
     $stmt = $conn->prepare('SELECT * FROM "User" WHERE "User".email = ?');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
-	
+
     if (password_verify($password, $user['password']))
         return $user;
     else
@@ -43,7 +43,7 @@ function getUserNameById($id)
 function getUserById($userId)
 {
     global $conn;
-	
+
     $stmt = $conn->prepare('SELECT "id", "name" FROM "User" WHERE "id" = ?');
     $stmt->execute([$userId]);
     return $stmt->fetch();
@@ -52,7 +52,7 @@ function getUserById($userId)
 function getUnreadNotifications($userId)
 {
     global $conn;
-	
+
     $stmt = $conn->prepare('SELECT * FROM "Notification" WHERE "userId" = ? AND read = FALSE');
     $stmt->execute([$userId]);
     return $stmt->fetchAll();
@@ -61,9 +61,9 @@ function getUnreadNotifications($userId)
 function getUserByName($inputString, $thisPageFirstResult, $resultsPerPage)
 {
     global $conn;
-	
+
     $expression = '%' . $inputString . '%';
-	
+
     $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ? LIMIT ? OFFSET ?');
     $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
@@ -72,9 +72,9 @@ function getUserByName($inputString, $thisPageFirstResult, $resultsPerPage)
 function getUserByNameOrderedByAnswers($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy)
 {
     global $conn;
-	
+
     $expression = '%' . $inputString . '%';
-	
+
     if ($orderBy == 1) { //ASC
         $stmt = $conn->prepare('
     SELECT * FROM "User",
@@ -94,7 +94,7 @@ function getUserByNameOrderedByAnswers($inputString, $thisPageFirstResult, $resu
     ORDER BY "Answers" DESC
     LIMIT ? OFFSET ?');
     }
-	
+
     $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
 }
@@ -102,9 +102,9 @@ function getUserByNameOrderedByAnswers($inputString, $thisPageFirstResult, $resu
 function getUserByNameOrderedByQuestions($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy)
 {
     global $conn;
-	
+
     $expression = '%' . $inputString . '%';
-	
+
     if ($orderBy == 3) { //ASC
         $stmt = $conn->prepare('
     SELECT * FROM "User",
@@ -124,7 +124,7 @@ function getUserByNameOrderedByQuestions($inputString, $thisPageFirstResult, $re
     ORDER BY "Answers" DESC
     LIMIT ? OFFSET ?');
     }
-	
+
     $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
     return $stmt->fetchAll();
 }
@@ -142,7 +142,7 @@ function getNumberOfUsersByName($inputString)
 
 function getUserQuestions($userId)
 {
-	global $conn;
+    global $conn;
     $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
     $stmt->execute([$userId]);
     return $stmt->fetchAll();
@@ -150,9 +150,9 @@ function getUserQuestions($userId)
 
 function getUserQuestionAnswered($userId)
 {
-	global $conn;
+    global $conn;
     $stmt = $conn->prepare(
-	'SELECT DISTINCT ON ("Question"."contentId") "Question"."contentId", "Question"."title", "Question"."closed", "Question"."numReplies", "Content"."creatorId", "Content"."creationDate", "Content"."rating"
+        'SELECT DISTINCT ON ("Question"."contentId") "Question"."contentId", "Question"."title", "Question"."closed", "Question"."numReplies", "Content"."creatorId", "Content"."creationDate", "Content"."rating"
 		FROM "Question", "Content", "Reply"
 			WHERE "creatorId" = ? 
 			AND "Reply"."contentId" = "Content".id 
@@ -163,8 +163,8 @@ function getUserQuestionAnswered($userId)
 
 function getQuestionFromTopContent($topContentId)
 {
-	global $conn;
-	$topContentId = '{' . $topContentId . '}';
+    global $conn;
+    $topContentId = '{' . $topContentId . '}';
     $stmt = $conn->prepare('SELECT * FROM "Content", "Question", unnest(?::INTEGER[]) AS "questions" WHERE "Content"."id" = "Question"."contentId" AND "Content"."id" = "questions";');
     $stmt->execute([$topContentId]);
     return $stmt->fetchAll();
@@ -173,7 +173,7 @@ function getQuestionFromTopContent($topContentId)
 
 function getNumberUserQuestions($userId)
 {
-	global $conn;
+    global $conn;
     $stmt = $conn->prepare('SELECT COUNT(*) FROM "Content", "Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
     $stmt->execute([$userId]);
     return $stmt->fetch()['count'];
@@ -181,8 +181,28 @@ function getNumberUserQuestions($userId)
 
 function getNumberUserReply($userId)
 {
-	global $conn;
+    global $conn;
     $stmt = $conn->prepare('SELECT COUNT(*) FROM "Content", "Reply" WHERE "creatorId" = ? AND "contentId" = "Content".id');
     $stmt->execute([$userId]);
     return $stmt->fetch()['count'];
+}
+
+function getUsersByName($name, $resultOffset, $resultsPerPage, $order)
+{
+    $order = '"id"';
+
+    switch ($order) {
+        case UserSearchOrder::NUM_QUESTIONS_ASC:
+            $orderBy = 'rating ASC';
+            break;
+        case UserSearchOrder::NUM_QUESTIONS_DESC:
+            $orderBy = 'rating DESC';
+            break;
+        case UserSearchOrder::NUM_REPLIES_ASC:
+            $orderBy = '"numReplies" ASC';
+            break;
+        case UserSearchOrder::NUM_REPLIES_DESC:
+            $orderBy = '"numReplies" DESC';
+            break;
+    }
 }

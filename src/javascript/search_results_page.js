@@ -24,7 +24,7 @@ $(document).ready(function () {
 });
 
 function clearSearchResults() {
-    $('#search-question-panel').children().remove();
+    $('#search-bar-container').siblings().remove();
 }
 
 function clearPagination() {
@@ -73,9 +73,7 @@ function filterChanged() {
 }
 
 function insertLoadingIcon() {
-    const searchQuestionPanel = $('#search-question-panel');
-
-    searchQuestionPanel.append('<img src="/images/rolling.svg"/>');
+    $('#search-bar-container').after('<div class="panel panel-default"><div class="loading"><img src="/images/rolling.svg"/></div></div>');
 }
 
 function search(page) {
@@ -108,10 +106,10 @@ function search(page) {
                 orderBy: orderBy,
                 searchType: searchType,
                 selectedTags: selectedTags,
-                resultsOffset: currentPage - 1,
+                page: currentPage,
                 resultsPerPage: resultsPerPage
             }
-        }).done(buildSearchQuestionsResults);
+        }).done(insertSearchResults);
     }
     else if (searchType === SEARCH_FOR_USERS) {
         $.ajax({
@@ -121,87 +119,25 @@ function search(page) {
                 inputString: input,
                 orderBy: orderBy,
                 searchType: searchType,
-                resultsOffset: currentPage - 1,
+                page: currentPage,
                 resultsPerPage: resultsPerPage
             }
-        }).done(buildSearchUserResults);
+        }).done(insertSearchResults);
     }
 }
 
-function buildSearchQuestionsResults(response) {
-    const searchQuestionPanel = $('#search-question-panel');
-    searchQuestionPanel.children().remove();
+function insertSearchResults(response) {
+    const searchBarContainer = $('#search-bar-container');
+    searchBarContainer.siblings().remove();
 
     clearSearchResults();
-    clearPagination();
-    console.log(response);
 
-    searchQuestionPanel.append(response);
-
-    return;
-    if (reply.numResults > 0) {
-        for (let question of reply.results) {
-            searchQuestionPanel.append(
-                '<div class="list-group-item">' +
-                '<div class="row no-gutter no-side-margin">' +
-                '<div class="col-xs-1">' +
-                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' + question.id + '&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>' +
-                '<div class="text-center"><span>' + question.rating + '</span></div>' +
-                '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' + question.id + '&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>' +
-                '</div>' +
-                '<div class="col-xs-11 anchor clickable" href="question_page.php?id=' + question.id + '">' +
-                '<div class="col-xs-12">' +
-                '<a class="small-text" href="../users/profile_page.php?id=' + question.creatorId + '"><span>' + question.creatorName + '</span></a>' +
-                '<span class="small-text"> | ' + question.creationDate + '</span>' +
-                '</div>' +
-                '<span class="large-text col-xs-12">' + question.title + '</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            );
-        }
-
-        addEventToClickableElements();
-    } else {
-        insertNoResultsFound();
-    }
-
-    insertPagination(reply.numResults);
+    searchBarContainer.after(response);
+    addEventToClickableElements();
 }
 
 function insertNoResultsFound() {
-    $('#search-question-panel').append('<div class="list-group-item">No results found</div>');
-}
-
-function buildSearchUserResults(response) {
-    const json = JSON.parse(response);
-    const searchQuestionPanel = $('#search-question-panel');
-
-    clearSearchResults();
-    clearPagination();
-
-    if (json['users'].length === 0) {
-        insertNoResultsFound();
-    } else {
-        for (let user of json['users']) {
-            searchQuestionPanel.append(
-                '<div class="list-group-item">' +
-                '<div class="row no-gutter no-side-margin">' +
-                '<div class="col-xs-3">' +
-                '<img class="center-block img-circle img-responsive img-user-search" src="/images/user-default.png">' +
-                '</div>' +
-                '<div class="col-xs-9 anchor clickable user-text" href="../users/profile_page.php?id=' + user.id + '">' +
-                '<span class="large-text col-xs-12">' + user.name + '</span>' +
-                '<span class="small-text col-xs-12">' + user.email + '</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            );
-        }
-        addEventToClickableElements();
-    }
-
-    insertPagination();
+    $('#search-bar-container').after('<div class="panel panel-default"><div class="list-group-item">No results found</div></div>');
 }
 
 function insertPagination(numResults) {

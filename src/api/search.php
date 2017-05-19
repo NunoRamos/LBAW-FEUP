@@ -2,7 +2,8 @@
 include_once('../config/init.php');
 include_once($BASE_DIR . 'database/users.php');
 include_once($BASE_DIR . 'database/content.php');
-include_once($BASE_DIR . 'lib/order.php');
+include_once($BASE_DIR . 'lib/question_search_order.php');
+include_once($BASE_DIR . 'lib/user_search_order.php');
 include_once($BASE_DIR . 'lib/search_type.php');
 
 $searchString = htmlspecialchars($_GET['inputString']);
@@ -17,89 +18,138 @@ $resultsPerPage = intval(htmlspecialchars($_GET['resultsPerPage']));
 if (!is_integer($resultsPerPage) || $resultsPerPage < 1)
     $resultsPerPage = 10;
 
-$resultOffset = intval(htmlspecialchars($_GET['resultsOffset']));
-if (!is_integer($resultOffset) || $resultOffset < 1)
-    $resultOffset = 0;
+$page = intval(htmlspecialchars($_GET['page']));
+if (!is_integer($page) || $page < 1)
+    $page = 1;
+
+$orderBy = htmlspecialchars($_GET['orderBy']);
 
 if ((sizeof($selectedTags) == 0 && strlen($searchString) == 0))
     echo json_encode(['reply' => [], 'users' => [], 'numberOfPages' => 0]);
 
+
 switch ($_GET['searchType']) {
     case SearchType::QUESTIONS:
-        searchQuestion($searchString, $selectedTags, $resultsPerPage, $resultOffset);
+        searchQuestion($searchString, $selectedTags, $resultsPerPage, $page, $orderBy);
         break;
     case SearchType::USERS:
-        searchUsers();
+        searchUsers($searchString, $resultsPerPage, $page, $orderBy);
         break;
     default:
         echo json_encode("Error");
         break;
 }
 
-function searchQuestion($searchString, $selectedTags, $resultsPerPage, $resultOffset)
+function searchQuestion($searchString, $selectedTags, $resultsPerPage, $page, $orderBy)
 {
-    //Getting filter to search
-    $orderBy = htmlspecialchars($_GET['orderBy']);
-    if (!is_integer($orderBy))
-        $orderBy = Order::SIMILARITY;
+    $resultOffset = $resultsPerPage * ($page - 1);
+    $results = searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $resultOffset);
+    $questions = $results['questions'];
+    $numResults = $results['numResults'];
 
-    $questions = searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $resultOffset);
+    $return = '<div class="panel panel-default">';
 
-    $return = '';
     foreach ($questions as $question) {
         $return .= '<div class="list-group-item">' .
             '<div class="row no-gutter no-side-margin">' .
             '<div class="col-xs-1">' .
-            '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' . $question['id'] . '&vote=1"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>' .
+            '<div class="text-center anchor clickable" href="/actions/add_vote.php?questionId=' . $question['id'] . '&vote=1">' .
+            '<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></div>' .
             '<div class="text-center"><span>' . $question['rating'] . '</span></div>' .
-            '<div class="text-center anchor clickable" href="../../actions/add_vote.php?questionId=' . $question['id'] . '&vote=0"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>' .
+            '<div class="text-center anchor clickable" href="/actions/add_vote.php?questionId=' . $question['id'] . '&vote=0">' .
+            '<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></div>' .
             '</div>' .
             '<div class="col-xs-11 anchor clickable" href="question_page.php?id=' . $question['id'] . '">' .
             '<div class="col-xs-12">' .
-            '<a class="small-text" href="../users/profile_page.php?id=' . $question['creatorId'] . '><span>' . $question [' creatorName '] . '</span></a>' .
+            '<a class="small-text" href="../users/profile_page.php?id=' . $question['creatorId'] . '"><span>' . $question ['creatorName'] . '</span></a>' .
             '<span class="small-text"> | ' . $question['creationDate'] . '</span>' .
             '</div>' .
-            '<span class="large - text col - xs - 12">' . $question ['title'] . '</span>' .
+            '<span class="large-text col-xs-12">' . $question ['title'] . '</span>' .
             '</div>' .
             '</div>' .
             '</div>';
     }
 
-    echo $return;
+
+    $pagination = '';
+
+    if ($numResults === 0)
+        $return = '<div class="list-group-item">No results found</div>';
+    else
+        $pagination = generatePagination($numResults, $resultsPerPage, $page);
+
+    $return .= '</div>';
+
+    echo $return . $pagination;
 }
 
-function searchUsers()
+function generatePagination($numResults, $resultsPerPage, $currentPage)
 {
-    global $searchString;
-    global $resultsPerPage;
+    $numPages = ceil($numResults / $resultsPerPage);
 
-    //Lets see number of results
-    $return = getNumberOfUsersByName($searchString);
-    $numberOfResults = $return['count'];
+    $before = '<nav id="pagination-nav" aria-label="Page navigation" class="text-center">' .
+        '<ul id="pagination-list" class="pagination">' .
+        '<li><span class="clickable" ' .
+        ($currentPage !== 1 ? 'onclick="search(' . ($currentPage - 1) . ')"' : '') .
+        'aria-hidden="true">&laquo;</span></li>';
 
-    $numberOfPages = ceil($numberOfResults / $resultsPerPage);
+    $inBetween = '';
 
-    if (isset($_GET['page']))
-        $atualPage = htmlspecialchars($_GET['page']);
-    else $atualPage = 1;
-
-    //Getting the position of the first element to be searched
-    $thisPageFirstResult = ($atualPage - 1) * $resultsPerPage;
-
-    //Getting filter to search
-    if (isset($_GET['orderBy']))
-        $orderBy = htmlspecialchars($_GET['orderBy']);
-    else $orderBy = 0;
-
-    if ($orderBy == 1 || $orderBy == 2) { // 1 == Order by Answers - Ascending | 2 == Order by Answers - Descending
-        $users = getUserByNameOrderedByAnswers($searchString, $thisPageFirstResult, $resultsPerPage, $orderBy);
-    } else if ($orderBy == 3 || $orderBy == 4) { // 3 == Order by Questions - Ascending | 4 == Order by Questions - Descending
-        $users = getUserByNameOrderedByQuestions($searchString, $thisPageFirstResult, $resultsPerPage, $orderBy);
-    } else { //No order
-        $users = getUserByName($searchString, $thisPageFirstResult, $resultsPerPage);
+    for ($i = 1; $i <= $numPages; $i++) {
+        $inBetween = '<li' .
+            ($currentPage === $i ? ' class="active"' : '') .
+            '><span class="clickable" onclick="search(' . $i . ')">' . $i . '</span>' .
+            '</li>';
     }
 
-    echo json_encode(['users' => $users, 'numberOfPages' => $numberOfPages]);
+    $after = '<li><span class="clickable" ' .
+        ($currentPage !== $numPages ? 'onclick="search(' . ($currentPage + 1) . ')"' : '') .
+        'aria-hidden="true">&raquo;</span></li>' .
+
+        '</ul>' .
+        '</nav>';
+
+    return $before . $inBetween . $after;
+}
+
+function searchUsers($searchString, $resultsPerPage, $page, $orderBy)
+{
+    $numResults = getNumberOfUsersByName($searchString)['count'];
+    $resultOffset = $resultsPerPage * ($page - 1);
+
+    if ($orderBy == 3 || $orderBy == 4)  // 3 == Order by Answers - Ascending | 4 == Order by Answers - Descending
+        $users = getUserByNameOrderedByAnswers($searchString, $resultOffset, $resultsPerPage, $orderBy);
+    else if ($orderBy == 1 || $orderBy == 2)  // 1 == Order by Questions - Ascending | 2 == Order by Questions - Descending
+        $users = getUserByNameOrderedByQuestions($searchString, $resultOffset, $resultsPerPage, $orderBy);
+    else  //No order
+        $users = getUserByName($searchString, $resultOffset, $resultsPerPage);
+
+
+    $return = '<div class="panel panel-default">';
+
+    foreach ($users as $user) {
+        $return .=
+            '<div class="list-group-item">' .
+            '<div class="row no-gutter no-side-margin">' .
+            '<div class="col-xs-3">' .
+            '<img class="center-block img-circle img-responsive img-user-search" src="/images/user-default.png">' .
+            '</div>' .
+            '<div class="col-xs-9 anchor clickable user-text" href="../users/profile_page.php?id=' . $user['id'] . '">' .
+            '<span class="large-text col-xs-12">' . $user['name'] . '</span>' .
+            '<span class="small-text col-xs-12">' . $user['email'] . '</span>' .
+            '</div>' .
+            '</div>' .
+            '</div>';
+    }
+
+    $pagination = '';
+    if ($numResults === 0)
+        $return = '<div class="list-group-item">No results found</div>';
+    else
+        $pagination = generatePagination($numResults, $resultsPerPage, $page);
+
+    $return .= '</div>';
+    echo $return . $pagination;
 }
 
 
