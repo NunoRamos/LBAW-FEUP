@@ -1,4 +1,4 @@
-<div data-content-id="{$content["id"]}" data-vote-positive="{if $content["positive"] === FALSE}0{elseif $content["positive"] === TRUE}1{else}-1{/if}" class="row no-gutter no-side-margin list-group-item">
+<div class="row no-gutter no-side-margin list-group-item">
     <div class="col-xs-1">
         {include file="content/common/rating.tpl"}
     </div>
