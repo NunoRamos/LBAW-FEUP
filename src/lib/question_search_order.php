@@ -1,5 +1,7 @@
 <?php
-class Order {
+
+class QuestionSearchOrder
+{
     const SIMILARITY = 0;
     const RATING_ASC = 1;
     const RATING_DESC = 2;

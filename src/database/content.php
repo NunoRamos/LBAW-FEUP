@@ -47,14 +47,8 @@ LIMIT ?');
 
 function canDeleteContent($userId, $contentId)
 {
-    if (isset($userId) && isset($contentId)) {
-        if (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId)
-            return true;
-        else if (canDeleteAnyContent($userId))
-            return true;
-        else
-            return false;
-    }
+    if (isset($userId) && isset($contentId))
+        return (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId) || canDeleteAnyContent($userId);
 
     return false;
 }
@@ -159,29 +153,24 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $resultOffset)
+function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOffset)
 {
     global $conn;
-    $textLanguage = "'english'";
-    $sortingMethod = 'ts_rank_cd(search_vector, search_query)';
-    $sortingOrder = 'DESC';
+    $textLanguage = 'english';
+    $orderBy = 'ts_rank_cd(search_vector, search_query)';
 
-    switch ($orderBy) {
-        case Order::RATING_ASC:
-            $sortingMethod = 'rating';
-            $sortingOrder = 'ASC';
+    switch ($order) {
+        case QuestionSearchOrder::RATING_ASC:
+            $orderBy = 'rating ASC';
             break;
-        case Order::RATING_DESC:
-            $sortingMethod = 'rating';
-            $sortingOrder = 'DESC';
+        case QuestionSearchOrder::RATING_DESC:
+            $orderBy = 'rating DESC';
             break;
-        case Order::NUM_REPLIES_ASC:
-            $sortingMethod = '"numReplies"';
-            $sortingOrder = 'ASC';
+        case QuestionSearchOrder::NUM_REPLIES_ASC:
+            $orderBy = '"numReplies" ASC';
             break;
-        case Order::NUM_REPLIES_DESC:
-            $sortingMethod = '"numReplies"';
-            $sortingOrder = 'DESC';
+        case QuestionSearchOrder::NUM_REPLIES_DESC:
+            $orderBy = '"numReplies" DESC';
             break;
     }
 
@@ -195,8 +184,8 @@ function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $result
         
         SELECT COUNT(*)
             FROM "Content", "Question", "User", 
-                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
-                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
+                plainto_tsquery(? ,?) AS search_query,
+                to_tsvector(?, concat_ws(\' \', "title", "text")) AS search_vector
             WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
                 (NOT EXISTS(SELECT * FROM selected_tags) 
                 OR
@@ -204,16 +193,15 @@ function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $result
                     SELECT selected_tags."tagId"
                         FROM "QuestionTags", selected_tags 
                         WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))');
-        $countStmt->execute([$tags, $inputString]);
-
+        $countStmt->execute([$tags, $textLanguage, $inputString, $textLanguage]);
 
         $searchStmt = $conn->prepare('
         WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
         
         SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
             FROM "Content", "Question", "User", 
-                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
-                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
+                plainto_tsquery(?, ?) AS search_query,
+                to_tsvector(?, concat_ws(\' \', "title", "text")) AS search_vector
             WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
                 (NOT EXISTS(SELECT * FROM selected_tags) 
                 OR
@@ -221,12 +209,12 @@ function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $result
                     SELECT selected_tags."tagId"
                         FROM "QuestionTags", selected_tags 
                         WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
-            ORDER BY ' . $sortingMethod . ' ' . $sortingOrder . ' LIMIT ? OFFSET ?');
+            ORDER BY ? LIMIT ? OFFSET ?');
 
-        $searchStmt->execute([$tags, $inputString, $resultsPerPage, $resultOffset]);
+        $searchStmt->execute([$tags, $textLanguage, $inputString, $textLanguage, $orderBy, $resultsPerPage, $resultOffset]);
         $conn->commit();
 
-        return ["numResults" => $countStmt->fetchAll()[0]['count'], "results" => $searchStmt->fetchAll()];
+        return ['questions' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
     } catch (PDOException $exception) {
         $conn->rollBack();
         throw $exception;
@@ -328,4 +316,44 @@ function readNotifications($questionId)
           ');
 
     $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
+}
+
+function deleteQuestion($questionId)
+{
+    global $conn;
+
+    try {
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Reply" WHERE "questionId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Question" WHERE "contentId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Content" WHERE "id" = ?');
+        $stmt->execute([$questionId]);
+
+        $conn->commit();
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+}
+
+function deleteReply($replyId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Reply" SET "deleted" = TRUE WHERE "contentId" = ?');
+    $stmt->execute([$replyId]);
+}
+
+function isQuestion($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Question" WHERE "contentId" = ?');
+    $stmt->execute([$contentId]);
+    return count($stmt->fetchAll()) > 0;
 }

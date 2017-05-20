@@ -102,26 +102,36 @@
             <div class="modal-body">
                 <div class="tab-content row">
                     <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12"
-                          method="post" action="{$BASE_URL}actions/login.php">
+                          method="post" action="{$BASE_URL}actions/sign_in.php">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
-                            <input type="text" class="form-control" name="email" placeholder="Email" required>
+                            <input type="text" class="form-control" name="email" placeholder="Email" required
+                                   value="{$FORM_VALUES['sign-in']['email']}">
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
+                        {foreach $ERROR_MESSAGES['sign-in'] as $error_message}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="text-center">{$error_message}</span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                            </div>
+                        {/foreach}
                         <button type="submit" class="btn btn-default col-xs-12">Sign In</button>
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12"
-                          method="post" action="{$BASE_URL}actions/register.php" onsubmit="return validateSignUp()">
+                          method="post" action="{$BASE_URL}actions/sign_up.php" onsubmit="return validateSignUp()">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
-                            <input type="text" class="form-control" name="name" placeholder="Real Name" required>
+                            <input type="text" class="form-control" name="name" placeholder="Real Name" required
+                                   value="{$FORM_VALUES['sign-up']['name']}">
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-envelope"></div>
-                            <input type="email" class="form-control" name="email" placeholder="Email" required>
+                            <input type="email" class="form-control" name="email" placeholder="Email" required
+                                   value="{$FORM_VALUES['sign-up']['email']}">
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-lock"></div>
@@ -133,8 +143,14 @@
                             <input id="repeat-password" type="password" class="form-control" name="repeat-password"
                                    placeholder="Repeat your password" required>
                         </div>
-                        <div id="register-failed" class="alert alert-danger text-center" role="alert"
-                             style="display:none;">
+                        <div id="sign-up-errors">
+                            {foreach $ERROR_MESSAGES['sign-up'] as $error_message}
+                                <div class="alert alert-danger" role="alert">
+                                    <span class="text-center">{$error_message}</span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                </div>
+                            {/foreach}
                         </div>
                         <button type="submit" class="btn btn-default col-xs-12">Sign Up</button>
                     </form>
@@ -145,8 +161,3 @@
 </div>
 
 <div class="wrapper container-fluid">
-    {if $ERROR_MESSAGES}
-    <div class="container">
-        <div class="alert alert-danger col-xs-12 text-center" role="alert">{$ERROR_MESSAGES[0]}</div>
-    </div>
-{/if}

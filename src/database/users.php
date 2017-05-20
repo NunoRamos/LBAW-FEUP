@@ -14,22 +14,17 @@ function register($email, $password, $name)
 function login($email, $password)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "User".email = ?');
+    $stmt = $conn->prepare('SELECT "id", "name", "password", "photo", "email", "signupDate" FROM "User" WHERE "User".email = ?');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    if (password_verify($password, $user['password']))
+    $userPassword = $user['password'];
+    unset($user['password']);
+
+    if (password_verify($password, $userPassword))
         return $user;
     else
         return false;
-}
-
-function getUserByEmail($email)
-{
-    global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "User".email = ?');
-    $stmt->execute([$email]);
-    return $stmt->fetch();
 }
 
 function getUserNameById($id)
@@ -58,77 +53,6 @@ function getUnreadNotifications($userId)
     return $stmt->fetchAll();
 }
 
-function getUserByName($inputString, $thisPageFirstResult, $resultsPerPage)
-{
-    global $conn;
-
-    $expression = '%' . $inputString . '%';
-
-    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "name" LIKE ? LIMIT ? OFFSET ?');
-    $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
-    return $stmt->fetchAll();
-}
-
-function getUserByNameOrderedByAnswers($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy)
-{
-    global $conn;
-
-    $expression = '%' . $inputString . '%';
-
-    if ($orderBy == 1) { //ASC
-        $stmt = $conn->prepare('
-    SELECT * FROM "User",
-    (SELECT COUNT(*) FROM "Reply","Content"
-      WHERE id = "contentId"
-      GROUP BY "creatorId") AS "Answers" 
-    WHERE "name" LIKE ? 
-    ORDER BY "Answers" ASC
-    LIMIT ? OFFSET ?');
-    } else { //DESC
-        $stmt = $conn->prepare('
-    SELECT * FROM "User",
-    (SELECT COUNT(*) FROM "Reply","Content"
-      WHERE id = "contentId"
-      GROUP BY "creatorId") AS "Answers" 
-    WHERE "name" LIKE ? 
-    ORDER BY "Answers" DESC
-    LIMIT ? OFFSET ?');
-    }
-
-    $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
-    return $stmt->fetchAll();
-}
-
-function getUserByNameOrderedByQuestions($inputString, $thisPageFirstResult, $resultsPerPage, $orderBy)
-{
-    global $conn;
-
-    $expression = '%' . $inputString . '%';
-
-    if ($orderBy == 3) { //ASC
-        $stmt = $conn->prepare('
-    SELECT * FROM "User",
-    (SELECT COUNT(*) FROM "Question","Content"
-      WHERE id = "contentId"
-      GROUP BY "creatorId") AS "Answers" 
-    WHERE "name" LIKE ? 
-    ORDER BY "Answers" ASC
-    LIMIT ? OFFSET ?');
-    } else { //DESC
-        $stmt = $conn->prepare('
-    SELECT * FROM "User",
-    (SELECT COUNT(*) FROM "Question","Content"
-      WHERE id = "contentId"
-      GROUP BY "creatorId") AS "Answers" 
-    WHERE "name" LIKE ? 
-    ORDER BY "Answers" DESC
-    LIMIT ? OFFSET ?');
-    }
-
-    $stmt->execute([$expression, $resultsPerPage, $thisPageFirstResult]);
-    return $stmt->fetchAll();
-}
-
 function getNumberOfUsersByName($inputString)
 {
     global $conn;
@@ -138,4 +62,100 @@ function getNumberOfUsersByName($inputString)
     $stmt = $conn->prepare('SELECT COUNT(*) FROM "User" WHERE "name" LIKE ?');
     $stmt->execute([$expression]);
     return $stmt->fetch();
+}
+
+function getUserQuestions($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll();
+}
+
+function getUserQuestionAnswered($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare(
+        'SELECT DISTINCT ON ("Question"."contentId") "Question"."contentId", "Question"."title", "Question"."closed", "Question"."numReplies", "Content"."creatorId", "Content"."creationDate", "Content"."rating"
+		FROM "Question", "Content", "Reply"
+			WHERE "creatorId" = ? 
+			AND "Reply"."contentId" = "Content".id 
+			AND "questionId" = "Question"."contentId"');
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll();
+}
+
+function getQuestionFromTopContent($topContentId)
+{
+    global $conn;
+    $topContentId = '{' . $topContentId . '}';
+    $stmt = $conn->prepare('SELECT * FROM "Content", "Question", unnest(?::INTEGER[]) AS "questions" WHERE "Content"."id" = "Question"."contentId" AND "Content"."id" = "questions";');
+    $stmt->execute([$topContentId]);
+    return $stmt->fetchAll();
+}
+
+
+function getNumberUserQuestions($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Content", "Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['count'];
+}
+
+function getNumberUserReply($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Content", "Reply" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['count'];
+}
+
+function getOrderedUsersByName($name, $offset, $limit, $order)
+{
+    global $conn;
+
+    switch ($order) {
+        case UserSearchOrder::NUM_QUESTIONS_ASC:
+            $orderCriteria = '(SELECT COUNT(*) FROM "Question", "Content" WHERE id = "contentId" GROUP BY "creatorId")';
+            $orderDirection = 'ASC';
+            break;
+        case UserSearchOrder::NUM_QUESTIONS_DESC:
+            $orderCriteria = '(SELECT COUNT(*) FROM "Question", "Content" WHERE id = "contentId" GROUP BY "creatorId")';
+            $orderDirection = 'DESC';
+            break;
+        case UserSearchOrder::NUM_REPLIES_ASC:
+            $orderCriteria = '(SELECT COUNT(*) FROM "Reply", "Content" WHERE id = "contentId" GROUP BY "creatorId")';
+            $orderDirection = 'ASC';
+            break;
+        case UserSearchOrder::NUM_REPLIES_DESC:
+            $orderCriteria = '(SELECT COUNT(*) FROM "Reply", "Content" WHERE id = "contentId" GROUP BY "creatorId")';
+            $orderDirection = 'DESC';
+            break;
+        case UserSearchOrder::JOIN_DATE_ASC:
+            $orderCriteria = '"signupDate"';
+            $orderDirection = 'ASC';
+            break;
+        default:
+            $orderCriteria = '"signupDate"';
+            $orderDirection = 'DESC';
+            break;
+    }
+
+
+    try {
+        $conn->beginTransaction();
+        $countStmt = $conn->prepare('SELECT Count(*) FROM "User" WHERE "name" ~~* ?');
+        $countStmt->execute(['%' . $name . '%']);
+        $searchStmt = $conn->prepare('SELECT "id", "email", "photo","name", "signupDate"  FROM "User" WHERE "name" ~~* ? ORDER BY ? LIMIT ? OFFSET ?');
+        $searchStmt->execute(['%' . $name . '%', $orderCriteria . ' ' . $orderDirection, $limit, $offset]);
+
+        $conn->commit();
+
+        return ['users' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+
 }
