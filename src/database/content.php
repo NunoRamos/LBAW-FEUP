@@ -1,22 +1,43 @@
 <?php
 
-function getQuestion($questionId)
+function getQuestion($questionId, $userId)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id');
-    $stmt->execute([$questionId]);
+
+    if(isset($userId)){
+        $stmt = $conn->prepare('SELECT "question"."id","question"."creatorId","question"."creationDate","question"."text","question"."rating","question"."contentId","question"."title","question"."closed","question"."numReplies","Vote"."positive"
+ FROM (SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id) AS "question"
+ LEFT JOIN "Vote" ON "question"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;
+');
+        $stmt->execute([$questionId,$userId]);
+    }
+    else {
+        $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id');
+        $stmt->execute([$questionId]);
+    }
+
     return $stmt->fetch();
 }
 
-function getDescendantsOfContent($contentId, $level = 1)
+function getDescendantsOfContent($contentId, $userId, $level = 1)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?');
-    $stmt->execute([$contentId]);
+
+    if(isset($userId)){
+        $stmt = $conn->prepare('SELECT "replies"."id", "replies"."creatorId", "replies"."creationDate", "replies"."text", "replies"."rating", "replies"."contentId", "replies"."parentId",	"replies"."questionId", "replies"."deleted", "Vote"."positive"
+ FROM (SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?) AS "replies"
+ LEFT JOIN "Vote" ON "replies"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;');
+        $stmt->execute([$contentId, $userId]);
+    }
+    else {
+        $stmt = $conn->prepare('SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?');
+        $stmt->execute([$contentId]);
+    }
+
     $descendants = $stmt->fetchAll();
     foreach ($descendants as $key => $descendant) {
         $descendants[$key]["indentation"] = $level;
-        $descendants[$key]["children"] = getDescendantsOfContent($descendant['contentId'], $level + 1);
+        $descendants[$key]["children"] = getDescendantsOfContent($descendant['contentId'], $userId, $level + 1);
     }
     return $descendants;
 }
@@ -292,9 +313,9 @@ function getQuestionFromReply($replyId)
 
 /** If the id received is from a question, then return its information.
  * Otherwise, get the information as if it were a reply, and return it. */
-function getQuestionFromContent($contentId)
+function getQuestionFromContent($contentId, $userId)
 {
-    $question = getQuestion($contentId);
+    $question = getQuestion($contentId,$userId);
 
     return ($question !== false)
         ? $question

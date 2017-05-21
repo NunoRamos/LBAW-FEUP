@@ -50,8 +50,6 @@ function changeVoteColor(){
     let selector = 'div[data-content-id=' + id + ']';
     let rating = parseInt($(selector).find('div.rating span').text());
 
-    console.log(rating);
-
     switch (newVote){
         case UP:
             if(oldVote == UP){
