@@ -4,9 +4,9 @@ function getQuestion($questionId, $userId)
 {
     global $conn;
 
-    if(!isset($userId)){
+    if(!isset($userId))
         $userId = 0;
-    }
+
     $stmt = $conn->prepare('SELECT "question"."id","question"."creatorId","question"."creationDate","question"."text","question"."rating","question"."contentId","question"."title","question"."closed","question"."numReplies","Vote"."positive"
  FROM (SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id) AS "question"
  LEFT JOIN "Vote" ON "question"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;
@@ -20,9 +20,8 @@ function getDescendantsOfContent($contentId, $userId, $level = 1)
 {
     global $conn;
 
-    if(!isset($userId)){
+    if(!isset($userId))
         $userId = 0;
-    }
 
     $stmt = $conn->prepare('SELECT "replies"."id", "replies"."creatorId", "replies"."creationDate", "replies"."text", "replies"."rating", "replies"."contentId", "replies"."parentId",	"replies"."questionId", "replies"."deleted", "Vote"."positive"
  FROM (SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?) AS "replies"
@@ -174,6 +173,9 @@ function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOf
     global $conn;
     $textLanguage = 'english';
     $orderBy = 'ts_rank_cd(search_vector, search_query)';
+
+    if(!isset($userId))
+        $userId = 0;
 
     switch ($order) {
         case QuestionSearchOrder::RATING_ASC:
