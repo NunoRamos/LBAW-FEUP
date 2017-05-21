@@ -6,6 +6,10 @@ let id;
 let newVote;
 let oldVote;
 
+$(document).ready(function () {
+    $('#users-votes').on('hidden.bs.modal', removeModalContent)
+});
+
 function addPositiveVote(userId,contentId){
     newVote = UP;
     vote(userId,contentId);
@@ -87,5 +91,26 @@ function changeVoteColor(){
 
     //Updating rating
     $(selector).find('div.rating span').text(rating);
+}
+
+function getVotedUsers(contentId){
+    $.ajax({
+        method: "GET",
+        url: "../../api/get_voted_users.php",
+        data: {
+            contentId: contentId
+        }
+    }).done(insertUsersOnModal);
+}
+
+function removeModalContent(){
+    $('#users').remove();
+}
+
+function insertUsersOnModal(response){
+
+  removeModalContent();
+
+  $('.modal-body').append(response);
 }
 

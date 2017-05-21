@@ -7,11 +7,28 @@
     <div class="text-center anchor clickable positive" onclick="addPositiveVote({$userId},{$content["id"]})">
         <span class="glyphicon glyphicon-triangle-top {if $content["positive"] === TRUE}positive-vote{/if}" aria-hidden="true"></span>
     </div>
-    <div class="text-center rating"><span>{$content["rating"]}</span></div>
-
+    <div class="text-center rating" data-toggle="modal" data-target="#users-votes" onclick="getVotedUsers({$content["id"]})"><span>{$content["rating"]}</span></div>
     <div class="text-center anchor clickable negative" onclick="addNegativeVote({$userId},{$content["id"]})">
         <span class="glyphicon glyphicon-triangle-bottom {if $content["positive"] === FALSE}negative-vote{/if}" aria-hidden="true"></span>
+    </div>
+</div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="users-votes" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title large-text col-xs-8">Votes</span>
+                <button type="button" class="close col-xs-1" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                {foreach $users as $user}
+                    {include file="content/common/user_overview.tpl"}
+                {/foreach}
+            </div>
+        </div>
     </div>
 </div>
 

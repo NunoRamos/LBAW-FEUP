@@ -30,4 +30,5 @@
 {include file="common/footer.tpl"}
 <script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
 <script src="{$BASE_URL}javascript/question_page.js"></script>
+<script src="{$BASE_URL}javascript/clickable_div.js"></script>
 <script src="{$BASE_URL}javascript/vote.js"></script>

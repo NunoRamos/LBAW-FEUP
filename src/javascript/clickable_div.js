@@ -4,6 +4,7 @@ $(document).ready(function () {
 
 function addEventToClickableElements() {
     $('.anchor').on('click', function () {
+        console.log('entrei');
 
         let href = $(this).attr('href');
 

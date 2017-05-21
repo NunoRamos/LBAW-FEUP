@@ -378,3 +378,16 @@ function isQuestion($contentId)
     $stmt->execute([$contentId]);
     return count($stmt->fetchAll()) > 0;
 }
+
+function getVotedUsers($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+    SELECT "User"."id", "email", "name", "photo","positive"
+      FROM "Vote", "User"
+      WHERE "contentId" = ? AND "userId" = "User"."id";  ');
+    $stmt->execute([$contentId]);
+
+    return $stmt->fetchAll();
+}
