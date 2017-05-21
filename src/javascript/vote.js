@@ -112,5 +112,6 @@ function insertUsersOnModal(response){
   removeModalContent();
 
   $('.modal-body').append(response);
+    addEventToClickableElements();
 }
 
