@@ -4,17 +4,14 @@ function getQuestion($questionId, $userId)
 {
     global $conn;
 
-    if(isset($userId)){
-        $stmt = $conn->prepare('SELECT "question"."id","question"."creatorId","question"."creationDate","question"."text","question"."rating","question"."contentId","question"."title","question"."closed","question"."numReplies","Vote"."positive"
+    if(!isset($userId)){
+        $userId = 0;
+    }
+    $stmt = $conn->prepare('SELECT "question"."id","question"."creatorId","question"."creationDate","question"."text","question"."rating","question"."contentId","question"."title","question"."closed","question"."numReplies","Vote"."positive"
  FROM (SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id) AS "question"
  LEFT JOIN "Vote" ON "question"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;
 ');
-        $stmt->execute([$questionId,$userId]);
-    }
-    else {
-        $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id');
-        $stmt->execute([$questionId]);
-    }
+    $stmt->execute([$questionId,$userId]);
 
     return $stmt->fetch();
 }
@@ -23,16 +20,14 @@ function getDescendantsOfContent($contentId, $userId, $level = 1)
 {
     global $conn;
 
-    if(isset($userId)){
-        $stmt = $conn->prepare('SELECT "replies"."id", "replies"."creatorId", "replies"."creationDate", "replies"."text", "replies"."rating", "replies"."contentId", "replies"."parentId",	"replies"."questionId", "replies"."deleted", "Vote"."positive"
+    if(!isset($userId)){
+        $userId = 0;
+    }
+
+    $stmt = $conn->prepare('SELECT "replies"."id", "replies"."creatorId", "replies"."creationDate", "replies"."text", "replies"."rating", "replies"."contentId", "replies"."parentId",	"replies"."questionId", "replies"."deleted", "Vote"."positive"
  FROM (SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?) AS "replies"
  LEFT JOIN "Vote" ON "replies"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;');
-        $stmt->execute([$contentId, $userId]);
-    }
-    else {
-        $stmt = $conn->prepare('SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?');
-        $stmt->execute([$contentId]);
-    }
+    $stmt->execute([$contentId, $userId]);
 
     $descendants = $stmt->fetchAll();
     foreach ($descendants as $key => $descendant) {
@@ -61,7 +56,7 @@ function getMostRecentQuestions($limit,$userId)
  LEFT JOIN "Vote" ON "questions"."id" = "Vote"."contentId" AND "Vote"."userId" = ?
 ORDER BY "questions"."creationDate" DESC
 LIMIT ?');
-    
+
     $stmt->execute([$userId,$limit]);
     return $stmt->fetchAll();
 }
@@ -174,7 +169,7 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOffset)
+function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOffset, $userId)
 {
     global $conn;
     $textLanguage = 'english';
@@ -219,20 +214,23 @@ function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOf
         $searchStmt = $conn->prepare('
         WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
         
-        SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
-            FROM "Content", "Question", "User", 
-                plainto_tsquery(?, ?) AS search_query,
-                to_tsvector(?, concat_ws(\' \', "title", "text")) AS search_vector
-            WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
-                (NOT EXISTS(SELECT * FROM selected_tags) 
-                OR
-                EXISTS(
-                    SELECT selected_tags."tagId"
-                        FROM "QuestionTags", selected_tags 
-                        WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
+        SELECT "search"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "creatorName", "positive"
+        FROM
+            (SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
+                FROM "Content", "Question", "User", 
+                    plainto_tsquery(?, ?) AS search_query,
+                    to_tsvector(?, concat_ws(\' \', "title", "text")) AS search_vector
+                WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
+                    (NOT EXISTS(SELECT * FROM selected_tags) 
+                    OR
+                    EXISTS(
+                        SELECT selected_tags."tagId"
+                            FROM "QuestionTags", selected_tags 
+                            WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))) AS "search"
+            LEFT JOIN "Vote" ON "search"."id" = "Vote"."contentId" AND "Vote"."userId" = ?
             ORDER BY ? LIMIT ? OFFSET ?');
 
-        $searchStmt->execute([$tags, $textLanguage, $inputString, $textLanguage, $orderBy, $resultsPerPage, $resultOffset]);
+        $searchStmt->execute([$tags, $textLanguage, $inputString, $textLanguage, $userId, $orderBy, $resultsPerPage, $resultOffset]);
         $conn->commit();
 
         return ['questions' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];

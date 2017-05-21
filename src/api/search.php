@@ -32,9 +32,11 @@ $offset = $resultsPerPage * ($page - 1);
 $smarty->assign('resultsPerPage', $resultsPerPage);
 $smarty->assign('currentPage', $page);
 
+$userId = $userId = $smarty->getTemplateVars('USERID');
+
 switch ($_GET['searchType']) {
     case SearchType::QUESTIONS:
-        $results = searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $offset);
+        $results = searchQuestions($searchString, $selectedTags, $orderBy, $resultsPerPage, $offset, $userId);
         $smarty->assign('numResults', $results['numResults']);
         $smarty->assign('questions', $results['questions']);
         break;

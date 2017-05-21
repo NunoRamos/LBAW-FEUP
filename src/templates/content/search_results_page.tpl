@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <nav id="main-div" class="col-xs-12 col-sm-8 col-md-9">
+    <nav id="main-div" class="col-xs-12 col-sm-getQuestionHierarchy8 col-md-9">
         <div id="search-bar-container" class="input-group form-group">
             <input id="search-bar" type="text" name="search" class="form-control" placeholder="Search"
                    value="{$inputString}" autofocus/>
@@ -92,3 +92,4 @@
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
 <script src="{$BASE_URL}javascript/search_results_page.js"></script>
 <script src="{$BASE_URL}javascript/clickable_div.js"></script>
+<script src="{$BASE_URL}javascript/vote.js"></script>
