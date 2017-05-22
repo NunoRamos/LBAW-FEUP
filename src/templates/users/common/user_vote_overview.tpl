@@ -9,9 +9,9 @@
             <span class="small-text col-xs-12">{$user['email']}</span>
             {if isset($user['positive'])}
                 {if $user['positive'] === TRUE}
-                    <span class="small-text positive-vote col-xs-12">Up</span>
+                    <span class="small-text positive col-xs-12">Up</span>
                 {else}
-                    <span class="small-text negative-vote col-xs-12">Down</span>
+                    <span class="small-text negative col-xs-12">Down</span>
                 {/if}
             {/if}
         </div>

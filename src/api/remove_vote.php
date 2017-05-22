@@ -2,13 +2,13 @@
 include_once '../config/init.php';
 include_once '../database/content.php';
 
-if (!isset($_GET['contentId']) || !isset($_GET['vote']) || !isset($_GET['userId'])) {
+if (!isset($_GET['contentId']) || !isset($_GET['userId'])) {
+    http_response_code(403);
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit;
 }
 
 $contentId = htmlspecialchars($_GET['contentId']);
-$vote = htmlspecialchars($_GET['vote']);
 $userId = htmlspecialchars($_GET['userId']);
 
-vote($userId,$contentId,$vote);
-
+removeVote($userId, $contentId);

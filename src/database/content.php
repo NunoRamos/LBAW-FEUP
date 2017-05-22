@@ -4,14 +4,14 @@ function getQuestion($questionId, $userId)
 {
     global $conn;
 
-    if(!isset($userId))
+    if (!isset($userId))
         $userId = 0;
 
     $stmt = $conn->prepare('SELECT "question"."id","question"."creatorId","question"."creationDate","question"."text","question"."rating","question"."contentId","question"."title","question"."closed","question"."numReplies","Vote"."positive"
  FROM (SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id) AS "question"
  LEFT JOIN "Vote" ON "question"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;
 ');
-    $stmt->execute([$questionId,$userId]);
+    $stmt->execute([$questionId, $userId]);
 
     return $stmt->fetch();
 }
@@ -20,7 +20,7 @@ function getDescendantsOfContent($contentId, $userId, $level = 1)
 {
     global $conn;
 
-    if(!isset($userId))
+    if (!isset($userId))
         $userId = 0;
 
     $stmt = $conn->prepare('SELECT "replies"."id", "replies"."creatorId", "replies"."creationDate", "replies"."text", "replies"."rating", "replies"."contentId", "replies"."parentId",	"replies"."questionId", "replies"."deleted", "Vote"."positive"
@@ -44,7 +44,7 @@ function getContentOwnerId($contentId)
     return $stmt->fetch()['creatorId'];
 }
 
-function getMostRecentQuestions($limit,$userId)
+function getMostRecentQuestions($limit, $userId)
 {
     global $conn;
     //$stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
@@ -56,7 +56,7 @@ function getMostRecentQuestions($limit,$userId)
 ORDER BY "questions"."creationDate" DESC
 LIMIT ?');
 
-    $stmt->execute([$userId,$limit]);
+    $stmt->execute([$userId, $limit]);
     return $stmt->fetchAll();
 }
 
@@ -174,7 +174,7 @@ function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOf
     $textLanguage = 'english';
     $orderBy = 'ts_rank_cd(search_vector, search_query)';
 
-    if(!isset($userId))
+    if (!isset($userId))
         $userId = 0;
 
     switch ($order) {
@@ -242,22 +242,24 @@ function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOf
     }
 }
 
-function vote($userId, $contentId, $vote)
+function removeVote($userId, $contentId)
 {
     global $conn;
 
-    if($vote == -1){
-        $stmt = $conn->prepare('DELETE FROM "Vote" WHERE "contentId" = ? AND "userId" = ?');
-        $stmt->execute([$contentId, $userId]);
-    }
-    else{
-        try{
-            $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
-            $stmt->execute([$userId, $contentId, $vote]);
-        }catch (PDOException $e){
-            $stmt = $conn->prepare('UPDATE "Vote" SET "positive" = ? WHERE "contentId" = ? AND "userId" = ?');
-            $stmt->execute([$vote, $contentId, $userId]);
-        }
+    $stmt = $conn->prepare('DELETE FROM "Vote" WHERE "contentId" = ? AND "userId" = ?');
+    $stmt->execute([$contentId, $userId]);
+}
+
+function vote($userId, $contentId, $isPositive)
+{
+    global $conn;
+
+    try {
+        $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
+        $stmt->execute([$userId, $contentId, $isPositive]);
+    } catch (PDOException $e) {
+        $stmt = $conn->prepare('UPDATE "Vote" SET "positive" = ? WHERE "contentId" = ? AND "userId" = ?');
+        $stmt->execute([$isPositive, $contentId, $userId]);
     }
 
 }
@@ -315,7 +317,7 @@ function getQuestionFromReply($replyId)
  * Otherwise, get the information as if it were a reply, and return it. */
 function getQuestionFromContent($contentId, $userId)
 {
-    $question = getQuestion($contentId,$userId);
+    $question = getQuestion($contentId, $userId);
 
     return ($question !== false)
         ? $question

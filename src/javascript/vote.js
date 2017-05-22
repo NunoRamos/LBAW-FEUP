@@ -1,96 +1,65 @@
 const UP = 1;
-const DOWN = 0;
-const REMOVE_VOTE = -1;
-
-let id;
-let newVote;
-let oldVote;
+const REMOVE = 0;
+const DOWN = -1;
 
 $(document).ready(function () {
-    $('#users-votes').on('hidden.bs.modal', removeModalContent)
+    $('.vote-modal').on('hidden.bs.modal', removeModalContent)
 });
 
-function addPositiveVote(userId, contentId) {
-    newVote = UP;
-    vote(userId, contentId);
-}
-
-function addNegativeVote(userId, contentId) {
-    newVote = DOWN;
-    vote(userId, contentId);
-}
-
-function vote(userId, contentId) {
-
-    if (userId == 0)
+function vote(userId, contentId, newVote) {
+    if (userId === 0)
         return;
 
-    id = contentId;
+    const votes = $('div[data-content-id=' + contentId + ']').children().not('.rating').children('span');
+    let oldVote = 0;
 
-    oldVote = parseInt($('div[data-content-id=' + id + ']').attr("data-vote-positive"));
-
-    let vote;
+    if (votes.first().hasClass('positive'))
+        oldVote = UP;
+    else if (votes.last().hasClass('negative'))
+        oldVote = DOWN;
 
     if (oldVote === newVote)
-        vote = REMOVE_VOTE;
+        removeVote(contentId, userId, newVote);
     else
-        vote = newVote;
-
-    $('div[data-content-id=' + id + ']').attr("data-vote-positive", vote);
-
-    $.ajax({
-        method: "GET",
-        url: "../../api/add_vote.php",
-        data: {
-            contentId: contentId,
-            vote: vote,
-            userId: userId,
-        }
-    }).done(changeVoteColor);
+        addVote(contentId, userId, newVote, oldVote);
 }
 
-function changeVoteColor() {
+function addVote(contentId, userId, newVote, oldVote) {
+    const ratingIfSuccessful = $('div[data-content-id=' + contentId + ']').find('.rating span').text() - oldVote + newVote;
 
-    let selector = 'div[data-content-id=' + id + ']';
-    let rating = parseInt($(selector).find('div.rating span').text());
+    $.ajax("../../api/vote.php", {
+        data: {
+            contentId: contentId,
+            isPositive: newVote === UP,
+            userId: userId,
+        }
+    }).then(updateVoteColor.bind(this, contentId, newVote)).then(updateRating.bind(this, contentId, ratingIfSuccessful));
+}
 
-    switch (newVote) {
-        case UP:
-            if (oldVote === UP) {
-                $(selector).find('div.positive span').toggleClass("positive-vote");
-                rating--;
-            }
-            else if (oldVote === DOWN) {
-                $(selector).find('div.positive span').toggleClass("positive-vote");
-                $(selector).find('div.negative span').toggleClass("negative-vote");
-                rating += 2;
-            }
-            else {
-                $(selector).find('div.positive span').toggleClass("positive-vote");
-                rating++;
-            }
-            break;
-        case DOWN:
-            if (oldVote === DOWN) {
-                $(selector).find('div.negative span').toggleClass("negative-vote");
-                rating++;
-            }
-            else if (oldVote === UP) {
-                $(selector).find('div.positive span').toggleClass("positive-vote");
-                $(selector).find('div.negative span').toggleClass("negative-vote");
-                rating -= 2;
-            }
-            else {
-                $(selector).find('div.negative span').toggleClass("negative-vote");
-                rating--;
-            }
-            break;
-        default:
-            break;
-    }
+function removeVote(contentId, userId, newVote) {
+    const ratingIfSuccessful = $('div[data-content-id=' + contentId + ']').find('.rating span').text() - newVote;
 
-    //Updating rating
-    $(selector).find('div.rating span').text(rating);
+    $.ajax("../../api/remove_vote.php", {
+        data: {
+            contentId: contentId,
+            userId: userId,
+        }
+    }).then(updateVoteColor.bind(this, contentId, REMOVE)).then(updateRating.bind(this, contentId, ratingIfSuccessful));
+}
+
+function updateRating(contentId, newRating) {
+    $('div[data-content-id=' + contentId + ']').find('.rating span').text(newRating);
+}
+
+function updateVoteColor(contentId, vote) {
+    const votes = $('div[data-content-id=' + contentId + ']').children().not('.rating').children('span');
+
+    votes.removeClass('negative positive');
+
+    if (vote === UP)
+        votes.first().addClass('positive');
+    else if (vote === DOWN)
+        votes.last().addClass('negative');
 }
 
 function getUsersWhoVotedOnContent(contentId) {
@@ -104,15 +73,14 @@ function getUsersWhoVotedOnContent(contentId) {
 }
 
 function removeModalContent() {
-    $('#users').remove();
+    $('.vote-modal .voters *').remove();
 }
 
 function insertUsersOnModal(response) {
-
     removeModalContent();
     $('.loading').remove();
 
-    $('.modal-body').append(response);
+    $('.voters').append(response);
     addEventToClickableElements();
 }
 
