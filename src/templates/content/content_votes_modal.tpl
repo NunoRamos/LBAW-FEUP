@@ -3,7 +3,7 @@
         <div class="list-group-item text-center">No one voted</div>
     {else}
         {foreach $users as $user}
-            {include file="content/common/user_overview.tpl"}
+            {include file="users/common/user_vote_overview.tpl"}
         {/foreach}
     {/if}
 </div>

@@ -12,4 +12,4 @@ $users = getVotedUsers($contentId);
 
 $smarty->assign('users', $users);
 
-$smarty->display('content/modal_content_votes.tpl');
+$smarty->display('content/content_votes_modal.tpl');
