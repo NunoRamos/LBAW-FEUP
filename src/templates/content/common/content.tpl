@@ -6,7 +6,7 @@
         <div class="col-xs-11 no-gutter">
             <div class="col-xs-10 no-gutter">
                 <div class="col-xs-12 text-left">
-                    <a class="small-text" href="#">{getUserNameById($content.creatorId)}</a>
+                    <a class="small-text" href="../users/profile_page.php?id={$content["creatorId"]}">{getUserNameById($content.creatorId)}</a>
                     <span class="small-text">{$content["creationDate"]}</span>
                 </div>
                 <div class="content-text text-wrap">

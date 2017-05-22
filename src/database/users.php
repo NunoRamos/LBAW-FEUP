@@ -11,6 +11,16 @@ function register($email, $password, $name)
     return $stmt->fetch();
 }
 
+function ban($explanation, $expires, $reason, $userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('INSERT INTO "User" (explanation, expires, reason, userId) VALUES (?,?,?,?) RETURNING "explanation", "expires", "reason", "userId"');
+    $stmt->execute([$explanation, $expires, $reason, $userId]);
+
+    return $stmt->fetch();
+}
+
+
 function login($email, $password)
 {
     global $conn;
@@ -39,7 +49,7 @@ function getUserById($userId)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT "id", "name" FROM "User" WHERE "id" = ?');
+    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "id" = ?');
     $stmt->execute([$userId]);
     return $stmt->fetch();
 }
@@ -76,7 +86,7 @@ function getUserQuestionAnswered($userId)
 {
     global $conn;
     $stmt = $conn->prepare(
-        'SELECT DISTINCT ON ("Question"."contentId") "Question"."contentId", "Question"."title", "Question"."closed", "Question"."numReplies", "Content"."creatorId", "Content"."creationDate", "Content"."rating"
+        'SELECT DISTINCT ON ("Question"."contentId") "Question"."contentId", "Question"."title", "Question"."closed", "Question"."numReplies", "Content"."creatorId", "Content"."creationDate", "Content"."rating", "Content"."id"
 		FROM "Question", "Content", "Reply"
 			WHERE "creatorId" = ? 
 			AND "Reply"."contentId" = "Content".id 
@@ -106,7 +116,11 @@ function getNumberUserQuestions($userId)
 function getNumberUserReply($userId)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Content", "Reply" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM(SELECT DISTINCT ON ("Question"."contentId") "Question"."contentId", "Question"."title", "Question"."closed", "Question"."numReplies", "Content"."creatorId", "Content"."creationDate", "Content"."rating"
+		FROM "Question", "Content", "Reply"
+			WHERE "creatorId" = ? 
+			AND "Reply"."contentId" = "Content".id 
+			AND "questionId" = "Question"."contentId") as a');
     $stmt->execute([$userId]);
     return $stmt->fetch()['count'];
 }
