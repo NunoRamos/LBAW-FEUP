@@ -80,7 +80,7 @@
 
     <div id="search-question-panel" class="panel panel-default">
         <div class="loading">
-            <img src="/images/rolling.svg"/>
+            <img src="{$BASE_URL}/images/rolling.svg"/>
         </div>
     </div>
 </nav>
