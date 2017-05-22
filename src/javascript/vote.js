@@ -31,7 +31,7 @@ function vote(userId,contentId){
 
     let vote;
 
-    if(oldVote == newVote)
+    if(oldVote === newVote)
         vote = REMOVE_VOTE;
     else
         vote = newVote;
@@ -56,11 +56,11 @@ function changeVoteColor(){
 
     switch (newVote){
         case UP:
-            if(oldVote == UP){
+            if(oldVote === UP){
                 $(selector).find('div.positive span').toggleClass("positive-vote");
                 rating--;
             }
-            else if(oldVote == DOWN){
+            else if(oldVote === DOWN){
                 $(selector).find('div.positive span').toggleClass("positive-vote");
                 $(selector).find('div.negative span').toggleClass("negative-vote");
                 rating += 2;
@@ -71,11 +71,11 @@ function changeVoteColor(){
             }
             break;
         case DOWN:
-            if(oldVote == DOWN){
+            if(oldVote === DOWN){
                 $(selector).find('div.negative span').toggleClass("negative-vote");
                 rating++;
             }
-            else if(oldVote == UP){
+            else if(oldVote === UP){
                 $(selector).find('div.positive span').toggleClass("positive-vote");
                 $(selector).find('div.negative span').toggleClass("negative-vote");
                 rating -= 2;
@@ -93,10 +93,10 @@ function changeVoteColor(){
     $(selector).find('div.rating span').text(rating);
 }
 
-function getVotedUsers(contentId){
+function getUsersWhoVotedOnContent(contentId){
     $.ajax({
         method: "GET",
-        url: "../../api/get_content_votes.php",
+        url: "/api/get_content_votes.php",
         data: {
             contentId: contentId
         }

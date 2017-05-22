@@ -1,7 +1,8 @@
 <div class="list-group-item">
     <div class="row no-gutter no-side-margin">
         <div class="col-xs-3">
-            <img class="center-block img-circle img-responsive img-user-search" src="{if isset($user["photo"])}user["photo"]{else}/images/user-default.png{/if}">
+            <img class="center-block img-circle img-responsive img-user-search"
+                 src="{$BASE_URL}{if isset($user["photo"]) && !is_null($user["photo"])}{$user["photo"]}{else}images/user-default.png{/if}">
         </div>
         <div class="col-xs-9 anchor clickable user-text" href="../users/profile_page.php?id={$user['id']}">
             <span class="large-text col-xs-12">{$user['name']}</span>
