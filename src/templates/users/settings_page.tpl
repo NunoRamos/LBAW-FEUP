@@ -1,6 +1,7 @@
 {include file="common/header.tpl"}
 
 <script src="{$BASE_URL}javascript/settings.js"></script>
+<script src="{$BASE_URL}javascript/tag_choice.js"></script>
 
 <div class="container">
 
@@ -11,7 +12,8 @@
             <div class="list-group nav " id ="edit-profile-nav">
                 <a href="#edit-personal-info" class="list-group-item">Edit Personal Info</a>
                 <a href="#settings" class="list-group-item">Settings</a>
-                <a href="#ola" class="list-group-item">Exemplo 2</a>
+                <a href="#moderator" class="list-group-item">Moderator Settings</a>
+                <a href="#admin" class="list-group-item">Admin Settings</a>
             </div>
         </div>
 
@@ -60,6 +62,7 @@
                         </div>
                     </div>
                 </div>
+
             <div id='settings' class="panel panel-default tab-content settings-tab ">
                 <div class="panel-heading">Settings</div>
                 <div class="panel-body">
@@ -101,6 +104,37 @@
                         </div>
 
                     </form>
+                </div>
+            </div>
+            <div id='moderator' class="panel panel-default tab-content settings-tab ">
+                <div class="panel-heading">Moderator Settings</div>
+                <div class="panel-body">
+                    <h3>Pending Tags</h3>
+                    <hr class="divider">
+                    <div class="row">
+                        <div class="panel-body row">
+                            {$pendingTags = getAllPendingTags()}
+                            {foreach $pendingTags as $tag}
+                                {include file="content/common/tag_choice.tpl"}
+                            {/foreach}
+                        </div>
+
+                    </div>
+                    <h3>Ban User</h3>
+                    <hr class="divider">
+                    
+                </div>
+            </div>
+            <div id='admin' class="panel panel-default tab-content settings-tab ">
+                <div class="panel-heading">Admin Settings</div>
+                <div class="panel-body">
+                    <h3>Manage moderators/admins</h3>
+                    <hr class="divider">
+                    <div class="row">
+
+                    </div>
+                    <h3>Ban User</h3>
+                    <hr class="divider">
                 </div>
             </div>
         </div>

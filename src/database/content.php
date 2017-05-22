@@ -153,6 +153,15 @@ function getAllTags()
     return $stmt->fetchAll();
 }
 
+function getAllPendingTags()
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PendingTag"');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
 function getQuestionHierarchy($questionId)
 {
     $question = getQuestion($questionId);
@@ -440,6 +449,41 @@ function deleteReply($replyId)
 
     $stmt = $conn->prepare('UPDATE "Reply" SET "deleted" = TRUE WHERE "contentId" = ?');
     $stmt->execute([$replyId]);
+}
+
+function deletePendingTag($tagId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
+    $stmt->execute([$tagId]);
+}
+
+function getPendingTagNameById($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "name" FROM "PendingTag" WHERE "id" = ?');
+    $stmt->execute([$id]);
+    $return = $stmt->fetch();
+    return $return['name'];
+}
+
+function addTagFromPendingTag($tagId)
+{
+    global $conn;
+    $name = getPendingTagNameById($tagId);
+    try {
+        $conn->beginTransaction();
+
+       $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
+       $stmt->execute([$tagId]);
+       $stmt = $conn->prepare('INSERT INTO "Tag"("name") VALUES (?)');
+       $stmt->execute([$name]);
+        $conn->commit();
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
 }
 
 function isQuestion($contentId)
