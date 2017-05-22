@@ -391,3 +391,15 @@ function getVotedUsers($contentId)
 
     return $stmt->fetchAll();
 }
+
+function getQuestionTags($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+    SELECT "id","name" FROM "QuestionTags","Tag"
+WHERE "contentId"=? AND "id"="tagId";');
+    $stmt->execute([$contentId]);
+
+    return $stmt->fetchAll();
+}

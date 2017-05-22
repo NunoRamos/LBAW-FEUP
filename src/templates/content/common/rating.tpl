@@ -24,6 +24,9 @@
                             aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
+                <div class="loading">
+                    <img src="/images/rolling.svg"/>
+                </div>
                 {foreach $users as $user}
                     {include file="content/common/user_overview.tpl"}
                 {/foreach}

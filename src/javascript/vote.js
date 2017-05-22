@@ -110,6 +110,7 @@ function removeModalContent(){
 function insertUsersOnModal(response){
 
   removeModalContent();
+  $('.loading').remove();
 
   $('.modal-body').append(response);
     addEventToClickableElements();
