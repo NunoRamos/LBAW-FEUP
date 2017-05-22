@@ -96,7 +96,7 @@ function changeVoteColor(){
 function getVotedUsers(contentId){
     $.ajax({
         method: "GET",
-        url: "../../api/get_voted_users.php",
+        url: "../../api/get_content_votes.php",
         data: {
             contentId: contentId
         }
