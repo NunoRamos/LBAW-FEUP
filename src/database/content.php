@@ -60,14 +60,6 @@ LIMIT ?');
     return $stmt->fetchAll();
 }
 
-function canDeleteContent($userId, $contentId)
-{
-    if (isset($userId) && isset($contentId))
-        return (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId) || canDeleteAnyContent($userId);
-
-    return false;
-}
-
 function createQuestion($creatorId, $creationDate, $text, $title, $tags)
 {
     global $conn;
@@ -402,4 +394,12 @@ WHERE "contentId"=? AND "id"="tagId";');
     $stmt->execute([$contentId]);
 
     return $stmt->fetchAll();
+}
+
+function updateContentText($contentId,$text)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Content" SET "text" = ? WHERE "id" = ?');
+    $stmt->execute([$text, $contentId]);
 }

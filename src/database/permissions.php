@@ -31,3 +31,35 @@ function canReply($userId)
     $stmt->execute([$userId]);
     return $stmt->fetch()["canReply"];
 }
+
+function canDeleteContent($userId, $contentId)
+{
+    if (isset($userId) && isset($contentId))
+        return (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId) || canDeleteAnyContent($userId);
+
+    return false;
+}
+
+function canEditAnyContent($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "canEditAnyContent" FROM "User", "PrivilegeLevel" WHERE "User".id = ? AND "User"."privilegeLevelId" = "PrivilegeLevel".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()["canEditAnyContent"];
+}
+
+function canEditOwnContent($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "canEditOwnContent" FROM "User", "PrivilegeLevel" WHERE "User".id = ? AND "User"."privilegeLevelId" = "PrivilegeLevel".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()["canEditOwnContent"];
+}
+
+function canEditContent($userId, $contentId)
+{
+    if (isset($userId) && isset($contentId))
+        return (canEditOwnContent($userId) && getContentOwnerId($contentId) === $userId) || canEditAnyContent($userId);
+
+    return false;
+}

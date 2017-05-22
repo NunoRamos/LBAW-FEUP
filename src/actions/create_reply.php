@@ -6,15 +6,12 @@ include_once '../database/permissions.php';
 
 $userId = $smarty->getTemplateVars('USERID');
 
-
 if (!isset($userId)){
     http_response_code(403);
     exit;
 }
 
-
-
-$text = stripProhibitedTags($_POST['reply-text']);
+$text = stripProhibitedTags($_POST['container-text']);
 $parentId = intval(htmlspecialchars($_POST['parent-id']));
 $questionId = intval(htmlspecialchars($_POST['question-id']));
 
