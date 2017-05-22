@@ -1,5 +1,5 @@
 const UP = 1;
-const DOWN= 0;
+const DOWN = 0;
 const REMOVE_VOTE = -1;
 
 let id;
@@ -10,19 +10,19 @@ $(document).ready(function () {
     $('#users-votes').on('hidden.bs.modal', removeModalContent)
 });
 
-function addPositiveVote(userId,contentId){
+function addPositiveVote(userId, contentId) {
     newVote = UP;
-    vote(userId,contentId);
+    vote(userId, contentId);
 }
 
-function addNegativeVote(userId,contentId){
+function addNegativeVote(userId, contentId) {
     newVote = DOWN;
-    vote(userId,contentId);
+    vote(userId, contentId);
 }
 
-function vote(userId,contentId){
+function vote(userId, contentId) {
 
-    if(userId == 0)
+    if (userId == 0)
         return;
 
     id = contentId;
@@ -31,7 +31,7 @@ function vote(userId,contentId){
 
     let vote;
 
-    if(oldVote === newVote)
+    if (oldVote === newVote)
         vote = REMOVE_VOTE;
     else
         vote = newVote;
@@ -49,18 +49,18 @@ function vote(userId,contentId){
     }).done(changeVoteColor);
 }
 
-function changeVoteColor(){
+function changeVoteColor() {
 
     let selector = 'div[data-content-id=' + id + ']';
     let rating = parseInt($(selector).find('div.rating span').text());
 
-    switch (newVote){
+    switch (newVote) {
         case UP:
-            if(oldVote === UP){
+            if (oldVote === UP) {
                 $(selector).find('div.positive span').toggleClass("positive-vote");
                 rating--;
             }
-            else if(oldVote === DOWN){
+            else if (oldVote === DOWN) {
                 $(selector).find('div.positive span').toggleClass("positive-vote");
                 $(selector).find('div.negative span').toggleClass("negative-vote");
                 rating += 2;
@@ -71,11 +71,11 @@ function changeVoteColor(){
             }
             break;
         case DOWN:
-            if(oldVote === DOWN){
+            if (oldVote === DOWN) {
                 $(selector).find('div.negative span').toggleClass("negative-vote");
                 rating++;
             }
-            else if(oldVote === UP){
+            else if (oldVote === UP) {
                 $(selector).find('div.positive span').toggleClass("positive-vote");
                 $(selector).find('div.negative span').toggleClass("negative-vote");
                 rating -= 2;
@@ -93,26 +93,26 @@ function changeVoteColor(){
     $(selector).find('div.rating span').text(rating);
 }
 
-function getUsersWhoVotedOnContent(contentId){
+function getUsersWhoVotedOnContent(contentId) {
     $.ajax({
         method: "GET",
-        url: "/api/get_content_votes.php",
+        url: "../../api/get_content_votes.php",
         data: {
             contentId: contentId
         }
     }).done(insertUsersOnModal);
 }
 
-function removeModalContent(){
+function removeModalContent() {
     $('#users').remove();
 }
 
-function insertUsersOnModal(response){
+function insertUsersOnModal(response) {
 
-  removeModalContent();
-  $('.loading').remove();
+    removeModalContent();
+    $('.loading').remove();
 
-  $('.modal-body').append(response);
+    $('.modal-body').append(response);
     addEventToClickableElements();
 }
 
