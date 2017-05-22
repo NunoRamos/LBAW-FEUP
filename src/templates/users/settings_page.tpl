@@ -1,7 +1,7 @@
 {include file="common/header.tpl"}
 
 <script src="{$BASE_URL}javascript/settings.js"></script>
-<script src="{$BASE_URL}javascript/tag_choice.js"></script>
+<script src="{$BASE_URL}javascript/settings_page.js"></script>
 
 <div class="container">
 
@@ -120,21 +120,40 @@
                         </div>
 
                     </div>
-                    <h3>Ban User</h3>
-                    <hr class="divider">
-                    
-                </div>
+
+            </div>
             </div>
             <div id='admin' class="panel panel-default tab-content settings-tab ">
                 <div class="panel-heading">Admin Settings</div>
                 <div class="panel-body">
-                    <h3>Manage moderators/admins</h3>
+                    <h3>Banned Users</h3>
                     <hr class="divider">
-                    <div class="row">
+                    <table class="table table-hover col-xs-12">
 
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Banned Until</th>
+                            <th>Reason</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {$users_banned=getAllBannedUsers()}
+
+                        {foreach $users_banned as $user}
+                            <div >
+                                <tr id ="ban-user-tr-{$user['userId']}">
+                                <td><a href="#">{getUserNameById($user['userId'])}</a></td>
+                                <td>{$user['expires']}</td>
+                                <td>{$user['reason']}</td>
+                                <td><a id="unban-user-button"class="btn btn-primary btn-danger pull-right ban-user-button" onclick="unbanUser({$user['userId']})">Unban User</a></td>
+                            </tr>
+                            </div>
+                        {/foreach}
+                        </tbody>
+                    </table>
                     </div>
-                    <h3>Ban User</h3>
-                    <hr class="divider">
+                </div>
                 </div>
             </div>
         </div>

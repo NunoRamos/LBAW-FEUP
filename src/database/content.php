@@ -152,6 +152,14 @@ function getAllTags()
     $stmt->execute();
     return $stmt->fetchAll();
 }
+function getAllBannedUsers()
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "BannedUser"');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
 
 function getAllPendingTags()
 {
@@ -484,6 +492,13 @@ function addTagFromPendingTag($tagId)
         $conn->rollBack();
         throw $exception;
     }
+}
+
+function unbanUser($id){
+
+    global $conn;
+    $stmt = $conn->prepare('DELETE FROM "BannedUser" WHERE "userId" = ?');
+    $stmt->execute([$id]);
 }
 
 function isQuestion($contentId)

@@ -30,3 +30,20 @@ function removePendingTagDiv(id) {
     $('div[data-tag-id=' + id + ']').remove();
 
 }
+
+function unbanUser(id) {
+
+
+    $.ajax({
+        method: "GET",
+        url: "../../api/unban_user.php",
+        data: {
+            id:id,
+        }
+    }).done(removeBannedUserDiv(id));
+
+}
+
+function removeBannedUserDiv(id){
+    $("#ban-user-tr-"+id).remove();
+}
