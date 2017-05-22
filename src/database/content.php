@@ -1,22 +1,37 @@
 <?php
 
-function getQuestion($questionId)
+function getQuestion($questionId, $userId)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id');
-    $stmt->execute([$questionId]);
+
+    if(!isset($userId))
+        $userId = 0;
+
+    $stmt = $conn->prepare('SELECT "question"."id","question"."creatorId","question"."creationDate","question"."text","question"."rating","question"."contentId","question"."title","question"."closed","question"."numReplies","Vote"."positive"
+ FROM (SELECT * FROM "Content", "Question" WHERE "id" = ? AND "contentId" = "Content".id) AS "question"
+ LEFT JOIN "Vote" ON "question"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;
+');
+    $stmt->execute([$questionId,$userId]);
+
     return $stmt->fetch();
 }
 
-function getDescendantsOfContent($contentId, $level = 1)
+function getDescendantsOfContent($contentId, $userId, $level = 1)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?');
-    $stmt->execute([$contentId]);
+
+    if(!isset($userId))
+        $userId = 0;
+
+    $stmt = $conn->prepare('SELECT "replies"."id", "replies"."creatorId", "replies"."creationDate", "replies"."text", "replies"."rating", "replies"."contentId", "replies"."parentId",	"replies"."questionId", "replies"."deleted", "Vote"."positive"
+ FROM (SELECT * FROM "Content", "Reply" WHERE "id" = "contentId" AND "parentId" = ?) AS "replies"
+ LEFT JOIN "Vote" ON "replies"."id" = "Vote"."contentId" AND "Vote"."userId" = ?;');
+    $stmt->execute([$contentId, $userId]);
+
     $descendants = $stmt->fetchAll();
     foreach ($descendants as $key => $descendant) {
         $descendants[$key]["indentation"] = $level;
-        $descendants[$key]["children"] = getDescendantsOfContent($descendant['contentId'], $level + 1);
+        $descendants[$key]["children"] = getDescendantsOfContent($descendant['contentId'], $userId, $level + 1);
     }
     return $descendants;
 }
@@ -29,24 +44,26 @@ function getContentOwnerId($contentId)
     return $stmt->fetch()['creatorId'];
 }
 
-function getMostRecentQuestions($limit)
+function getMostRecentQuestions($limit,$userId)
 {
     global $conn;
-    $stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
-    $stmt->execute([$limit]);
+    //$stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
+
+    $stmt = $conn->prepare('
+    SELECT "questions"."id","questions"."text","questions"."creatorId", "questions"."rating", "questions"."title", "questions"."creationDate","Vote"."positive"
+ FROM (SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id) AS "questions"
+ LEFT JOIN "Vote" ON "questions"."id" = "Vote"."contentId" AND "Vote"."userId" = ?
+ORDER BY "questions"."creationDate" DESC
+LIMIT ?');
+
+    $stmt->execute([$userId,$limit]);
     return $stmt->fetchAll();
 }
 
 function canDeleteContent($userId, $contentId)
 {
-    if (isset($userId) && isset($contentId)) {
-        if (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId)
-            return true;
-        else if (canDeleteAnyContent($userId))
-            return true;
-        else
-            return false;
-    }
+    if (isset($userId) && isset($contentId))
+        return (canDeleteOwnContent($userId) && getContentOwnerId($contentId) === $userId) || canDeleteAnyContent($userId);
 
     return false;
 }
@@ -151,29 +168,27 @@ function getContentById($id)
     return $stmt->fetch();
 }
 
-function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $resultOffset)
+function searchQuestions($inputString, $tags, $order, $resultsPerPage, $resultOffset, $userId)
 {
     global $conn;
-    $textLanguage = "'english'";
-    $sortingMethod = 'ts_rank_cd(search_vector, search_query)';
-    $sortingOrder = 'DESC';
+    $textLanguage = 'english';
+    $orderBy = 'ts_rank_cd(search_vector, search_query)';
 
-    switch ($orderBy) {
-        case Order::RATING_ASC:
-            $sortingMethod = 'rating';
-            $sortingOrder = 'ASC';
+    if(!isset($userId))
+        $userId = 0;
+
+    switch ($order) {
+        case QuestionSearchOrder::RATING_ASC:
+            $orderBy = 'rating ASC';
             break;
-        case Order::RATING_DESC:
-            $sortingMethod = 'rating';
-            $sortingOrder = 'DESC';
+        case QuestionSearchOrder::RATING_DESC:
+            $orderBy = 'rating DESC';
             break;
-        case Order::NUM_REPLIES_ASC:
-            $sortingMethod = '"numReplies"';
-            $sortingOrder = 'ASC';
+        case QuestionSearchOrder::NUM_REPLIES_ASC:
+            $orderBy = '"numReplies" ASC';
             break;
-        case Order::NUM_REPLIES_DESC:
-            $sortingMethod = '"numReplies"';
-            $sortingOrder = 'DESC';
+        case QuestionSearchOrder::NUM_REPLIES_DESC:
+            $orderBy = '"numReplies" DESC';
             break;
     }
 
@@ -187,8 +202,8 @@ function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $result
         
         SELECT COUNT(*)
             FROM "Content", "Question", "User", 
-                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
-                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
+                plainto_tsquery(? ,?) AS search_query,
+                to_tsvector(?, concat_ws(\' \', "title", "text")) AS search_vector
             WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
                 (NOT EXISTS(SELECT * FROM selected_tags) 
                 OR
@@ -196,41 +211,55 @@ function searchQuestions($inputString, $tags, $orderBy, $resultsPerPage, $result
                     SELECT selected_tags."tagId"
                         FROM "QuestionTags", selected_tags 
                         WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))');
-        $countStmt->execute([$tags, $inputString]);
-
+        $countStmt->execute([$tags, $textLanguage, $inputString, $textLanguage]);
 
         $searchStmt = $conn->prepare('
         WITH selected_tags AS (SELECT * FROM unnest(?::INTEGER[]) AS "tagId")
         
-        SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
-            FROM "Content", "Question", "User", 
-                plainto_tsquery(' . $textLanguage . ',?) AS search_query,
-                to_tsvector(' . $textLanguage . ', concat_ws(\' \', "title", "text")) AS search_vector
-            WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
-                (NOT EXISTS(SELECT * FROM selected_tags) 
-                OR
-                EXISTS(
-                    SELECT selected_tags."tagId"
-                        FROM "QuestionTags", selected_tags 
-                        WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))
-            ORDER BY ' . $sortingMethod . ' ' . $sortingOrder . ' LIMIT ? OFFSET ?');
+        SELECT "search"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "creatorName", "positive"
+        FROM
+            (SELECT "Content"."id", "rating", "title", "creatorId",  "creationDate", "numReplies", "User"."name" AS "creatorName"
+                FROM "Content", "Question", "User", 
+                    plainto_tsquery(?, ?) AS search_query,
+                    to_tsvector(?, concat_ws(\' \', "title", "text")) AS search_vector
+                WHERE "contentId" = "Content"."id" AND "creatorId" = "User"."id" AND search_vector @@ search_query AND 
+                    (NOT EXISTS(SELECT * FROM selected_tags) 
+                    OR
+                    EXISTS(
+                        SELECT selected_tags."tagId"
+                            FROM "QuestionTags", selected_tags 
+                            WHERE "QuestionTags"."contentId" = "Content"."id" AND "QuestionTags"."tagId" = selected_tags."tagId"))) AS "search"
+            LEFT JOIN "Vote" ON "search"."id" = "Vote"."contentId" AND "Vote"."userId" = ?
+            ORDER BY ? LIMIT ? OFFSET ?');
 
-        $searchStmt->execute([$tags, $inputString, $resultsPerPage, $resultOffset]);
+        $searchStmt->execute([$tags, $textLanguage, $inputString, $textLanguage, $userId, $orderBy, $resultsPerPage, $resultOffset]);
         $conn->commit();
 
-        return ["numResults" => $countStmt->fetchAll()[0]['count'], "results" => $searchStmt->fetchAll()];
+        return ['questions' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
     } catch (PDOException $exception) {
         $conn->rollBack();
         throw $exception;
     }
 }
 
-function addVote($userId, $contentId, $vote)
+function vote($userId, $contentId, $vote)
 {
     global $conn;
 
-    $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
-    $stmt->execute([$userId, $contentId, $vote]);
+    if($vote == -1){
+        $stmt = $conn->prepare('DELETE FROM "Vote" WHERE "contentId" = ? AND "userId" = ?');
+        $stmt->execute([$contentId, $userId]);
+    }
+    else{
+        try{
+            $stmt = $conn->prepare('INSERT INTO "Vote" ("userId","contentId","positive") VALUES (?,?,?)');
+            $stmt->execute([$userId, $contentId, $vote]);
+        }catch (PDOException $e){
+            $stmt = $conn->prepare('UPDATE "Vote" SET "positive" = ? WHERE "contentId" = ? AND "userId" = ?');
+            $stmt->execute([$vote, $contentId, $userId]);
+        }
+    }
+
 }
 
 function getVoteTarget($voteId)
@@ -284,9 +313,9 @@ function getQuestionFromReply($replyId)
 
 /** If the id received is from a question, then return its information.
  * Otherwise, get the information as if it were a reply, and return it. */
-function getQuestionFromContent($contentId)
+function getQuestionFromContent($contentId, $userId)
 {
-    $question = getQuestion($contentId);
+    $question = getQuestion($contentId,$userId);
 
     return ($question !== false)
         ? $question
@@ -379,4 +408,70 @@ function editEmail($id, $email)
 
         //$conn = null;
     }
+}
+
+
+function deleteQuestion($questionId)
+{
+    global $conn;
+
+    try {
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Reply" WHERE "questionId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Question" WHERE "contentId" = ?');
+        $stmt->execute([$questionId]);
+        $stmt = $conn->prepare('DELETE FROM "Content" WHERE "id" = ?');
+        $stmt->execute([$questionId]);
+
+        $conn->commit();
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+}
+
+function deleteReply($replyId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Reply" SET "deleted" = TRUE WHERE "contentId" = ?');
+    $stmt->execute([$replyId]);
+}
+
+function isQuestion($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Question" WHERE "contentId" = ?');
+    $stmt->execute([$contentId]);
+    return count($stmt->fetchAll()) > 0;
+}
+
+function getVotedUsers($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+    SELECT "User"."id", "email", "name", "photo","positive"
+      FROM "Vote", "User"
+      WHERE "contentId" = ? AND "userId" = "User"."id";  ');
+    $stmt->execute([$contentId]);
+
+    return $stmt->fetchAll();
+}
+
+function getQuestionTags($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+    SELECT "id","name" FROM "QuestionTags","Tag"
+WHERE "contentId"=? AND "id"="tagId";');
+    $stmt->execute([$contentId]);
+
+    return $stmt->fetchAll();
 }

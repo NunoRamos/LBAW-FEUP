@@ -17,7 +17,9 @@ if ($contentId == 0) {
     exit();
 }
 
-$question = getQuestionFromContent($contentId);
+$userId = $userId = $smarty->getTemplateVars('USERID');
+$question = getQuestionFromContent($contentId, $userId);
+$questionTags = getQuestionTags($contentId);
 
 if (!isset($question['title'])) {
     http_response_code(400);
@@ -25,9 +27,10 @@ if (!isset($question['title'])) {
 }
 
 readNotifications($question['contentId']);
-$replies = getDescendantsOfContent($question['contentId']);
+$replies = getDescendantsOfContent($question['contentId'],$userId);
 $question['children'] = $replies;
 
 $smarty->assign('content', $question);
+$smarty->assign('questionTags', $questionTags);
 $smarty->display('content/question_page.tpl');
 

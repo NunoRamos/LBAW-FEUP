@@ -9,16 +9,22 @@
                     <a class="small-text" href="#">{getUserNameById($content.creatorId)}</a>
                     <span class="small-text">{$content["creationDate"]}</span>
                 </div>
-                <div>
-                    {$content["text"]}
+                <div class="text-wrap">
+                    {if $content.deleted}
+                        [deleted]
+                    {else}
+                        {$content["text"]}
+                    {/if}
                 </div>
             </div>
             <div class="col-xs-2 text-align-right no-gutter btn-toolbar">
                 {if canDeleteContent($USERID, $content.id)}
-                    <div class="btn-group pull-right">
-                        <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span>
+                    <form class="btn-group pull-right" action="/actions/delete_content.php" method="post">
+                        <input type="hidden" value="{$content.id}" name="content-id">
+                        <button type="submit" class="btn btn-danger btn-xs"><span
+                                    class="glyphicon glyphicon-trash"></span>
                         </button>
-                    </div>
+                    </form>
                 {/if}
                 {if canReply($USERID)}
                     <div class="btn-group pull-right">

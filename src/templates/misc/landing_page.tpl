@@ -6,9 +6,7 @@
         </div>
         <div class="list-group">
             {foreach $questions as $content}
-                <div class="list-group-item">
-                    {include file="content/common/question_overview.tpl"}
-                </div>
+                {include file="content/common/question_overview.tpl"}
             {/foreach}
         </div>
     </div>
@@ -19,11 +17,13 @@
             <h3 class="panel-title">Suggested Tags</h3>
         </div>
         <div class="panel-body list-group">
-        {foreach $tags as $tag}
-            <a href="../content/search_results.php?activeTags={$tag['name']}" class="list-group-item">{$tag['name']}</a>
+            {foreach $tags as $tag}
+                <a href="../content/search_results.php?activeTags={$tag['name']}"
+                   class="list-group-item">{$tag['name']}</a>
             {/foreach}
         </div>
     </div>
 </div>
 {include file="common/footer.tpl"}
 <script src="{$BASE_URL}javascript/clickable_div.js"></script>
+<script src="{$BASE_URL}javascript/vote.js"></script>

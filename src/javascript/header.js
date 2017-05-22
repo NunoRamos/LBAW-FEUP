@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    if (window.location.href.indexOf('#signup') !== -1) {
+    if (window.location.href.indexOf('#sign-up') !== -1) {
         $('#sign-in-modal').modal('show');
-        console.log($('#sign-up'));
         $('#sign-up-tab').tab('show');
     }
 
-    if (window.location.href.indexOf('#signin') !== -1) {
+    if (window.location.href.indexOf('#sign-in') !== -1) {
         $('#sign-in-modal').modal('show');
     }
 
@@ -14,20 +13,28 @@ $(document).ready(function () {
     notificationDropdown.on('hidden.bs.dropdown', deleteNotifications);
 });
 
+function createErrorMessage(message) {
+    return $('<div class="alert alert-danger" role="alert">' +
+        '<span class="text-center">' + message +
+        '</span>' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span' +
+        'aria-hidden="true">&times;</span></button>' +
+        '</div>');
+}
+
 function validateSignUp() {
     let password = $("#password").val();
     let repeatPassword = $("#repeat-password").val();
-    let errorMessage = $("#register-failed");
+    let errorAlert = $("#sign-up-errors");
+    errorAlert.children().remove();
 
     if (password.length < 8) {
-        errorMessage.text("Password needs to be greater or equal to 8 characters");
-        errorMessage.show();
+        errorAlert.append(createErrorMessage("Password needs to be greater or equal to 8 characters"));
         return false;
     }
 
     if (repeatPassword !== password) {
-        errorMessage.text("Passwords do not match");
-        errorMessage.show();
+        errorAlert.append(createErrorMessage("Passwords do not match"));
         return false;
     }
 
