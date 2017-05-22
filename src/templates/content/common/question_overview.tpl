@@ -8,6 +8,6 @@
                href="../users/profile_page.php?id={$content["creatorId"]}"><span>{getUserNameById($content["creatorId"])}</span></a>
             <span class="small-text"> | {$content["creationDate"]}</span>
         </div>
-        <span class="large-text col-xs-12">{$content["title"]}</span>
+        <span class="large-text col-xs-12 text-wrap">{$content["title"]}</span>
     </div>
 </div>

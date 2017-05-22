@@ -9,7 +9,7 @@
                     <a class="small-text" href="#">{getUserNameById($content.creatorId)}</a>
                     <span class="small-text">{$content["creationDate"]}</span>
                 </div>
-                <div>
+                <div class="text-wrap">
                     {if $content.deleted}
                         [deleted]
                     {else}
