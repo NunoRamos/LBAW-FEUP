@@ -61,7 +61,7 @@ function filterChanged() {
 }
 
 function insertLoadingIcon() {
-    $('#search-bar-container').after('<div class="panel panel-default loading"><img src="/images/rolling.svg"/></div>');
+    $('#search-bar-container').after('<div class="panel panel-default loading"><img src="{$BASE_URL}images/rolling.svg"/></div>');
 }
 
 function searchFailed() {
@@ -84,7 +84,7 @@ function search() {
 
     if (searchType === SEARCH_FOR_QUESTIONS) {
         $.ajax({
-            url: "/api/search.php",
+            url: "../../api/search.php",
             dataType: "html",
             data: {
                 inputString: input,
@@ -98,7 +98,7 @@ function search() {
             .fail(searchFailed);
     } else if (searchType === SEARCH_FOR_USERS) {
         $.ajax({
-            url: "/api/search.php",
+            url: "../../api/search.php",
             dataType: "html",
             data: {
                 inputString: input,

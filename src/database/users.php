@@ -36,6 +36,42 @@ function login($email, $password)
     else
         return false;
 }
+function checkCurrentPassword($id, $currentPassword){
+
+    global $conn;
+    $stmt = $conn->prepare('SELECT * FROM "User" WHERE "User".id = ?');
+    $stmt->execute([$id]);
+    $user = $stmt->fetch();
+
+    if (password_verify($currentPassword, $user['password']))
+        return true;
+    else
+        return false;
+}
+
+function changePassword($id, $newPassword){
+
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+        $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt = $conn->prepare('UPDATE "User" SET "password" = ? WHERE "id" = ?;');
+        $stmt->execute([$hashed_password, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+
+}
 
 function getUserNameById($id)
 {
@@ -43,6 +79,22 @@ function getUserNameById($id)
     $stmt = $conn->prepare('SELECT "User"."name" FROM "User" WHERE "User".id = ?');
     $stmt->execute([$id]);
     return $stmt->fetch()["name"];
+}
+
+function getUserEmailById($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "User"."email" FROM "User" WHERE "User".id = ?');
+    $stmt->execute([$id]);
+    return $stmt->fetch()["email"];
+}
+
+function getUserBioById($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "User"."bio" FROM "User" WHERE "User".id = ?');
+    $stmt->execute([$id]);
+    return $stmt->fetch()["bio"];
 }
 
 function getUserById($userId)

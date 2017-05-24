@@ -144,6 +144,23 @@ function getAllTags()
     $stmt->execute();
     return $stmt->fetchAll();
 }
+function getAllBannedUsers()
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "BannedUser"');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function getAllPendingTags()
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PendingTag"');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
 
 function getQuestionHierarchy($questionId)
 {
@@ -333,6 +350,78 @@ function readNotifications($questionId)
     $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
 }
 
+
+
+function editName($id, $name)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+       // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "name" = ? WHERE "id" = ?;');
+        $stmt->execute([$name, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
+function editBio($id, $bio)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "bio" = ? WHERE "id" = ?;');
+        $stmt->execute([$bio, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
+function editEmail($id, $email)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "email" = ? WHERE "id" = ?;');
+        $stmt->execute([$email, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
+
 function deleteQuestion($questionId)
 {
     global $conn;
@@ -362,6 +451,48 @@ function deleteReply($replyId)
 
     $stmt = $conn->prepare('UPDATE "Reply" SET "deleted" = TRUE WHERE "contentId" = ?');
     $stmt->execute([$replyId]);
+}
+
+function deletePendingTag($tagId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
+    $stmt->execute([$tagId]);
+}
+
+function getPendingTagNameById($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "name" FROM "PendingTag" WHERE "id" = ?');
+    $stmt->execute([$id]);
+    $return = $stmt->fetch();
+    return $return['name'];
+}
+
+function addTagFromPendingTag($tagId)
+{
+    global $conn;
+    $name = getPendingTagNameById($tagId);
+    try {
+        $conn->beginTransaction();
+
+       $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
+       $stmt->execute([$tagId]);
+       $stmt = $conn->prepare('INSERT INTO "Tag"("name") VALUES (?)');
+       $stmt->execute([$name]);
+        $conn->commit();
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+}
+
+function unbanUser($id){
+
+    global $conn;
+    $stmt = $conn->prepare('DELETE FROM "BannedUser" WHERE "userId" = ?');
+    $stmt->execute([$id]);
 }
 
 function isQuestion($contentId)

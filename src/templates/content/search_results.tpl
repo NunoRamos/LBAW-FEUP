@@ -4,7 +4,7 @@
     {else}
         {if isset($users)}
             {foreach $users as $user}
-                {include file="content/common/user_vote_overview.tpl"}
+                {include file="users/common/user_overview.tpl"}
             {/foreach}
         {else}
             {foreach $questions as $content}

@@ -1,73 +1,161 @@
 {include file="common/header.tpl"}
 
+<script src="{$BASE_URL}javascript/settings.js"></script>
+<script src="{$BASE_URL}javascript/settings_page.js"></script>
+
 <div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">Settings</div>
-        <div class="panel-body">
-            <h3>Personal Details</h3>
-            <hr class="divider">
 
-            <div class="row">
-                <form class="form-horizontal col-xs-12 col-sm-6">
-                    <div class="form-group">
-                        <label for="name" class="control-label col-xs-12 col-sm-3">Name</label>
-                        <div class="col-xs-12 col-sm-9">
-                            <input id="name" class="form-control" value="Bernardo Belchior"/>
+    <div class="row">
+
+        <div class="col-md-3">
+            <p class="lead">{$NAME}</p>
+            <div class="list-group nav " id ="edit-profile-nav">
+                <a href="#edit-personal-info" class="list-group-item">Edit Personal Info</a>
+                <a href="#settings" class="list-group-item">Settings</a>
+                <a href="#moderator" class="list-group-item">Moderator Settings</a>
+                <a href="#admin" class="list-group-item">Admin Settings</a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+                <div id='edit-personal-info' class="panel panel-default tab-content settings-tab ">
+                    <div class="panel-heading">Edit Personal Info</div>
+                    <div class="panel-body">
+                        <h3>Personal Details</h3>
+                        <hr class="divider">
+                        <div class="row">
+                            <form class="form-horizontal col-xs-12 col-sm-6" method="post" action="../../actions/update_personal_info.php">
+                                <div class="form-group">
+                                    <label for="name" class="control-label col-xs-12 col-sm-3">Name</label>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <input id="name" class="form-control" value="{getUserNameById($USERID)}" name="name"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="control-label col-xs-12 col-sm-3">Email</label>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <input id="email" type="email" class="form-control" value="{getUserEmailById($USERID)}" name ="email"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="bio" class="control-label col-xs-12 col-sm-3">Bio</label>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <input id="bio" class="form-control" value="{getUserBioById($USERID)}" name = "bio"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-12 col-sm-offset-3 col-sm-9">
+                                        <input class="btn btn-default form-control" type="submit" value="Update Details">
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="col-sm-6">
+                                <img class="hidden-xs img-responsive img-rounded col-xs-6 col-xs-offset-3 well well-sm"
+                                     src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Linus_Torvalds_(cropped).jpg"
+                                     alt="Profile picture"/>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="email" class="control-label col-xs-12 col-sm-3">Email</label>
-                        <div class="col-xs-12 col-sm-9">
-                            <input id="email" type="email" class="form-control" value="up201405381@fe.up.pt"/>
+            <div id='settings' class="panel panel-default tab-content settings-tab ">
+                <div class="panel-heading">Settings</div>
+                <div class="panel-body">
+                    <h3>Change Password</h3>
+                    <hr class="divider">
+                    <form class="form-horizontal center-block" method="post" action="../../actions/change_password.php" onsubmit="return validatePassword()">
+                        <div class="form-group">
+                            <label for="curr-password" class="control-label col-xs-12 col-sm-2">Current Password</label>
+                            <div class="col-xs-12 col-sm-4">
+                                <input id="curr-password" class="form-control" type="password" placeholder="Current Password" name = "curr-password">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-xs-12 col-sm-offset-3 col-sm-9">
-                            <input class="btn btn-default form-control" type="submit" value="Update Details">
+                        <div class="form-group">
+                            <label for="new-password" class="control-label col-xs-12 col-sm-2">New Password</label>
+                            <div class="col-xs-12 col-sm-4">
+                                <input id="new-password" class="form-control" type="password" placeholder="New Password" name = "new-password">
+                            </div>
                         </div>
-                    </div>
-                </form>
 
-                <div class="col-sm-6">
-                    <img class="hidden-xs img-responsive img-rounded col-xs-6 col-xs-offset-3 well well-sm"
-                         src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Linus_Torvalds_(cropped).jpg"
-                         alt="Profile picture"/>
+                        <div class="form-group">
+                            <label for="new-repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
+                            <div class="col-xs-12 col-sm-4">
+                                <input id="new-repeat-password" class="form-control" type="password"
+                                       placeholder="Repeat Password" name = "new-repeat-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="new-password-failed" class="alert alert-danger text-center col-xs-12 col-sm-offset-2 col-sm-4" role="alert"
+                                 style="display:none;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-offset-2 col-sm-4">
+                                <input class="btn btn-default form-control" type="submit" value="Change Password">
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
             </div>
+            <div id='moderator' class="panel panel-default tab-content settings-tab ">
+                <div class="panel-heading">Moderator Settings</div>
+                <div class="panel-body">
+                    <h3>Pending Tags</h3>
+                    <hr class="divider">
+                    <div class="row">
+                        <div class="panel-body row">
+                            {$pendingTags = getAllPendingTags()}
+                            {foreach $pendingTags as $tag}
+                                {include file="content/common/tag_choice.tpl"}
+                            {/foreach}
+                        </div>
 
-            <h3>Change Password</h3>
-            <hr class="divider">
-            <form class="form-horizontal center-block">
-                <div class="form-group">
-                    <label for="curr-password" class="control-label col-xs-12 col-sm-2">Current Password</label>
-                    <div class="col-xs-12 col-sm-4">
-                        <input id="curr-password" class="form-control" type="password" placeholder="Current Password">
+                    </div>
+
+            </div>
+            </div>
+            <div id='admin' class="panel panel-default tab-content settings-tab ">
+                <div class="panel-heading">Admin Settings</div>
+                <div class="panel-body">
+                    <h3>Banned Users</h3>
+                    <hr class="divider">
+                    <table class="table table-hover col-xs-12">
+
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Banned Until</th>
+                            <th>Reason</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {$users_banned=getAllBannedUsers()}
+
+                        {foreach $users_banned as $user}
+                            <div >
+                                <tr id ="ban-user-tr-{$user['userId']}">
+                                <td><a href="#">{getUserNameById($user['userId'])}</a></td>
+                                <td>{$user['expires']}</td>
+                                <td>{$user['reason']}</td>
+                                <td><a id="unban-user-button"class="btn btn-primary btn-danger pull-right ban-user-button" onclick="unbanUser({$user['userId']})">Unban User</a></td>
+                            </tr>
+                            </div>
+                        {/foreach}
+                        </tbody>
+                    </table>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="new-password" class="control-label col-xs-12 col-sm-2">New Password</label>
-                    <div class="col-xs-12 col-sm-4">
-                        <input id="new-password" class="form-control" type="password" placeholder="New Password">
-                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="repeat-password" class="control-label col-xs-12 col-sm-2">Repeat Password</label>
-                    <div class="col-xs-12 col-sm-4">
-                        <input id="repeat-password" class="form-control" type="password"
-                               placeholder="Repeat Password">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-offset-2 col-sm-4">
-                        <input class="btn btn-default form-control" type="submit" value="Change Password">
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
