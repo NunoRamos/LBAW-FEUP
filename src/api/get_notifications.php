@@ -9,6 +9,7 @@ if (!isset($_SESSION['userId'])) {
 }
 
 
+$userId = $_SESSION['userId'];
 $notifications = getUnreadNotifications($_SESSION['userId']);
 $return = Array();
 
@@ -16,12 +17,12 @@ foreach ($notifications as $notification) {
     $notificationContent = ['date' => $notification['date']];
 
     if ($notification['contentId'] != null) {
-        $question = getQuestionFromContent($notification['contentId']);
+        $question = getQuestionFromContent($notification['contentId'], $userId);
         $notificationContent['text'] = getUserNameById($notification['triggererId']) . ' replied to your question "' . $question['title'] . '".';
         $notificationContent['contentId'] = $notification['contentId'];
     } else {
-        $notificationContent['text'] = getUserNameById($notification['triggererId']) . ' voted on your content . ';
-        $notificationContent['contentId'] = getVoteTarget($notification['voteId']);
+        $notificationContent['text'] = getUserNameById($notification['triggererId']) . ' voted on your content.';
+        $notificationContent['contentId'] = getVoteTarget($notification['voteId'])['contentId'];
     }
 
     $return[] = $notificationContent;

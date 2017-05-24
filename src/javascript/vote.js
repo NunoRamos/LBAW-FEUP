@@ -27,10 +27,11 @@ function vote(userId, contentId, newVote) {
 function addVote(contentId, userId, newVote, oldVote) {
     const ratingIfSuccessful = $('div[data-content-id=' + contentId + ']').find('.rating span').text() - oldVote + newVote;
 
+    console.log(newVote === UP);
     $.ajax("../../api/vote.php", {
         data: {
             contentId: contentId,
-            isPositive: newVote === UP,
+            isPositive: (newVote === UP) + 0,
             userId: userId,
         }
     }).then(updateVoteColor.bind(this, contentId, newVote)).then(updateRating.bind(this, contentId, ratingIfSuccessful));

@@ -260,9 +260,9 @@ function getVoteTarget($voteId)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT * FROM "Vote" WHERE "id" = ?');
+    $stmt = $conn->prepare('SELECT * FROM "Vote" WHERE "Vote"."id" = ?');
     $stmt->execute([$voteId]);
-    return $stmt->fetchAll();
+    return $stmt->fetch();
 }
 
 function getTagsId($tags)
@@ -398,7 +398,7 @@ WHERE "contentId"=? AND "id"="tagId";');
     return $stmt->fetchAll();
 }
 
-function updateContentText($contentId,$text)
+function updateContentText($contentId, $text)
 {
     global $conn;
 

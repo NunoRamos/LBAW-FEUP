@@ -9,8 +9,11 @@ if (!isset($_GET['contentId']) || !isset($_GET['isPositive']) || !isset($_GET['u
 }
 
 $contentId = htmlspecialchars($_GET['contentId']);
-$isPositive = boolval(htmlspecialchars($_GET['isPositive']));
 $userId = htmlspecialchars($_GET['userId']);
+$isPositive = htmlspecialchars($_GET['isPositive']);
 
-if (is_bool($isPositive) && isset($userId) && isset($contentId))
+if ($isPositive != 0 && $isPositive != 1)
+    exit;
+
+if (isset($userId) && isset($contentId))
     vote($userId, $contentId, $isPositive);
