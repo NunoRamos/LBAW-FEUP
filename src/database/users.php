@@ -1,5 +1,6 @@
 <?php
 
+
 function register($email, $password, $name)
 {
     global $conn;
@@ -11,12 +12,11 @@ function register($email, $password, $name)
     return $stmt->fetch();
 }
 
-function ban($explanation, $expires, $reason, $userId)
+function banUser($explanation, $expires, $reason, $userId)
 {
     global $conn;
-    $stmt = $conn->prepare('INSERT INTO "User" (explanation, expires, reason, userId) VALUES (?,?,?,?) RETURNING "explanation", "expires", "reason", "userId"');
+    $stmt = $conn->prepare('INSERT INTO "BannedUser" (explanation, expires, reason, "userId") VALUES (?,?,?,?) RETURNING "explanation", "expires", "reason", "userId"');
     $stmt->execute([$explanation, $expires, $reason, $userId]);
-
     return $stmt->fetch();
 }
 
