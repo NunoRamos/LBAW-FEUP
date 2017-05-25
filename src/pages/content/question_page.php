@@ -33,6 +33,6 @@ $question['children'] = $replies;
 
 $smarty->assign('content', $question);
 $smarty->assign('questionTags', $questionTags);
-$smarty->assign('TAGS', EditContentType::TAGS);
+$smarty->assign('TITLE', EditContentType::TITLE);
 $smarty->display('content/question_page.tpl');
 

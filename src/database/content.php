@@ -562,3 +562,11 @@ function followsContent($userId, $contentId)
     $stmt->execute([$contentId, $userId]);
     return count($stmt->fetchAll()) > 0;
 }
+
+function updateQuestionTitle($contentId, $title)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Question" SET "title" = ? WHERE "contentId" = ?');
+    $stmt->execute([$title, $contentId]);
+}

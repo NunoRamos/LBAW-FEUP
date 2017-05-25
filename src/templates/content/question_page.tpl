@@ -8,8 +8,8 @@
             {assign "questionId" $content["id"]}
             <form id="edit-title-form" style="display: none" class="panel-title inline" method="post" action="../../actions/edit_content.php">
                 <input type="hidden" name="content-id" value="{$content["id"]}">
-                <input type="hidden" name="edit-type" value="{$TAGS}">
-                <input class="edit-title-input" name="text" value="{$content["title"]}">
+                <input type="hidden" name="edit-type" value="{$TITLE}">
+                <input class="edit-title-input" name="title" value="{$content["title"]}">
                 <input class="btn btn-default submit-answer-btn btn-xs" type="submit" value="Edit Title">
             </form>
             {if canEditContent($USERID, $content["id"])}

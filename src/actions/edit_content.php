@@ -18,12 +18,14 @@ if (!canEditContent($userId,$contentId)){
     exit;
 }
 
-switch ($_GET['edit-type']) {
+switch ($_POST['edit-type']) {
     case EditContentType::TEXT:
         $text = stripProhibitedTags($_POST['content-text']);
         updateContentText($contentId,$text);
         break;
     case EditContentType::TITLE:
+        $title = stripProhibitedTags($_POST['title']);
+        updateQuestionTitle($contentId,$title);
         break;
     case EditContentType::TAGS:
         break;
