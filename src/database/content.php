@@ -144,6 +144,7 @@ function getAllTags()
     $stmt->execute();
     return $stmt->fetchAll();
 }
+
 function getAllBannedUsers()
 {
     global $conn;
@@ -351,14 +352,13 @@ function readNotifications($questionId)
 }
 
 
-
 function editName($id, $name)
 {
     //FIXME: untested
     global $conn;
 
     try {
-       // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
         //$conn->beginTransaction();
 
         $stmt = $conn->prepare('UPDATE "User" SET "name" = ? WHERE "id" = ?;');
@@ -477,10 +477,10 @@ function addTagFromPendingTag($tagId)
     try {
         $conn->beginTransaction();
 
-       $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
-       $stmt->execute([$tagId]);
-       $stmt = $conn->prepare('INSERT INTO "Tag"("name") VALUES (?)');
-       $stmt->execute([$name]);
+        $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
+        $stmt->execute([$tagId]);
+        $stmt = $conn->prepare('INSERT INTO "Tag"("name") VALUES (?)');
+        $stmt->execute([$name]);
         $conn->commit();
     } catch (PDOException $exception) {
         $conn->rollBack();
@@ -488,7 +488,8 @@ function addTagFromPendingTag($tagId)
     }
 }
 
-function unbanUser($id){
+function unbanUser($id)
+{
 
     global $conn;
     $stmt = $conn->prepare('DELETE FROM "BannedUser" WHERE "userId" = ?');
@@ -535,4 +536,29 @@ function updateContentText($contentId, $text)
 
     $stmt = $conn->prepare('UPDATE "Content" SET "text" = ? WHERE "id" = ?');
     $stmt->execute([$text, $contentId]);
+}
+
+function followContent($userId, $contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('INSERT INTO "FollowContent"("contentId", "followerId") VALUES(?, ?)');
+    $stmt->execute([$contentId, $userId]);
+}
+
+function unfollowContent($userId, $contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('DELETE FROM "FollowContent" WHERE "contentId" = ? AND "followerId" = ?');
+    $stmt->execute([$contentId, $userId]);
+}
+
+function followsContent($userId, $contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "FollowContent" WHERE "contentId" = ? AND "followerId" = ?');
+    $stmt->execute([$contentId, $userId]);
+    return count($stmt->fetchAll()) > 0;
 }

@@ -63,3 +63,12 @@ function canEditContent($userId, $contentId)
 
     return false;
 }
+
+function canFollowContent($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PrivilegeLevel", "User" WHERE "User"."id" = ? AND "User"."privilegeLevelId" = "PrivilegeLevel"."id"');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['canFollowContent'];
+}

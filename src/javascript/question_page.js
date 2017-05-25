@@ -10,7 +10,7 @@ function toggleTextBox(caller, edit) {
         let questionId = $('#question').children().attr('id');
 
         let formUrl, buttonValue;
-        if(edit === 1){
+        if (edit === 1) {
             formUrl = '../../actions/edit_content.php';
             buttonValue = "Edit Text";
         }
@@ -28,10 +28,34 @@ function toggleTextBox(caller, edit) {
 
         boxDiv.find('.container-text').trumbowyg();
 
-        if(edit === 1)
+        if (edit === 1)
             boxDiv.find('.container-text').trumbowyg('html', button.parentsUntil('.list-group', '.list-group-item').find('.content-text').html());
 
     } else {
         boxDiv.children().remove();
     }
+}
+
+function followContent(clickedElement, contentId) {
+    const span = $(clickedElement).children().first();
+    $.ajax('../../api/follow_content.php', {
+        method: 'POST',
+        data: {
+            contentId: contentId
+        }
+    }).done(toggleFollowContent.bind(this, span));
+}
+
+function unfollowContent(clickedElement, contentId) {
+    const span = $(clickedElement).children().first();
+    $.ajax('../../api/unfollow_content.php', {
+        method: 'POST',
+        data: {
+            contentId: contentId
+        }
+    }).done(toggleFollowContent.bind(this, span));
+}
+
+function toggleFollowContent(span) {
+    span.toggleClass('glyphicon-star-empty glyphicon-star');
 }
