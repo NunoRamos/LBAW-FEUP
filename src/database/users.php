@@ -6,7 +6,7 @@ function register($email, $password, $name)
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $conn->prepare('INSERT INTO "User" (email,password,name,"privilegeLevelId") VALUES (?,?,?,?) RETURNING "id", "email", "name", "privilegeLevelId"');
-    $stmt->execute([$email, $hashed_password, $name, 1]);
+    $stmt->execute([$email, $hashed_password, $name, 4]);
 
     return $stmt->fetch();
 }
