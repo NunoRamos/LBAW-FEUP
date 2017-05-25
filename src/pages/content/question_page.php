@@ -1,8 +1,9 @@
 <?php
-include_once '../../config/init.php';
-include_once '../../database/permissions.php';
-include_once '../../database/content.php';
-include_once '../../database/users.php';
+include_once('../../config/init.php');
+include_once($BASE_DIR . 'database/permissions.php');
+include_once($BASE_DIR . 'database/content.php');
+include_once($BASE_DIR . 'database/users.php');
+include_once($BASE_DIR . 'lib/edit_content_type.php');
 
 if (is_array($_GET['id'])) {
     http_response_code(400);
@@ -32,5 +33,6 @@ $question['children'] = $replies;
 
 $smarty->assign('content', $question);
 $smarty->assign('questionTags', $questionTags);
+$smarty->assign('TAGS', EditContentType::TAGS);
 $smarty->display('content/question_page.tpl');
 

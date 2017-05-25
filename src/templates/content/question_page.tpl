@@ -3,11 +3,24 @@
 
 <div id="question" class="container col-xs-12 col-md-8 full-screen-xs">
     <div id="{$content["id"]}" class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title inline">{$content["title"]}</h3>
+        <div id="title-container" class="panel-heading">
+            <h3 id="question-title-header" class="panel-title inline">{$content["title"]}</h3>
             {assign "questionId" $content["id"]}
+            <form id="edit-title-form" style="display: none" class="panel-title inline" method="post" action="../../actions/edit_content.php">
+                <input type="hidden" name="content-id" value="{$content["id"]}">
+                <input type="hidden" name="edit-type" value="{$TAGS}">
+                <input class="edit-title-input" name="text" value="{$content["title"]}">
+                <input class="btn btn-default submit-answer-btn btn-xs" type="submit" value="Edit Title">
+            </form>
+            {if canEditContent($USERID, $content["id"])}
+                <div class="btn-group pull-right">
+                    <button data-content-id="{$content["id"]}" class="btn btn-xs" onclick="toggleTitleInput()"><span
+                                class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </div>
+            {/if}
         </div>
-        <div class="panel-body">
+        <div id="main-body" class="panel-body">
             <div class="small-bottom-margin">
                 {include file="content/common/content.tpl"}
             </div>

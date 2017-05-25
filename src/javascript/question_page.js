@@ -20,16 +20,17 @@ function toggleTextBox(caller, edit) {
         }
 
         boxDiv.append('<form class="form-horizontal" method="post" action="' + formUrl + '">' +
-            '<input type="hidden" name="parent-id" value="' + parentId + '">' +
+            '<input type="hidden" name="content-id" value="' + parentId + '">' +
             '<input type="hidden" name="question-id" value="' + questionId + '">' +
-            '<textarea class="form-control container-text" name="container-text" placeholder="Answer"></textarea>' +
+            '<input type="hidden" name="edit-type" value="' + 0 + '">' +
+            '<textarea class="form-control content-text" name="content-text" placeholder="Answer"></textarea>' +
             '<input class="btn btn-default submit-answer-btn" type="submit" value="' + buttonValue + ' ">' +
             '</form>');
 
-        boxDiv.find('.container-text').trumbowyg();
+        boxDiv.find('.content-text').trumbowyg();
 
         if (edit === 1)
-            boxDiv.find('.container-text').trumbowyg('html', button.parentsUntil('.list-group', '.list-group-item').find('.content-text').html());
+            boxDiv.find('.content-text').trumbowyg('html', button.parentsUntil('.list-group', '.list-group-item').find('.content-text').html());
 
     } else {
         boxDiv.children().remove();
@@ -58,4 +59,22 @@ function unfollowContent(clickedElement, contentId) {
 
 function toggleFollowContent(span) {
     span.toggleClass('glyphicon-star-empty glyphicon-star');
+}
+
+function toggleTitleInput(contentId){
+    let headerElement = $('#question-title-header');
+    let formElement = $('#edit-title-form');
+
+    if(formElement.is(':visible')){
+        headerElement.show();
+        formElement.hide()
+    }
+    else {
+        headerElement.hide();
+        formElement.show();
+        $('.edit-title-input').focus();
+    }
+
+
+
 }
