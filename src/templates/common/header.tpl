@@ -44,7 +44,7 @@
                         <li class="hidden-xs"><span>Signed in as</span></li>
                         <li class="hidden-xs"><span><strong>{$NAME}</strong></span></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="../users/profile_page.php">Profile</a></li>
+                        <li><a href="../users/profile_page.php?id={$USERID}">Profile</a></li>
                         {if $PRIVILEGELEVELID == 3}
                             <li><a href="../users/admin_page.php">Admin Page</a></li>
                         {/if}
