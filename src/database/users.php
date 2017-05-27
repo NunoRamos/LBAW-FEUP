@@ -239,3 +239,35 @@ function getOrderedUsersByName($name, $offset, $limit, $order)
     }
 
 }
+
+
+
+function getOrderedAllBannedUsers($offset, $limit)
+{
+    global $conn;
+
+            $orderCriteria = '"expires"';
+            $orderDirection = 'DESC';
+
+
+    try {
+        $conn->beginTransaction();
+        $countStmt = $conn->prepare('SELECT Count(*) FROM "BannedUser"');
+        $countStmt->execute();
+        $searchStmt = $conn->prepare('SELECT "userId", "reason", "expires" FROM "BannedUser" ORDER BY ? LIMIT ? OFFSET ?');
+        $searchStmt->execute([$orderCriteria . ' ' . $orderDirection, $limit, $offset]);
+
+        $conn->commit();
+
+        return ['users' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+
+}
+
+
+
+
+

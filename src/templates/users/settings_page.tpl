@@ -4,12 +4,16 @@
 <script src="{$BASE_URL}javascript/jquery.js"></script>
 <script src="{$BASE_URL}javascript/fileuploader.js"></script>
 
+<script src="{$BASE_URL}javascript/ban_user_pagination.js"></script>
+
+<script src="{$BASE_URL}javascript/clickable_div.js"></script>
+
 <div class="container">
 
     <div class="row">
 
-        <div class="col-md-3">
-            <p class="lead">{$NAME}</p>
+        <div class="col-md-3 panel-default">
+            <div class="panel-heading ">{$NAME}</div>
             <div class="list-group nav " id ="edit-profile-nav">
                 <a href="#edit-personal-info" class="list-group-item">Edit Personal Info</a>
                 <a href="#settings" class="list-group-item">Settings</a>
@@ -78,8 +82,6 @@
                     </div>
                 </div>
 
-
-
             <div id='settings' class="panel panel-default tab-content settings-tab ">
                 <div class="panel-heading">Settings</div>
                 <div class="panel-body">
@@ -136,11 +138,12 @@
                     <div class="row">
                         <div class="panel-body row">
                             {$pendingTags = getAllPendingTags()}
+                            {$numResults=0}
                             {foreach $pendingTags as $tag}
+                                {$numResults = $numResults + 1}
                                 {include file="content/common/tag_choice.tpl"}
                             {/foreach}
                         </div>
-
                     </div>
 
             </div>
@@ -159,22 +162,12 @@
                             <th>Reason</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        {$users_banned=getAllBannedUsers()}
+                        {include file="content/common/admin_tab.tpl"}
 
-                        {foreach $users_banned as $user}
-                            <div >
-                                <tr id ="ban-user-tr-{$user['userId']}">
-                                <td><a href="#">{getUserNameById($user['userId'])}</a></td>
-                                <td>{$user['expires']}</td>
-                                <td>{$user['reason']}</td>
-                                <td><a id="unban-user-button"class="btn btn-primary btn-danger pull-right ban-user-button" onclick="unbanUser({$user['userId']})">Unban User</a></td>
-                            </tr>
-                            </div>
-                        {/foreach}
-                        </tbody>
-                    </table>
+
+
                     </div>
+
                 </div>
                 </div>
             </div>
