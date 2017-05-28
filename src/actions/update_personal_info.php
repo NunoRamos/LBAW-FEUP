@@ -9,10 +9,12 @@ $userId = $smarty->getTemplateVars('USERID');
 $name = htmlspecialchars($_POST['name']);
 $email = htmlspecialchars($_POST['email']);
 $bio = htmlspecialchars($_POST['bio']);
+//$photo = $_FILES["img-url"]["name"];
 
 editName($userId,$name);
 editBio($userId,$bio);
 editEmail($userId,$email);
+//editPhoto($userId,$photo);
 
 $_SESSION['email'] = $email;
 $_SESSION['name'] = $name;

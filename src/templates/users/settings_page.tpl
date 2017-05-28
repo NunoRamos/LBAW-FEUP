@@ -1,7 +1,8 @@
 {include file="common/header.tpl"}
 
 <script src="{$BASE_URL}javascript/settings.js"></script>
-<script src="{$BASE_URL}javascript/settings_page.js"></script>
+<script src="{$BASE_URL}javascript/jquery.js"></script>
+<script src="{$BASE_URL}javascript/fileuploader.js"></script>
 
 <div class="container">
 
@@ -24,7 +25,7 @@
                     <div class="panel-body">
                         <h3>Personal Details</h3>
                         <hr class="divider">
-                        <div class="row">
+                        <div class="row col-sm-offset-2 col-sm-10">
                             <form class="form-horizontal col-xs-12 col-sm-6" method="post" action="../../actions/update_personal_info.php">
                                 <div class="form-group">
                                     <label for="name" class="control-label col-xs-12 col-sm-3">Name</label>
@@ -53,15 +54,31 @@
                                     </div>
                                 </div>
                             </form>
-
-                            <div class="col-sm-6">
-                                <img class="hidden-xs img-responsive img-rounded col-xs-6 col-xs-offset-3 well well-sm"
-                                     src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Linus_Torvalds_(cropped).jpg"
-                                     alt="Profile picture"/>
+                        </div>
+                    </div>
+                    <div class="panel-body ">
+                        <h3>Change profile picture</h3>
+                        <hr class="divider">
+                        <div class="row  col-sm-12">
+                            <div class ="form-horizontal col-sm-offset-4">
+                                <form action="../../actions/upload_img.php"  method="post" enctype="multipart/form-data">
+                                    <img id = "upload" class="img-circle form-group col-sm-offset-2" src="{$BASE_URL}images/user-default.png" height="200" width="200" alt="Image preview">
+                                    <div class="row form-groupcol-sm-offset-4">
+                                    <div class="col-sm-4">
+                                        <div id ="btn-upload" class="btn btn-default"  onclick="uploadImage()">Choose your Image</div>
+                                        <input type="file" name="fileToUpload" id="fileToUpload" class="form-group" onchange="previewFile()" style="display: none">
+                                    </div>
+                                        <div class="col-sm-3">
+                                            <input type="submit" class= "btn btn-default" value="Save Image" name="submit">
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
 
             <div id='settings' class="panel panel-default tab-content settings-tab ">
                 <div class="panel-heading">Settings</div>
@@ -90,13 +107,18 @@
                                        placeholder="Repeat Password" name = "new-repeat-password">
                             </div>
                         </div>
-
-                        <div class="form-group">
+                        {if $ERROR_PASSWORD == '-1'}
+                            <div class="form-group">
+                                <div id="new-password-failed" class="alert alert-danger text-center col-xs-12 col-sm-offset-2 col-sm-4" role="alert"> Current and new password are the same!
+                                </div>
+                            </div>
+                         {else}
+                         <div class="form-group">
                             <div id="new-password-failed" class="alert alert-danger text-center col-xs-12 col-sm-offset-2 col-sm-4" role="alert"
                                  style="display:none;">
                             </div>
                         </div>
-
+                        {/if}
                         <div class="form-group">
                             <div class="col-xs-12 col-sm-offset-2 col-sm-4">
                                 <input class="btn btn-default form-control" type="submit" value="Change Password">

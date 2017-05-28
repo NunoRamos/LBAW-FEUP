@@ -398,6 +398,29 @@ function editBio($id, $bio)
     }
 }
 
+function editPhoto($id, $photo)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "photo" = ? WHERE "id" = ?;');
+        $stmt->execute([$photo, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
 function editEmail($id, $email)
 {
     //FIXME: untested

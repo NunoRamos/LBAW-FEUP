@@ -38,7 +38,7 @@
             {if $USERID}
                 <li class="pull-right dropdown">
                     <img id="sign-in-image" class="dropdown-toggle img-circle navbar-btn align-right image-padding"
-                         data-toggle="dropdown" src="{$BASE_URL}images/user-default.png" alt="User Image">
+                         data-toggle="dropdown" src="{$BASE_URL}images/{getUserPhotoById($USERID)}" alt="User Image">
                     <ul class="dropdown-menu dropdown-responsive">
 
                         <li class="hidden-xs"><span>Signed in as</span></li>
