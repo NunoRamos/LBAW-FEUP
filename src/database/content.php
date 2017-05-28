@@ -570,3 +570,11 @@ function updateQuestionTitle($contentId, $title)
     $stmt = $conn->prepare('UPDATE "Question" SET "title" = ? WHERE "contentId" = ?');
     $stmt->execute([$title, $contentId]);
 }
+
+function removeTagFromQuestion($tagId, $contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ? AND "tagId" = ?');
+    $stmt->execute([$contentId, $tagId]);
+}

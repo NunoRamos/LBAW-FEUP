@@ -1,3 +1,6 @@
+const ADD_TAGS = 1;
+const REMOVE_TAG = 0;
+
 function toggleTextBox(caller, edit) {
     let button = $(caller);
 
@@ -75,6 +78,33 @@ function toggleTitleInput(contentId){
         $('.edit-title-input').focus();
     }
 
+}
 
+function toggleAddTags() {
+
+}
+
+function deleteTag(clickedElement, tagId) {
+    let contentId = $('#question div').attr('id');
+
+    let tagDIv = $(clickedElement).parent().parent();
+
+    $.ajax('../../api/edit_question_tags.php', {
+        method: 'POST',
+        data: {
+            tagId: tagId,
+            editType: REMOVE_TAG,
+            contentId: contentId
+        }
+    }).done(removeTag.bind(this, tagDIv));
+}
+
+function removeTag(tagDIv) {
+    tagDIv.remove();
+
+    let tagsContainer = $('#tags div');
+    
+    if(tagsContainer.length === 0)
+        $('#tags').append('<p class="list-group-item">No tags for this question</p>');
 
 }

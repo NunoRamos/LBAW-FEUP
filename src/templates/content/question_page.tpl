@@ -30,14 +30,28 @@
 <div class="container col-xs-12 col-md-4 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Question Tags</h3>
+            <h3 class="panel-title inline">Question Tags</h3>
+            {if canEditContent($USERID, $content["id"])}
+                <div class="btn-group pull-right">
+                    <button class="btn btn-xs" onclick="toggleAddTags()"><span
+                                class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            {/if}
         </div>
-        <div class="panel-body list-group">
+        <div id="tags" class="panel-body list-group">
             {if sizeof($questionTags)==0}
                 <p class="list-group-item">No tags for this question</p>
             {else}
                 {foreach $questionTags as $tag}
-                    <a href="search_results.php" class="list-group-item">{$tag['name']}</a>
+                    <div>
+                        <a href="search_results.php" class="list-group-item inline">{$tag['name']}</a>
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-xs" onclick="deleteTag(this,{$tag['id']})"><span
+                                        class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </div>
+                    </div>
                 {/foreach}
             {/if}
         </div>
