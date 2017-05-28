@@ -72,3 +72,21 @@ function canFollowContent($userId)
     $stmt->execute([$userId]);
     return $stmt->fetch()['canFollowContent'];
 }
+
+function canAcceptPendingTags($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PrivilegeLevel", "User" WHERE "User"."id" = ? AND "User"."privilegeLevelId" = "PrivilegeLevel"."id"');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['canAcceptPendingTags'];
+}
+
+function canBanUsers($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PrivilegeLevel", "User" WHERE "User"."id" = ? AND "User"."privilegeLevelId" = "PrivilegeLevel"."id"');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['canBanUsers'];
+}

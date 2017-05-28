@@ -104,7 +104,7 @@
                     <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12"
                           method="post" action="{$BASE_URL}actions/sign_in.php">
                         <div class="form-group input-group">
-                            <div class="input-group-addon glyphicon glyphicon-user"></div>
+                            <div class="input-group-addon glyphicon glyphicon-envelope"></div>
                             <input type="text" class="form-control" name="email" placeholder="Email" required
                                    value="{$FORM_VALUES['sign-in']['email']}">
                         </div>

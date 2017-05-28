@@ -351,52 +351,14 @@ function readNotifications($questionId)
     $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
 }
 
-
-function editName($id, $name)
+function editPersonalDetails($userId, $name, $email, $bio)
 {
-    //FIXME: untested
     global $conn;
 
-    try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "User" SET "name" = ? WHERE "id" = ?;');
-        $stmt->execute([$name, $id]);
-        //$conn->commit();
-
-    } catch (PDOException $exception) {
-        //$conn->rollBack();
-        {
-            echo $stmt . "<br>" . $exception->getMessage();
-        }
-
-        //$conn = null;
-    }
+    $stmt = $conn->prepare('UPDATE "User" SET ("name", "email", "bio") = (?, ?, ?) WHERE "id" = ?;');
+    $stmt->execute([$name, $email, $bio, $userId]);
 }
 
-function editBio($id, $bio)
-{
-    //FIXME: untested
-    global $conn;
-
-    try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "User" SET "bio" = ? WHERE "id" = ?;');
-        $stmt->execute([$bio, $id]);
-        //$conn->commit();
-
-    } catch (PDOException $exception) {
-        //$conn->rollBack();
-        {
-            echo $stmt . "<br>" . $exception->getMessage();
-        }
-
-        //$conn = null;
-    }
-}
 
 function editPhoto($id, $photo)
 {
@@ -420,30 +382,6 @@ function editPhoto($id, $photo)
         //$conn = null;
     }
 }
-
-function editEmail($id, $email)
-{
-    //FIXME: untested
-    global $conn;
-
-    try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "User" SET "email" = ? WHERE "id" = ?;');
-        $stmt->execute([$email, $id]);
-        //$conn->commit();
-
-    } catch (PDOException $exception) {
-        //$conn->rollBack();
-        {
-            echo $stmt . "<br>" . $exception->getMessage();
-        }
-
-        //$conn = null;
-    }
-}
-
 
 function deleteQuestion($questionId)
 {

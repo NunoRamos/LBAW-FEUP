@@ -3,37 +3,30 @@ $(document).ready(function () {
     $('.settings-tab').slice(1).hide();
     $('#edit-profile-nav a').click(function (event) {
         event.preventDefault();
-        var content = $(this).attr('href');
+        const content = $(this).attr('href');
         $(this).addClass('active');
         $(this).siblings().removeClass('active');
         $(content).show();
         $(content).siblings('.tab-content').hide();
+
+
     });
 
-   /* var thumb = $('#thumb');
 
-    new AjaxUpload('imageUpload', {
-        action: $('#newHotnessForm').attr('action'),
-        name: 'image',
-        onSubmit: function(file, extension) {
-            $('#preview').addClass('loading');
-        },
-        onComplete: function(file, response) {
-            thumb.load(function(){
-                $('#preview').removeClass('loading');
-                thumb.unbind();
-            });
-            thumb.attr('src', response);
-        }
-    });*/
+    if (window.location.href.indexOf('#personal-details') !== -1) {
+        $('#personal-details').tab('show');
+    }
+    else if (window.location.href.indexOf('#account-settings') !== -1) {
+        $('#account-settings').modal('show');
+    }
 });
 
 function validatePassword() {
+    let currPassword = $("#curr-password").val();
     let newPassword = $("#new-password").val();
     let repeatPassword = $("#new-repeat-password").val();
-    let currPassword = $("#curr-password").val();
-    let errorMessage = $("#new-password-failed");
 
+    let errorMessage = $("#new-password-failed");
 
     if (repeatPassword !== newPassword) {
         errorMessage.text("Passwords do not match");
@@ -41,15 +34,14 @@ function validatePassword() {
         return false;
     }
 
- /*   if (currPassword == newPassword) {
+    if (currPassword === newPassword) {
         errorMessage.text("New password is the same to the current password");
         errorMessage.show();
         return false;
-    }*/
+    }
+
     return true;
 }
-
-
 
 
 function removePendingTag(id) {
@@ -58,7 +50,7 @@ function removePendingTag(id) {
         method: "GET",
         url: "../../api/remove_pending_tag.php",
         data: {
-            id:id,
+            id: id,
         }
     }).done(removePendingTagDiv(id));
 
@@ -70,7 +62,7 @@ function addPendingTag(id) {
         method: "GET",
         url: "../../api/add_pending_tag.php",
         data: {
-            id:id,
+            id: id,
         }
     }).done(removePendingTagDiv(id));
 }
@@ -89,20 +81,20 @@ function unbanUser(id) {
         method: "GET",
         url: "../../api/unban_user.php",
         data: {
-            id:id,
+            id: id,
         }
     }).done(removeBannedUserDiv(id));
 
 }
 
-function removeBannedUserDiv(id){
-    $("#ban-user-tr-"+id).remove();
+function removeBannedUserDiv(id) {
+    $("#ban-user-tr-" + id).remove();
 }
 
-function previewFile(){
+function previewFile() {
     var preview = document.querySelector('#upload'); //selects the query named img
-    var file    = document.querySelector('input[type=file]').files[0]; //sames as here
-    var reader  = new FileReader();
+    var file = document.querySelector('input[type=file]').files[0]; //sames as here
+    var reader = new FileReader();
 
     reader.onloadend = function () {
         preview.src = reader.result;

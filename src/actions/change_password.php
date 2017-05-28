@@ -4,27 +4,28 @@ include_once '../database/users.php';
 include_once '../database/content.php';
 include_once '../database/permissions.php';
 
+global $lastToken;
+$token = $_POST['token'];
+
+if (strcmp($lastToken, $token) !== 0) {
+    http_response_code(403);
+    exit;
+}
+
 $userId = $smarty->getTemplateVars('USERID');
 
 $currPassword = htmlspecialchars($_POST['curr-password']);
 $newPassword = htmlspecialchars($_POST['new-password']);
+$repeatPassword = htmlspecialchars($_POST['repeat-password']);
 
-$smarty->assign('ERROR_PASSOWORD', '-1');
-header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/settings_page.php');
-if (!checkCurrentPassword($userId,$newPassword))
-if(checkCurrentPassword($userId,$currPassword)) {
+if (!checkCurrentPassword($userId, $currPassword))
+    $_SESSION['error_messages']['account-settings'] = 'The password provided does not match your current password.';
+else if (!strcmp($newPassword, $repeatPassword) === 0)
+    $_SESSION['error_messages']['account-settings'] = 'The new password and its repetition do not match.';
+else
     changePassword($userId, $newPassword);
-    header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/profile_page.php');
-}else
-    header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/settings_page.php');
-else{
 
-}
-
-
-
-
-
-
-
-
+if (strpos($_SERVER['HTTP_REFERER'], '#account-settings') === false)
+    header("Location: " . $_SERVER['HTTP_REFERER'] . '#account-settings');
+else
+    header("Location: " . $_SERVER['HTTP_REFERER']);
