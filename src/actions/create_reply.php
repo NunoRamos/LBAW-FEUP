@@ -14,7 +14,7 @@ if (strcmp($lastToken, $token) !== 0) {
 
 $userId = $_SESSION['userId'];
 
-if (!isset($userId)){
+if (!isset($userId)) {
     http_response_code(403);
     exit;
 }
@@ -23,7 +23,7 @@ $text = stripProhibitedTags($_POST['content-text']);
 $parentId = intval(htmlspecialchars($_POST['content-id']));
 $questionId = intval(htmlspecialchars($_POST['question-id']));
 
-if (canReply($userId))
+if (canReply($userId, $parentId, $questionId))
     createReply($userId, (new \DateTime())->format('Y-m-d H:i:s'), $text, $parentId, $questionId);
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);

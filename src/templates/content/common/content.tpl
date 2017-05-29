@@ -21,15 +21,14 @@
             <div class="col-xs-2 text-align-right no-gutter btn-toolbar">
                 {assign "canDeleteContent" canDeleteContent($USERID, $content.id)}
                 {assign "canEditContent" canEditContent($USERID, $content.id)}
-                {assign "canReply" canReply($USERID, $content.id)}
-                {assign "questionClosed" isQuestionClosed($content.id)}
+                {assign "canReply" canReply($USERID, $content.id, $content.questionId)}
                 {assign "canFollowContent" canFollowContent($USERID, $content.id)}
                 {assign "followsContent" followsContent($USERID, $content.id)}
                 {if $canDeleteContent || $canEditContent || $canReply || $canFollowContent}
                     <span class="dropdown-toggle glyphicon glyphicon-chevron-down pull-right"
                           data-toggle="dropdown"></span>
                     <ul id="edit-options" class="dropdown-menu dropdown-responsive">
-                        {if canDeleteContent}
+                        {if $canDeleteContent}
                             <li>
                                 <form action="{$BASE_URL}actions/delete_content.php" method="post">
                                     <input type="hidden" value="{$content.id}" name="content-id">
@@ -37,18 +36,18 @@
                                 </form>
                             </li>
                         {/if}
-                        {if canEditContent}
+                        {if $canEditContent}
                             <li>
                                 <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Edit</span>
                             </li>
                         {/if}
-                        {if canReply && !questionClosed}
+                        {if $canReply}
                             <li>
                                 <span data-content-id="{$content.id}" onclick="toggleTextBox(this,0)">Comment</span>
                             </li>
                         {/if}
-                        {if canFollowContent}
-                            {if followsContent}
+                        {if $canFollowContent}
+                            {if $followsContent}
                                 {assign "text" "Unfollow"}
                             {else}
                                 {assign "text" "Follow"}

@@ -24,7 +24,7 @@ function canDeleteAnyContent($userId)
     return $stmt->fetch()["canDeleteAnyContent"];
 }
 
-function canReply($userId)
+function canUserReply($userId)
 {
     global $conn;
     $stmt = $conn->prepare('SELECT "canReply" FROM "User", "PrivilegeLevel" WHERE "User".id = ? AND "User"."privilegeLevelId" = "PrivilegeLevel".id');
@@ -112,4 +112,9 @@ function canCloseOwnQuestion($userId)
 function canCloseQuestion($userId, $questionId)
 {
     return (canCloseOwnQuestion($userId) && getContentOwnerId($questionId) === $userId) || canCloseAnyQuestion($userId);
+}
+
+function canReply($userId, $contentId, $questionId)
+{
+    return canUserReply($userId) && (isset($questionId) ? !isQuestionClosed($questionId) : !isQuestionClosed($contentId));
 }
