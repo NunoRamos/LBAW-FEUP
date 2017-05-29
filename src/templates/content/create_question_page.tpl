@@ -10,6 +10,7 @@
         Ask A Question
     </div>
     <form class="panel-body form-horizontal" method="post" action="../../actions/create_question.php">
+        <input type="hidden" value="{$TOKEN}" name="token">
         <div class="form-group clearfix">
             <label class="col-xs-12 col-sm-2 control-label" for="question-title">Title</label>
             <div class="col-xs-12 col-sm-9">
@@ -45,9 +46,9 @@
     </form>
 </div>
 
-{include file="common/footer.tpl"}
-
 <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"
         integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
 <script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
 <script src="{$BASE_URL}javascript/create_question.js"></script>
+{include file="common/footer.tpl"}
+

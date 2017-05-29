@@ -12,8 +12,7 @@ if (strcmp($lastToken, $token) !== 0) {
     exit;
 }
 
-$userId = $smarty->getTemplateVars('USERID');
-
+$userId = $_SESSION['userId'];
 $currPassword = htmlspecialchars($_POST['curr-password']);
 $newPassword = htmlspecialchars($_POST['new-password']);
 $repeatPassword = htmlspecialchars($_POST['repeat-password']);
