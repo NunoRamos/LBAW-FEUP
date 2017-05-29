@@ -11,5 +11,5 @@ if (!isset($userId)){
 
 $smarty->assign('questions', getMostRecentQuestions(10,$userId));
 
-$smarty->assign('tags', getFixNumberOfTags(5));
+$smarty->assign('tags', getMostUsedTags(5));
 $smarty->display('misc/landing_page.tpl');

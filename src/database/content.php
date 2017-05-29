@@ -580,3 +580,19 @@ function getAllTagsExceptQuestionTags($contentId)
 
     return $stmt->fetchAll();
 }
+
+function getMostUsedTags($numberOfTags)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+    SELECT "name", "Tag"."id" FROM "Tag", (SELECT COUNT(*), "id" FROM "QuestionTags", "Tag"
+    WHERE id = "tagId"
+    GROUP BY "id"
+    ORDER BY COUNT(*) DESC
+    LIMIT ?) as "MostUsedTags"
+    WHERE "Tag"."id" = "MostUsedTags"."id";');
+    $stmt->execute([$numberOfTags]);
+
+    return $stmt->fetchAll();
+}
