@@ -239,3 +239,30 @@ function getOrderedUsersByName($name, $offset, $limit, $order)
     }
 
 }
+
+function getUserReplyRating($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare(
+        'SELECT SUM("Content"."rating") FROM final."Content", final."Reply" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['sum'];
+}
+
+function getUserQuestionRating($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT SUM("Content"."rating") FROM final."Content", final."Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['sum'];
+}
+
+function userScore($userId)
+{
+    $question = getUserQuestionRating($userId);
+	$reply = getUserReplyRating($userId);
+    return $question + 3 * $reply;
+}
+
+
+
