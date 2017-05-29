@@ -11,6 +11,8 @@
             <div class="list-group nav" id="settings-tabs">
                 <a href="#personal-details" class="list-group-item highlight selected" role="tab" data-toggle="tab">Personal
                     Details</a>
+                <a href="#update-picture" class="list-group-item highlight" role="tab" data-toggle="tab">
+                    Update Picture</a>
                 <a href="#account-settings" class="list-group-item highlight" role="tab" data-toggle="tab">Account
                     Settings</a>
                 {if $canAcceptPendingTags}
@@ -65,6 +67,11 @@
                         </div>
                     </form>
                 </div>
+            </div>
+
+
+            <div id="update-picture" class="panel panel-default tab-pane settings-tab">
+                <div class="panel-heading">Update Picture</div>
                 <div class="panel-body">
                     <h3>Change profile picture</h3>
                     <hr class="divider">
@@ -90,6 +97,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div id="account-settings" class="panel panel-default tab-pane settings-tab">
@@ -134,7 +142,7 @@
                 </div>
             </div>
             {if $canAcceptPendingTags}
-                <div id='moderator' class="panel panel-default tab-pane settings-tab ">
+                <div id="moderation-area" class="panel panel-default tab-pane settings-tab">
                     <div class="panel-heading">Moderation Area</div>
                     <div class="panel-body">
                         <h3>Pending Tags</h3>
@@ -150,7 +158,7 @@
                 </div>
             {/if}
             {if $canBanUsers}
-                <div id='admin' class="panel panel-default tab-pane settings-tab ">
+                <div id="administration-area" class="panel panel-default tab-pane settings-tab">
                     <div class="panel-heading">Administration Area</div>
                     <div class="panel-body">
                         <h3>Banned Users</h3>

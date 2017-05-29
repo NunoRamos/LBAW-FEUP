@@ -3,8 +3,14 @@ $(document).ready(function () {
 
     if (window.location.href.indexOf('#personal-details') !== -1)
         $('#personal-details').tab('show');
+    else if (window.location.href.indexOf('#update-picture') !== -1)
+        $('#update-picture').tab('show');
     else if (window.location.href.indexOf('#account-settings') !== -1)
         $('#account-settings').tab('show');
+    else if (window.location.href.indexOf('moderation-area') !== -1)
+        $('#moderation-area').tab('show');
+    else if (window.location.href.indexOf('administration-area') !== -1)
+        $('#administration-area').tab('show');
 
     $('#settings-tabs').find('a.list-group-item.highlight').on('click', function (e) {
         $(e.target).siblings().removeClass('selected');
