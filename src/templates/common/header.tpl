@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{$BASE_URL}images/icon.png">
     <title>Reply Planet</title>
     <link rel="stylesheet" href="{$BASE_URL}css/bootstrap.min.css">
     <link rel="stylesheet" href="{$BASE_URL}css/custom.min.css">
@@ -66,6 +67,7 @@
                     <ul id="notification-menu" class="dropdown-menu dropdown-responsive notification-dropdown">
                         <li id="notification-header" class="dropdown-header">Notifications</li>
                         <li role="separator" class="divider"></li>
+
                     </ul>
                 </li>
                 <li class="pull-right">
