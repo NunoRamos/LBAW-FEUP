@@ -27,8 +27,6 @@ switch ($_POST['edit-type']) {
         $title = stripProhibitedTags($_POST['title']);
         updateQuestionTitle($contentId,$title);
         break;
-    case EditContentType::TAGS:
-        break;
     default:
         break;
 }
