@@ -30,20 +30,21 @@ function toggleTextBox(caller, edit) {
         let formUrl, buttonValue;
         if (edit === 1) {
             formUrl = '../../actions/edit_content.php';
-            buttonValue = "Edit Text";
+            buttonValue = "Edit";
         }
         else {
             formUrl = '../../actions/create_reply.php';
-            buttonValue = "Post Answer";
+            buttonValue = "Comment";
         }
 
         boxDiv.append('<form class="form-horizontal" method="post" action="' + formUrl + '">' +
+            '<input type="hidden" name="token" value="' + $('#token').text() + '">' +
             '<input type="hidden" name="content-id" value="' + parentId + '">' +
             '<input type="hidden" name="question-id" value="' + questionId + '">' +
             '<input type="hidden" name="edit-type" value="' + 0 + '">' +
-            '<textarea class="form-control content-text" name="content-text" placeholder="Answer"></textarea>' +
+            '<textarea class="form-control content-text" name="content-text" placeholder="Comment"></textarea>' +
             '<input class="btn btn-default submit-answer-btn" type="submit" value="' + buttonValue + ' ">' +
-            '<input class="btn btn-default submit-answer-btn" onclick="removeTextBox(' + this + '   )" value="Cancel">' +
+            '<input class="btn btn-default submit-answer-btn" type="button"  onclick="removeTextBox(this)" value="Cancel">' +
             '</form>');
 
         boxDiv.find('.content-text').trumbowyg();
@@ -57,11 +58,11 @@ function toggleTextBox(caller, edit) {
 }
 
 function removeTextBox(caller) {
-
+    $(caller).parent().remove();
 }
 
 function followContent(clickedElement, contentId) {
-    const span = $(clickedElement).children().first();
+    const span = $(clickedElement);
     $.ajax('../../api/follow_content.php', {
         method: 'POST',
         data: {
@@ -71,7 +72,7 @@ function followContent(clickedElement, contentId) {
 }
 
 function unfollowContent(clickedElement, contentId) {
-    const span = $(clickedElement).children().first();
+    const span = $(clickedElement);
     $.ajax('../../api/unfollow_content.php', {
         method: 'POST',
         data: {
@@ -81,7 +82,11 @@ function unfollowContent(clickedElement, contentId) {
 }
 
 function toggleFollowContent(span) {
-    span.toggleClass('glyphicon-star-empty glyphicon-star');
+    /* If the text is currently "Follow" */
+    if (span.text().indexOf('Un') === -1)
+        span.text('Unfollow');
+    else
+        span.text('Follow');
 }
 
 function toggleTitleInput() {
@@ -125,7 +130,7 @@ function addNewTags(tags) {
         $('#tags').append($('<span class="list-group-item">' +
             '<a href="search_results.php' + tags[i].id + '">' + tags[i].text + '</a>' +
             '<button class="btn btn-xs pull-right" onclick="deleteTag(this,' + tags[i].id + ')">' +
-            '<span class="glyphicon glyphicon-minus"></span>' +
+            '<span class="glyphicon glyphicon-black glyphicon-minus"></span>' +
             '</button>' +
             '</span>'));
     }

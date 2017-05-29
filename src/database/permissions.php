@@ -90,3 +90,26 @@ function canBanUsers($userId)
     $stmt->execute([$userId]);
     return $stmt->fetch()['canBanUsers'];
 }
+
+function canCloseAnyQuestion($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PrivilegeLevel", "User" WHERE "User"."id" = ? AND "User"."privilegeLevelId" = "PrivilegeLevel"."id"');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['canCloseAnyQuestion'];
+}
+
+function canCloseOwnQuestion($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PrivilegeLevel", "User" WHERE "User"."id" = ? AND "User"."privilegeLevelId" = "PrivilegeLevel"."id"');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['canCloseOwnQuestion'];
+}
+
+function canCloseQuestion($userId, $questionId)
+{
+    return (canCloseOwnQuestion($userId) && getContentOwnerId($questionId) === $userId) || canCloseAnyQuestion($userId);
+}

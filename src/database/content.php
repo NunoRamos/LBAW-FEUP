@@ -47,7 +47,6 @@ function getContentOwnerId($contentId)
 function getMostRecentQuestions($limit, $userId)
 {
     global $conn;
-    //$stmt = $conn->prepare('SELECT * FROM "Content", "Question" WHERE "contentId" = "Content".id ORDER BY "creationDate" DESC LIMIT ?');
 
     $stmt = $conn->prepare('
     SELECT "questions"."id","questions"."text","questions"."creatorId", "questions"."rating", "questions"."title", "questions"."creationDate","Vote"."positive"
@@ -80,34 +79,6 @@ function createQuestion($creatorId, $creationDate, $text, $title, $tags)
 
         $conn->commit();
         return $contentId;
-    } catch (PDOException $exception) {
-        $conn->rollBack();
-        throw $exception;
-    }
-}
-
-function editQuestion($contentId, $text, $title, $tags)
-{
-    //FIXME: untested
-    global $conn;
-
-    try {
-        $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        $conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "Content" SET "text" = ? WHERE "id" = ?');
-        $stmt->execute([$text, $contentId]);
-
-
-        $stmt = $conn->prepare('UPDATE "Question" SET "title" = ? WHERE "contentId" = ?');
-        $stmt->execute([$title, $contentId]);
-
-        $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ? AND "tagId" NOT IN(SELECT * FROM unnest(?::INTEGER[]) AS unnest)');
-        $stmt->execute([$contentId, $tags]);
-
-        $stmt = $conn->prepare('INSERT INTO "QuestionTags" SELECT * FROM(SELECT ?) AS content_id, unnest(?::INTEGER[]) AS unnest WHERE unnest NOT IN(SELECT "tagId" FROM "QuestionTags" WHERE "contentId" = ?)');
-        $stmt->execute([$contentId, $tags, $contentId]);
-
     } catch (PDOException $exception) {
         $conn->rollBack();
         throw $exception;
@@ -362,25 +333,9 @@ function editPersonalDetails($userId, $name, $email, $bio)
 
 function editPhoto($id, $photo)
 {
-    //FIXME: untested
     global $conn;
-
-    try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "User" SET "photo" = ? WHERE "id" = ?;');
-        $stmt->execute([$photo, $id]);
-        //$conn->commit();
-
-    } catch (PDOException $exception) {
-        //$conn->rollBack();
-        {
-            echo $stmt . "<br>" . $exception->getMessage();
-        }
-
-        //$conn = null;
-    }
+    $stmt = $conn->prepare('UPDATE "User" SET "photo" = ? WHERE "id" = ?;');
+    $stmt->execute([$photo, $id]);
 }
 
 function deleteQuestion($questionId)
@@ -580,3 +535,22 @@ function getAllTagsExceptQuestionTags($contentId)
 
     return $stmt->fetchAll();
 }
+
+function toggleQuestionClosure($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Question" SET "closed" = NOT "closed" WHERE "contentId" = ?');
+    $stmt->execute([$contentId]);
+}
+
+function isQuestionClosed($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT "closed" FROM "Question" WHERE "contentId" = ?');
+    $stmt->execute([$contentId]);
+
+    return $stmt->fetch()['closed'];
+}
+

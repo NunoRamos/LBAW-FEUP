@@ -7,13 +7,27 @@
 <link rel="stylesheet" href="{$BASE_URL}css/select2.css">
 <link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
 
-<div id="question" class="container col-xs-12 col-md-8 full-screen-xs">
+<div id="question" data-content-id="{$content["id"]}" class="container col-xs-12 col-md-8 full-screen-xs">
+    <span id="token" class="hidden">{$TOKEN}</span>
     <div id="{$content["id"]}" class="panel panel-default">
         <div id="title-container" class="panel-heading">
-            {if canEditContent($USERID, $content["id"])}
+            {if canCloseQuestion($USERID, $content["id"])}
                 <div class="btn-group pull-right">
-                    <button data-content-id="{$content["id"]}" class="btn btn-xs" onclick="toggleTitleInput()">
-                        <span class="glyphicon glyphicon-pencil"></span>
+                    <form class="inline" action="../../actions/toggle_question_closure.php" method="post">
+                        <input type="hidden" name="token" value="{$TOKEN}">
+                        <input type="hidden" name="content-id" value="{$content['id']}">
+                        <button class="btn btn-xs lock">
+                            <img class="full-width"
+                                 {if isQuestionClosed($content["id"])}src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/unlock-alt-128.png"
+                                 {else}src="https://cdn4.iconfinder.com/data/icons/font-awesome-2/2048/f023-128.png"{/if}>
+                        </button>
+                    </form>
+                </div>
+            {/if}
+            {if canEditContent($USERID, $content["id"])}
+                <div class="btn-group small-right-margin pull-right">
+                    <button class="btn btn-xs" onclick="toggleTitleInput()">
+                        <span class="glyphicon glyphicon-black glyphicon-pencil"></span>
                     </button>
                 </div>
             {/if}
@@ -25,7 +39,7 @@
                 <input type="hidden" name="edit-type" value="{$TITLE}">
                 <div class="pull-right small-right-margin">
                     <button class="btn btn-xs" type="submit">
-                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                        <span class="glyphicon glyphicon-black glyphicon-floppy-disk"></span>
                     </button>
                 </div>
                 <div class="edit-title-input">
@@ -48,7 +62,7 @@
             {if $canEditContent}
                 <div class="btn-group pull-right">
                     <button class="btn btn-xs" onclick="toggleTagEditMode()"><span
-                                class="glyphicon glyphicon-plus"></span>
+                                class="glyphicon glyphicon-black glyphicon-plus"></span>
                     </button>
                 </div>
             {/if}
@@ -63,7 +77,7 @@
                             <a href="search_results.php?activeTags={$tag['id']}">{$tag['name']}</a>
                             {if canEditContent($USERID, $content["id"])}
                                 <button class="btn btn-xs pull-right" onclick="deleteTag(this,{$tag['id']})"><span
-                                            class="glyphicon glyphicon-minus"></span>
+                                            class="glyphicon glyphicon-black glyphicon-minus"></span>
                             </button>
                             {/if}
                     </span>
