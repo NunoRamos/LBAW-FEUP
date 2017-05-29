@@ -95,7 +95,7 @@
         <div class="modal-content">
             <div class="modal-header no-bottom-border">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                            class="hidden-xs" aria-hidden="true">&times;</span></button>
                 <ul class="nav nav-tabs nav-justified">
                     <li role="presentation" class="active"><a href="#sign-in" data-toggle="tab">Sign In</a></li>
                     <li role="presentation"><a id="sign-up-tab" href="#sign-up" data-toggle="tab">Sign Up</a></li>
@@ -152,7 +152,7 @@
                                 <div class="alert alert-danger" role="alert">
                                     <span class="text-center">{$error_message}</span>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></button>
+                                                 aria-hidden="true">&times;</span></button>
                                 </div>
                             {/foreach}
                         </div>
