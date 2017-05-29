@@ -56,6 +56,16 @@
                             </div>
                         </div>
 
+                        <div id="details-error-message" class="col-xs-12 col-sm-offset-6 col-sm-6">
+                            {foreach $ERROR_MESSAGES['personal-details'] as $error_message}
+                                <div class="alert alert-danger" role="alert">
+                                    <span class="text-center">{$error_message}</span>
+                                    <button type="button" class="close" data-dismiss="alert"
+                                            aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                </div>
+                            {/foreach}
+                        </div>
 
                         <div class="col-xs-12 large-top-bottom-margin">
                             <label for="bio" class="large-text">Describe yourself</label>
@@ -142,7 +152,7 @@
                         </div>
 
                         <div class="form-group">
-                            <div id="error-message" class="col-xs-12 col-sm-offset-3 col-sm-5">
+                            <div id="password-error-message" class="col-xs-12 col-sm-offset-3 col-sm-5">
                                 {foreach $ERROR_MESSAGES['account-settings'] as $error_message}
                                     <div class="alert alert-danger" role="alert">
                                         <span class="text-center">{$error_message}</span>

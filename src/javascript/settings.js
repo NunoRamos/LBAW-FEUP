@@ -22,7 +22,7 @@ function changeTab(e) {
 function validatePassword() {
     const newPassword = $("#new-password").val();
     const repeatPassword = $("#new-repeat-password").val();
-    const errorMessage = $("#error-message");
+    const errorMessage = $("#password-error-message");
 
     errorMessage.children().remove();
 
