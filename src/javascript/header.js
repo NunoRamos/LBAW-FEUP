@@ -55,7 +55,7 @@ function getNotifications() {
         for (let notification of notifications) {
             if (notification.hasOwnProperty('contentId') && notification.hasOwnProperty('text'))
                 $('#notification-menu').append(
-                    '<li class="notification"><a href="../content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +
+                    '<li class="notification"><a data-content-id="' + notification.contentId + '" href="../content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +
                     '<li class="divider"></li>'
                 );
         }
@@ -63,6 +63,7 @@ function getNotifications() {
         $('#notification-menu').append(
             '<li class="text-center"><a href="../content/notifications_page.php">View All Notifications</a></li>');
 
+        addOnHoverToNotifications();
     }).fail(function () {
         $('#notification-menu').append('<li class="dropdown-header">Could not get notifications.</li>');
     });
@@ -70,4 +71,28 @@ function getNotifications() {
 
 function deleteNotifications() {
     $('#notification-menu li.divider ~ li').remove();
+}
+
+function addOnHoverToNotifications() {
+    const notifications = $('.notification a');
+
+    notifications.each(function (index, notification) {
+        notification = $(notification);
+        notification.on('hover', readNotification.bind(this, notification.attr('data-content-id')))
+            .on('click', readNotification.bind(this, notification.attr('data-content-id')))
+            .on('mouseover', readNotification.bind(this, notification.attr('data-content-id')));
+    });
+
+    for (let notification of notifications) {
+        notification = $(notification);
+    }
+}
+
+function readNotification(contentId) {
+    $.ajax('../../api/read_notification.php', {
+        method: 'post',
+        data: {
+            contentId: contentId
+        }
+    });
 }

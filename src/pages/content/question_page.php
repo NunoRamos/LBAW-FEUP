@@ -27,8 +27,8 @@ if (!isset($question['title'])) {
     exit();
 }
 
-readNotifications($question['contentId']);
-$replies = getDescendantsOfContent($question['contentId'],$userId);
+//readNotifications($question['contentId']);
+$replies = getDescendantsOfContent($question['contentId'], $userId);
 $question['children'] = $replies;
 
 $smarty->assign('content', $question);

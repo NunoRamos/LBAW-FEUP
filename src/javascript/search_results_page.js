@@ -67,7 +67,10 @@ function searchFailed() {
     $('#search-bar-container').after('<div class="panel panel-default text-center"><div class="list-group-item">Could not connect to server.</div></div>');
 }
 
-function search(currentPage) {
+function search(e, currentPage) {
+    if (currentPage == null)
+        currentPage = 1;
+
     let selectedTags = getSelectedTags();
 
     const input = $('#search-bar').val();
