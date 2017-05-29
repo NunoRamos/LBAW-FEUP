@@ -2,8 +2,7 @@
 include_once('../config/init.php');
 include_once($BASE_DIR . 'database/users.php');
 
-
-if (!$_POST['expires'] || !$_POST['reason']) {
+if (!$_POST['date'] || !$_POST['reason']) {
     $_SESSION['error_messages']['ban-user'][] = 'All fields are mandatory';
 
     if (empty($_SERVER['HTTP_REFERER']))
@@ -14,17 +13,16 @@ if (!$_POST['expires'] || !$_POST['reason']) {
     exit;
 }
 
-$id =  htmlspecialchars($_POST['id']);
 $explanation = htmlspecialchars($_POST['explanation']);
 $reason = htmlspecialchars($_POST['reason']);
 $expires = htmlspecialchars($_POST['expires']);
 
+
 try {
-    $ban = banUser($explanation, $expires, $reason,$id);
+    $ban = banUser($email, $password, $name);
     $_SESSION['success_messages'][] = 'Ban User successful';
 } catch (PDOException $e) {
-    banUserFailed();
-
+    signUpFailed();
 }
 
 header("Location:" . $_SERVER['HTTP_REFERER']);

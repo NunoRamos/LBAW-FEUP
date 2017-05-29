@@ -7,9 +7,7 @@
     <title>Reply Planet</title>
     <link rel="stylesheet" href="{$BASE_URL}css/bootstrap.min.css">
     <link rel="stylesheet" href="{$BASE_URL}css/custom.min.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="{$BASE_URL}javascript/header.js"></script>
 </head>
 <body>
@@ -46,7 +44,7 @@
                         <li class="hidden-xs"><span>Signed in as</span></li>
                         <li class="hidden-xs"><span><strong>{$NAME}</strong></span></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="../users/profile_page.php?id={$USERID}">Profile</a></li>
+                        <li><a href="../users/profile_page.php">Profile</a></li>
                         {if $PRIVILEGELEVELID == 3}
                             <li><a href="../users/admin_page.php">Admin Page</a></li>
                         {/if}
@@ -105,9 +103,8 @@
                 <div class="tab-content row">
                     <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12"
                           method="post" action="{$BASE_URL}actions/sign_in.php">
-                        <input type="hidden" name="token" value="{$TOKEN}">
                         <div class="form-group input-group">
-                            <div class="input-group-addon glyphicon glyphicon-envelope"></div>
+                            <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" name="email" placeholder="Email" required
                                    value="{$FORM_VALUES['sign-in']['email']}">
                         </div>
@@ -126,7 +123,6 @@
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12"
                           method="post" action="{$BASE_URL}actions/sign_up.php" onsubmit="return validateSignUp()">
-                        <input type="hidden" name="token" value="{$TOKEN}">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" name="name" placeholder="Real Name" required

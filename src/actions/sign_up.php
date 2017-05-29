@@ -2,14 +2,6 @@
 include_once('../config/init.php');
 include_once($BASE_DIR . 'database/users.php');
 
-global $lastToken;
-$token = $_POST['token'];
-
-if (strcmp($lastToken, $token) !== 0) {
-    http_response_code(403);
-    exit;
-}
-
 if (!$_POST['name'] || !$_POST['email'] || !$_POST['password']) {
     $_SESSION['error_messages']['sign-up'][] = 'All fields are mandatory';
 

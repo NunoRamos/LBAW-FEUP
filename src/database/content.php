@@ -343,14 +343,53 @@ function readNotifications($questionId)
     $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
 }
 
-function editPersonalDetails($userId, $name, $email, $bio)
+
+
+function editName($id, $name)
 {
+    //FIXME: untested
     global $conn;
 
-    $stmt = $conn->prepare('UPDATE "User" SET ("name", "email", "bio") = (?, ?, ?) WHERE "id" = ?;');
-    $stmt->execute([$name, $email, $bio, $userId]);
+    try {
+       // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "name" = ? WHERE "id" = ?;');
+        $stmt->execute([$name, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
 }
 
+function editBio($id, $bio)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "bio" = ? WHERE "id" = ?;');
+        $stmt->execute([$bio, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
 
 function editPhoto($id, $photo)
 {
@@ -374,6 +413,30 @@ function editPhoto($id, $photo)
         //$conn = null;
     }
 }
+
+function editEmail($id, $email)
+{
+    //FIXME: untested
+    global $conn;
+
+    try {
+        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        //$conn->beginTransaction();
+
+        $stmt = $conn->prepare('UPDATE "User" SET "email" = ? WHERE "id" = ?;');
+        $stmt->execute([$email, $id]);
+        //$conn->commit();
+
+    } catch (PDOException $exception) {
+        //$conn->rollBack();
+        {
+            echo $stmt . "<br>" . $exception->getMessage();
+        }
+
+        //$conn = null;
+    }
+}
+
 
 function deleteQuestion($questionId)
 {
@@ -430,10 +493,10 @@ function addTagFromPendingTag($tagId)
     try {
         $conn->beginTransaction();
 
-        $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
-        $stmt->execute([$tagId]);
-        $stmt = $conn->prepare('INSERT INTO "Tag"("name") VALUES (?)');
-        $stmt->execute([$name]);
+       $stmt = $conn->prepare('DELETE FROM "PendingTag" WHERE "id" = ?');
+       $stmt->execute([$tagId]);
+       $stmt = $conn->prepare('INSERT INTO "Tag"("name") VALUES (?)');
+       $stmt->execute([$name]);
         $conn->commit();
     } catch (PDOException $exception) {
         $conn->rollBack();
@@ -441,8 +504,7 @@ function addTagFromPendingTag($tagId)
     }
 }
 
-function unbanUser($id)
-{
+function unbanUser($id){
 
     global $conn;
     $stmt = $conn->prepare('DELETE FROM "BannedUser" WHERE "userId" = ?');
@@ -491,66 +553,5 @@ function updateContentText($contentId, $text)
     $stmt->execute([$text, $contentId]);
 }
 
-function followContent($userId, $contentId)
-{
-    global $conn;
 
-    $stmt = $conn->prepare('INSERT INTO "FollowContent"("contentId", "followerId") VALUES(?, ?)');
-    $stmt->execute([$contentId, $userId]);
-}
 
-function unfollowContent($userId, $contentId)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('DELETE FROM "FollowContent" WHERE "contentId" = ? AND "followerId" = ?');
-    $stmt->execute([$contentId, $userId]);
-}
-
-function followsContent($userId, $contentId)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('SELECT * FROM "FollowContent" WHERE "contentId" = ? AND "followerId" = ?');
-    $stmt->execute([$contentId, $userId]);
-    return count($stmt->fetchAll()) > 0;
-}
-
-function updateQuestionTitle($contentId, $title)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('UPDATE "Question" SET "title" = ? WHERE "contentId" = ?');
-    $stmt->execute([$title, $contentId]);
-}
-
-function removeTagFromQuestion($tagId, $contentId)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ? AND "tagId" = ?');
-    $stmt->execute([$contentId, $tagId]);
-}
-
-function addTagToQuestion($tagId, $contentId)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('INSERT INTO "QuestionTags"("contentId", "tagId") VALUES(?, ?)');
-    $stmt->execute([$contentId, $tagId]);
-}
-
-function getAllTagsExceptQuestionTags($contentId)
-{
-    global $conn;
-
-    $stmt = $conn->prepare('
-        SELECT "id", "name" FROM "Tag"
-        WHERE "id" NOT IN (
-        SELECT "tagId" FROM "QuestionTags"
-        WHERE "contentId" = ?);
-        ');
-    $stmt->execute([$contentId]);
-
-    return $stmt->fetchAll();
-}

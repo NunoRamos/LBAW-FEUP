@@ -6,8 +6,7 @@
         <div class="col-xs-11 no-gutter">
             <div class="col-xs-10 no-gutter">
                 <div class="col-xs-12 text-left">
-                    <a class="small-text"
-                       href="../users/profile_page.php?id={$content["creatorId"]}">{getUserNameById($content.creatorId)}</a>
+                    <a class="small-text" href="../users/profile_page.php?id={$content["creatorId"]}">{getUserNameById($content.creatorId)}</a>
                     <span class="small-text">{$content["creationDate"]}</span>
                 </div>
                 <div class="content-text text-wrap">
@@ -39,17 +38,6 @@
                     <div class="btn-group pull-right">
                         <button data-content-id="{$content.id}" class="btn btn-xs" onclick="toggleTextBox(this,0)"><span
                                     class="glyphicon glyphicon-comment"></span>
-                        </button>
-                    </div>
-                {/if}
-                {if canFollowContent($USERID, $content.id)}
-                    {$followsContent=followsContent($USERID, $content.id)}
-                    <div class="btn-group pull-right">
-                        <button onclick="
-                                {if $followsContent}unfollowContent(this, {$content.id})
-                                {else}followContent(this, {$content.id}){/if}"
-                                data-content-id="{$content.id}" class="btn btn-xs">
-                            <span class="glyphicon {if $followsContent}glyphicon-star-empty{else}glyphicon-star{/if}"></span>
                         </button>
                     </div>
                 {/if}

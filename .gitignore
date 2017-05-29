@@ -1,6 +1,5 @@
 # IDEA Config 
 .idea/*
-*.iml
 
 # Smarty Cache
 src/templates_c/*

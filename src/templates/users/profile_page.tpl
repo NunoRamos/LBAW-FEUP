@@ -29,7 +29,6 @@
 
 			<div class="well no-bottom-margin">
 				<h2 class="center">{$user['name']}</h2>
-				<h4 class="center">Score: {$rating}</h4>
                 <i class="glyphicon glyphicon-envelope"></i> {$user['email']}<br>
                 <i class="glyphicon glyphicon-paperclip"></i> {$user['bio']}<br>
                 <i class="glyphicon glyphicon-time"></i> {$user['signupDate']}
@@ -72,7 +71,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="ban-user-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -86,8 +84,7 @@
             <div class="modal-body">
                 <div class="tab-content row">
                     <form id="ban-user" class="modal-form tab-pane fade in active col-xs-12"
-                         method="post" action="{$BASE_URL}actions/ban_user.php">
-						<input type="hidden" class="form-control" name="id" value="15" />
+                          method="post" action="{$BASE_URL}actions/sign-in.php">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-thumbs-down"></div>
                             <input type="text" class="form-control" name="explanation" placeholder="Explanation"
@@ -98,15 +95,11 @@
                             <input type="date" class="form-control" name="expires" placeholder="Ban Expires Date" required
                                    value="{$FORM_VALUES['ban-user']['expires']}">
                         </div>
-						<div class="form-group input-group">
+			<div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-ban-circle"></div>
-							<select class="form-control" name="reason">
-								<option value="bad_language">Bad Language</option>
-								<option value="inappropriate_content">Inappropriate Content</option>
-								<option value="spam">Spam</option>
-								<option value="disrespect_against_others">Disrespect Against Others</option>
-								</select>
-						</div>
+                            <input type="text" class="form-control" name="reason" placeholder="Ban Reason" required
+                                   value="{$FORM_VALUES['ban-user']['reason']}">
+                        </div>
                         {foreach $ERROR_MESSAGES['ban-user'] as $error_message}
                             <div class="alert alert-danger" role="alert">
                                 <span class="text-center">{$error_message}</span>

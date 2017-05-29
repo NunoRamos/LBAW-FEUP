@@ -4,35 +4,22 @@ include_once '../database/users.php';
 include_once '../database/content.php';
 include_once '../database/permissions.php';
 
-global $lastToken;
-$token = $_POST['token'];
+$userId = $smarty->getTemplateVars('USERID');
 
-if (strcmp($lastToken, $token) !== 0) {
-    http_response_code(403);
-    exit;
-}
-
-$userId = $_SESSION['userId'];
 $name = htmlspecialchars($_POST['name']);
 $email = htmlspecialchars($_POST['email']);
-$bio = stripProhibitedTags($_POST['bio']);
+$bio = htmlspecialchars($_POST['bio']);
+//$photo = $_FILES["img-url"]["name"];
 
-try {
-    editPersonalDetails($userId, $name, $email, $bio);
-} catch (PDOException $e) {
-    $_SESSION['error_messages']['personal-details'] = 'Chosen email is already in use.';
-    redirect();
-}
+editName($userId,$name);
+editBio($userId,$bio);
+editEmail($userId,$email);
+//editPhoto($userId,$photo);
 
 $_SESSION['email'] = $email;
 $_SESSION['name'] = $name;
 
-redirect();
+header('Location: ' . $smarty->getTemplateVars('BASE_URL')  . 'src/pages/users/settings_page.php');
 
-function redirect()
-{
-    if (strpos($_SERVER['HTTP_REFERER'], '#personal-details') === false)
-        header("Location: " . $_SERVER['HTTP_REFERER'] . '#personal-details');
-    else
-        header("Location: " . $_SERVER['HTTP_REFERER']);
-}
+
+
