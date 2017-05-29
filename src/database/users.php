@@ -1,22 +1,22 @@
 <?php
 
+
 function register($email, $password, $name)
 {
     global $conn;
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $conn->prepare('INSERT INTO "User" (email,password,name,"privilegeLevelId") VALUES (?,?,?,?) RETURNING "id", "email", "name", "privilegeLevelId"');
-    $stmt->execute([$email, $hashed_password, $name, 1]);
+    $stmt->execute([$email, $hashed_password, $name, 4]);
 
     return $stmt->fetch();
 }
 
-function ban($explanation, $expires, $reason, $userId)
+function banUser($explanation, $expires, $reason, $userId)
 {
     global $conn;
-    $stmt = $conn->prepare('INSERT INTO "User" (explanation, expires, reason, userId) VALUES (?,?,?,?) RETURNING "explanation", "expires", "reason", "userId"');
+    $stmt = $conn->prepare('INSERT INTO "BannedUser" (explanation, expires, reason, "userId") VALUES (?,?,?,?) RETURNING "explanation", "expires", "reason", "userId"');
     $stmt->execute([$explanation, $expires, $reason, $userId]);
-
     return $stmt->fetch();
 }
 
@@ -293,6 +293,33 @@ function becomeModerator($id)
 }
 
 
+
+
+
+
+function getUserReplyRating($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare(
+        'SELECT SUM("Content"."rating") FROM final."Content", final."Reply" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['sum'];
+}
+
+function getUserQuestionRating($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT SUM("Content"."rating") FROM final."Content", final."Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['sum'];
+}
+
+function userScore($userId)
+{
+    $question = getUserQuestionRating($userId);
+	$reply = getUserReplyRating($userId);
+    return $question + 3 * $reply;
+}
 
 
 

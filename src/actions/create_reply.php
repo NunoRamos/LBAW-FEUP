@@ -12,7 +12,7 @@ if (!isset($userId)){
 }
 
 $text = stripProhibitedTags($_POST['container-text']);
-$parentId = intval(htmlspecialchars($_POST['parent-id']));
+$parentId = intval(htmlspecialchars($_POST['content-id']));
 $questionId = intval(htmlspecialchars($_POST['question-id']));
 
 if (canReply($userId))
