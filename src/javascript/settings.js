@@ -67,7 +67,7 @@ function addPendingTag(id) {
 
     $.ajax({
         method: "GET",
-        url: "../../api/add_pending_tag.php",
+        url: "../../api/add_tag.php",
         data: {
             id: id,
         }

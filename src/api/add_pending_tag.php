@@ -2,12 +2,15 @@
 include_once '../config/init.php';
 include_once '../database/content.php';
 
-if (!isset($_GET['id'])) {
+$userId = $_SESSION['userId'];
+
+if (!isset($_POST['name']) && !isset($userId)) {
     exit;
 }
 
-$id = htmlspecialchars($_GET['id']);
+$name = htmlspecialchars($_POST['name']);
 
+$valid = verifyNameIfIsValid($name);
 
-addTagFromPendingTag($id);
-
+if(sizeof($valid) == 0)
+    addPendingTag($name);

@@ -77,7 +77,7 @@
                 </li>
             {else}
                 <li class="pull-right">
-                    <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                    <button type="button" class="btn btn-default navbar-btn small-margin-sign-in-button" data-toggle="modal"
                             data-target="#sign-in-modal">Sign In
                     </button>
                 </li>
