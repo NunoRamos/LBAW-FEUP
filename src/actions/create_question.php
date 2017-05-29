@@ -4,7 +4,15 @@ include_once '../database/users.php';
 include_once '../database/content.php';
 include_once '../database/permissions.php';
 
-$userId = $smarty->getTemplateVars('USERID');
+global $lastToken;
+$token = $_POST['token'];
+
+if (strcmp($lastToken, $token) !== 0) {
+    http_response_code(403);
+    exit;
+}
+
+$userId = $_SESSION['userId'];
 
 $text = stripProhibitedTags($_POST['question-text']);
 $title = htmlspecialchars($_POST['title']);

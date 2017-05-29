@@ -86,6 +86,17 @@ body
   white-space: nowrap
   width: 100%
 
+@media (min-width: $screen-sm-min)
+  .dropdown ul.dropdown-menu:before
+    content: ""
+    border-bottom: 10px solid #fff
+    border-right: 10px solid transparent
+    border-left: 10px solid transparent
+    position: absolute
+    top: -10px
+    right: 13px
+    z-index: 10
+
 /******************************
  * Question Page
  ******************************/

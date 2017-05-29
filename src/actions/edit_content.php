@@ -4,7 +4,7 @@ include_once ($BASE_DIR . 'database/content.php');
 include_once ($BASE_DIR . 'database/permissions.php');
 include_once($BASE_DIR . 'lib/edit_content_type.php');
 
-$userId = $smarty->getTemplateVars('USERID');
+$userId = $_SESSION['userId'];
 
 if (!isset($userId) || !isset($_POST['content-id'])){
     http_response_code(403);
