@@ -267,6 +267,27 @@ function getOrderedAllBannedUsers($offset, $limit)
 
 }
 
+function getAllOrderedPendingTags($offset,$limit){
+    global $conn;
+
+
+    try {
+        $conn->beginTransaction();
+        $countStmt = $conn->prepare('SELECT Count(*) FROM "PendingTag"');
+        $countStmt->execute();
+        $searchStmt = $conn->prepare('SELECT "id","name" FROM "PendingTag" ORDER BY ? LIMIT ? OFFSET ?');
+        $searchStmt->execute(['"id" DESC', $limit, $offset]);
+
+        $conn->commit();
+
+        return ['tags' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+
+}
+
 function getAllBannedUsers()
 {
     global $conn;
