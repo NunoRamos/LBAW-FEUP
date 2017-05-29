@@ -17,6 +17,7 @@
                     <span class="collapse in settings-collapse no-animation"><i
                                 class="glyphicon glyphicon-resize-small"></i></span>
                     <span class="collapse settings-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
+                </button>
             </div>
             <div class="list-group nav collapse in settings-collapse" id="settings-tabs">
                 <a href="#personal-details" class="list-group-item highlight selected" role="tab" data-toggle="tab">Personal

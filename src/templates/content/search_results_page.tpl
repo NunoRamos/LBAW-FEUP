@@ -16,6 +16,7 @@
                     <span class="collapse in results-collapse no-animation"><i
                                 class="glyphicon glyphicon-resize-small"></i></span>
                 <span class="collapse results-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
+            </button>
         </div>
         <div class="list-group collapse in results-collapse">
             <button id="search-type-questions" type="button" value="{$SEARCH_FOR_QUESTIONS}"
@@ -80,7 +81,7 @@
 
     <div id="search-question-panel" class="panel panel-default">
         <div class="loading">
-            <img src="{$BASE_URL}images/rolling.svg"/>
+            <img src="{$BASE_URL}images/rolling.svg" alt="Loading image"/>
         </div>
     </div>
 </nav>
