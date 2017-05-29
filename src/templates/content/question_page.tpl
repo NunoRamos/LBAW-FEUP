@@ -12,7 +12,8 @@
         <div id="title-container" class="panel-heading">
             <h3 id="question-title-header" class="panel-title inline">{$content["title"]}</h3>
             {assign "questionId" $content["id"]}
-            <form id="edit-title-form" style="display: none" class="panel-title inline" method="post" action="../../actions/edit_content.php">
+            <form id="edit-title-form" style="display: none" class="panel-title inline" method="post"
+                  action="../../actions/edit_content.php">
                 <input type="hidden" name="content-id" value="{$content["id"]}">
                 <input type="hidden" name="edit-type" value="{$TITLE}">
                 <input class="edit-title-input" name="title" value="{$content["title"]}">
@@ -37,30 +38,39 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title inline">Question Tags</h3>
-            {if canEditContent($USERID, $content["id"])}
+            {$canEditContent = canEditContent($USERID, $content["id"])}
+            {if $canEditContent}
                 <div class="btn-group pull-right">
-                    <button class="btn btn-xs" onclick="askForAllTags()"><span
+                    <button class="btn btn-xs" onclick="toggleTagEditMode()"><span
                                 class="glyphicon glyphicon-plus"></span>
                     </button>
                 </div>
             {/if}
         </div>
-        <div id="tags" class="panel-body list-group">
-            {if sizeof($questionTags)==0}
-                <p class="list-group-item">No tags for this question</p>
-            {else}
-                {foreach $questionTags as $tag}
-                    <div class="row list-group-item">
-                        <a href="search_results.php" class="col-xs-10">{$tag['name']}</a>
-                        {if canEditContent($USERID, $content["id"])}
-                            <div class="btn-group col-xs-2">
-                                <button class="btn btn-xs" onclick="deleteTag(this,{$tag['id']})"><span
+        <div id="tags-panel-body" class="panel-body list-group">
+            <div id="tags">
+                {if sizeof($questionTags)==0}
+                    <p class="list-group-item">This question has no tags.</p>
+                {else}
+                    {foreach $questionTags as $tag}
+                        <span class="list-group-item">
+                            <a href="search_results.php?activeTags={$tag['id']}">{$tag['name']}</a>
+                            {if canEditContent($USERID, $content["id"])}
+                                <button class="btn btn-xs pull-right" onclick="deleteTag(this,{$tag['id']})"><span
                                             class="glyphicon glyphicon-minus"></span>
-                                </button>
-                            </div>
-                        {/if}
-                    </div>
-                {/foreach}
+                            </button>
+                            {/if}
+                    </span>
+                    {/foreach}
+                {/if}
+            </div>
+            {if $canEditContent}
+                <div id="add-tags" style="display: none;">
+                    <!-- Inline width is MANDATORY for responsiveness. https://select2.github.io/examples.html#responsive -->
+                    <select id="tags-select" multiple="multiple" style="width: 100%;"></select>
+                    <input class="btn btn-default submit-answer-btn" onclick="saveNewTags()" type="submit"
+                           value="Add Tags">
+                </div>
             {/if}
         </div>
     </div>

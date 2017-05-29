@@ -19,7 +19,7 @@ if (!isset($userId)){
     exit;
 }
 
-$text = stripProhibitedTags($_POST['container-text']);
+$text = stripProhibitedTags($_POST['content-text']);
 $parentId = intval(htmlspecialchars($_POST['content-id']));
 $questionId = intval(htmlspecialchars($_POST['question-id']));
 
