@@ -43,6 +43,7 @@ function toggleTextBox(caller, edit) {
             '<input type="hidden" name="edit-type" value="' + 0 + '">' +
             '<textarea class="form-control content-text" name="content-text" placeholder="Answer"></textarea>' +
             '<input class="btn btn-default submit-answer-btn" type="submit" value="' + buttonValue + ' ">' +
+            '<input class="btn btn-default submit-answer-btn" onclick="removeTextBox('+this+'   )" value="Cancel">' +
             '</form>');
 
         boxDiv.find('.content-text').trumbowyg();
@@ -53,6 +54,10 @@ function toggleTextBox(caller, edit) {
     } else {
         boxDiv.children().remove();
     }
+}
+
+function removeTextBox(caller) {
+
 }
 
 function followContent(clickedElement, contentId) {

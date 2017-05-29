@@ -111,6 +111,60 @@ body
 div.trumbowyg-box, div.trumbowyg-editor
   margin: 5px auto
 
+.edit-title-input
+  background: $gray-darker
+  border-color: $gray-darker
+
+button .glyphicon-pencil
+  color: black
+
+button .glyphicon-plus
+  color: black
+
+button .glyphicon-minus
+  color: black
+
+ul#edit-options.dropdown-menu:before
+  content: ""
+  border-bottom: 12px solid #fff
+  border-right: 10px solid transparent
+  border-left: 10px solid transparent
+  position: absolute
+  top: -10px
+  right: 22%
+  z-index: 10
+
+ul#edit-options.dropdown-menu:after
+  content: ""
+  border-bottom: 13px solid rgba(0, 0, 0, 0.14902)
+  border-right: 10px solid transparent
+  border-left: 10px solid transparent
+  position: absolute
+  top: -12px
+  right: 22%
+  z-index: 9
+
+#tags
+  a
+    text-decoration: none
+    color: $list-group-link-color
+
+#delete-content-input
+  background: white
+  border: none
+  padding: 3px 25px
+  color: $gray-light
+
+ul#edit-options
+  margin-top: 10px
+  width: 70%
+  form input:hover
+    background: inherit
+    cursor: inherit
+  li:hover
+    background: #e6e6e6
+    cursor: pointer
+
 /******************************
  * Search Results
  ******************************/
@@ -375,21 +429,3 @@ div.loading
 
 .text-wrap
   overflow-wrap: break-word
-
-.edit-title-input
-  background: $gray-darker
-  border-color: $gray-darker
-
-button .glyphicon-pencil
-  color: black
-
-button .glyphicon-plus
-  color: black
-
-button .glyphicon-minus
-  color: black
-
-#tags
-  a
-    text-decoration: none
-    color: $list-group-link-color
