@@ -26,11 +26,13 @@
                 <a href="#account-settings" class="list-group-item highlight" role="tab" data-toggle="tab">Account
                     Settings</a>
                 {if $canAcceptPendingTags}
-                    <a href="#moderation-area" class="list-group-item highlight" role="tab" data-toggle="tab" onclick="changeTypeToPendingTags()">Moderation
+                    <a href="#moderation-area" class="list-group-item highlight" role="tab" data-toggle="tab"
+                       onclick="changeTypeToPendingTags()">Moderation
                         Area</a>
                 {/if}
                 {if $canBanUsers}
-                    <a href="#administration-area" class="list-group-item highlight" role="tab" data-toggle="tab" onclick="changeTypeToBanUsers()">Administration
+                    <a href="#administration-area" class="list-group-item highlight" role="tab" data-toggle="tab"
+                       onclick="changeTypeToBanUsers()">Administration
                         Area</a>
                 {/if}
             </div>
@@ -96,30 +98,22 @@
                 <div class="panel-body">
                     <h3>Change profile picture</h3>
                     <hr class="divider">
-                    <div class="row  col-sm-12 form-horizontal">
-                            <form action="../../actions/upload_img.php" method="post" enctype="multipart/form-data">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-8 pull-right">
-                                <img id="upload" class="img-circle form-group"
-                                     src="{$BASE_URL}images/user-default.png" height="200" width="200"
-                                     alt="Image preview">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-sm-offset-3 col-sm-3">
-                                        <div id="btn-upload" class="btn btn-default" onclick="uploadImage()">Choose your
-                                            Image
-                                        </div>
-                                        <input type="file" name="fileToUpload" id="fileToUpload" class="form-group"
-                                               onchange="previewFile()" style="display: none">
-                                    </div>
-                                    <div class="col-sm-2">
-
-                                        <input type="submit" class="btn btn-default" value="Save Image" name="submit">
-                                    </div>
-                                </div>
-                            </form>
-                    </div>
+                    <form action="../../actions/upload_img.php" method="post" enctype="multipart/form-data"
+                          class="form-horizontal row text-center">
+                        <div class="form-group">
+                            <img id="upload" class="img-circle"
+                                 src="{$BASE_URL}images/{getUserPhotoById($USERID)}"
+                                 style="max-width: 200px; max-height: 200px" alt="Image preview">
+                        </div>
+                        <div class="form-group">
+                            <div id="btn-upload" class="btn btn-default" onclick="uploadImage()">Choose your
+                                Image
+                            </div>
+                            <input type="file" name="fileToUpload" id="fileToUpload" class="form-group"
+                                   onchange="previewFile()" style="display: none">
+                            <input type="submit" class="btn btn-default" value="Save Image" name="submit">
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -188,7 +182,7 @@
             {/if}
             {if $canBanUsers}
                 <div id="administration-area" class="panel panel-default tab-pane settings-tab">
-                    <div id ="title-admin" class="panel-heading">Administration Area</div>
+                    <div id="title-admin" class="panel-heading">Administration Area</div>
 
                 </div>
             {/if}

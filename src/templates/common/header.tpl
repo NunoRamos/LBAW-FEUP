@@ -77,7 +77,8 @@
                 </li>
             {else}
                 <li class="pull-right">
-                    <button type="button" class="btn btn-default navbar-btn small-margin-sign-in-button" data-toggle="modal"
+                    <button type="button" class="btn btn-default navbar-btn small-margin-sign-in-button"
+                            data-toggle="modal"
                             data-target="#sign-in-modal">Sign In
                     </button>
                 </li>
@@ -154,7 +155,7 @@
                                 <div class="alert alert-danger" role="alert">
                                     <span class="text-center">{$error_message}</span>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                                 aria-hidden="true">&times;</span></button>
+                                                aria-hidden="true">&times;</span></button>
                                 </div>
                             {/foreach}
                         </div>

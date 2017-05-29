@@ -11,12 +11,11 @@ $photo = htmlspecialchars($_FILES["fileToUpload"]["name"]);
 $target_dir = "../images/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
-$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 // Check if image file is a actual image or fake image
 
-
 // Allow certain file formats
-if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
     echo "Sorry, only JPG, JPEG, PNG files are allowed.";
     $uploadOk = 0;
 }
