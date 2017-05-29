@@ -553,7 +553,7 @@ function getAllTagsExceptQuestionTags($contentId)
     global $conn;
 
     $stmt = $conn->prepare('
-        SELECT "id", "name" FROM "Tag"
+        SELECT "id", "name" AS "text" FROM "Tag"
         WHERE "id" NOT IN (
         SELECT "tagId" FROM "QuestionTags"
         WHERE "contentId" = ?);
