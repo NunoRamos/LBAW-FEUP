@@ -1,7 +1,6 @@
 {include file="../common/header.tpl"}
 
 
-
 <!--<div class="col-xs-12 col-sm-3 full-screen-xs">
         <div class="panel panel-default">
             <img class="center-block img-responsive img-profile" src="{$BASE_URL}images/user-default.png" alt="User Image">
@@ -36,35 +35,42 @@
             </div>
         </div>
     </div>-->
-<div class="container col-sm-3 col-xs-12 full-screen-xs">
+<div class="container col-sm-3 col-xs-12 full-screen-xs" style="height: 100%">
     <div class="panel panel-default">
         <div class="panel-heading panel-style">
             <h3 class="panel-title inline">{$user['name']}</h3>
             {if $PRIVILEGELEVELID == 3}
-                <span class="glyphicon glyphicon-menu-down dropdown-toggle pull-right" data-toggle="dropdown"></span>
-                <ul class="dropdown-menu dropdown-responsive">
-                    <li>
-                        <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Ban User</span>
-                    </li>
-                    <li>
-                        {if $user['privilegeLevelId'] == 2}
-                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Remove Moderator</span>
-                        {else}
-                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Make Moderator</span>
-                        {/if}
-                    </li>
-                    <li>
-                        {if $user['privilegeLevelId'] == 3}
-                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Remove Admin</span>
-                        {else}
-                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Make Admin</span>
-                        {/if}
-                    </li>
-                </ul>
+                <div class="btn-group dropdown pull-right">
+                    <span class="glyphicon glyphicon-menu-down dropdown-toggle"
+                          data-toggle="dropdown"></span>
+                    <ul class="dropdown-menu dropdown-responsive">
+                        <li>
+                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Ban User</span>
+                        </li>
+                        <li>
+                            {if $user['privilegeLevelId'] == 2}
+                                <span data-content-id="{$content.id}"
+                                      onclick="toggleTextBox(this,1)">Remove Moderator</span>
+                            {else}
+                                <span data-content-id="{$content.id}"
+                                      onclick="toggleTextBox(this,1)">Make Moderator</span>
+                            {/if}
+                        </li>
+                        <li>
+                            {if $user['privilegeLevelId'] == 3}
+                                <span data-content-id="{$content.id}"
+                                      onclick="toggleTextBox(this,1)">Remove Admin</span>
+                            {else}
+                                <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Make Admin</span>
+                            {/if}
+                        </li>
+                    </ul>
+                </div>
             {/if}
         </div>
         <img class="center-block img-responsive img-profile"
-             src="{$BASE_URL}images/user-default.png" alt="User Image"><!-- src="{$BASE_URL}{if isset($user["photo"]) && !is_null($user["photo"])}images/{$user["photo"]}{else}images/user-default.png{/if}" -->
+             src="{$BASE_URL}images/user-default.png" alt="User Image">
+        <!-- src="{$BASE_URL}{if isset($user["photo"]) && !is_null($user["photo"])}images/{$user["photo"]}{else}images/user-default.png{/if}" -->
         <div class="panel-body">
             <div class="row some-margin" title="Email">
                 <span class="glyphicon glyphicon-envelope col-xs-2"></span>
@@ -86,36 +92,38 @@
     </div>
 </div>
 
-<div class="container col-sm-8 col-xs-12 full-screen-xs">
-    <div class="panel panel-default">
-        <div class="panel-heading panel-style">
-            <h3 class="panel-title">Questions ({$numberQuestions})</h3>
-        </div>
-        <div class="remove-panel-padding panel-body">
-            {if sizeof($questions) == 0}
-                <p class="list-group-item">No questions created.</p>
-            {else}
-                {foreach $questions as $content}
-                    {include file="content/common/question_overview.tpl"}
-                {/foreach}
-            {/if}
+<div class="col-sm-9 full-screen-xs">
+    <div class="container col-xs-12 full-screen-xs">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-style">
+                <h3 class="panel-title">Questions ({$numberQuestions})</h3>
+            </div>
+            <div class="remove-panel-padding panel-body">
+                {if sizeof($questions) == 0}
+                    <p class="list-group-item">No questions created.</p>
+                {else}
+                    {foreach $questions as $content}
+                        {include file="content/common/question_overview.tpl"}
+                    {/foreach}
+                {/if}
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container col-sm-8 col-sm-offset-3 col-xs-12 full-screen-xs">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Answered Questions ({$numberQuestionsAnswered})</h3>
-        </div>
-        <div class="remove-panel-padding panel-body">
-            {if sizeof($questionsAnswered) == 0}
-                <p class="list-group-item">No questions answered.</p>
-            {else}
-                {foreach $questionsAnswered as $content}
-                    {include file="content/common/question_overview.tpl"}
-                {/foreach}
-            {/if}
+    <div class="container col-xs-12 full-screen-xs">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Answered Questions ({$numberQuestionsAnswered})</h3>
+            </div>
+            <div class="remove-panel-padding panel-body">
+                {if sizeof($questionsAnswered) == 0}
+                    <p class="list-group-item">No questions answered.</p>
+                {else}
+                    {foreach $questionsAnswered as $content}
+                        {include file="content/common/question_overview.tpl"}
+                    {/foreach}
+                {/if}
+            </div>
         </div>
     </div>
 </div>
@@ -134,7 +142,7 @@
                 <div class="tab-content row">
                     <form id="ban-user" class="modal-form tab-pane fade in active col-xs-12"
                           method="post" action="{$BASE_URL}actions/ban_user.php">
-                        <input type="hidden" class="form-control" name="id" value="15" />
+                        <input type="hidden" class="form-control" name="id" value="15"/>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-thumbs-down"></div>
                             <input type="text" class="form-control" name="explanation" placeholder="Explanation"
@@ -142,7 +150,8 @@
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-time"></div>
-                            <input type="date" class="form-control" name="expires" placeholder="Ban Expires Date" required
+                            <input type="date" class="form-control" name="expires" placeholder="Ban Expires Date"
+                                   required
                                    value="{$FORM_VALUES['ban-user']['expires']}">
                         </div>
                         <div class="form-group input-group">
