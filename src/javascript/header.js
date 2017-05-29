@@ -55,10 +55,13 @@ function getNotifications() {
         for (let notification of notifications) {
             if (notification.hasOwnProperty('contentId') && notification.hasOwnProperty('text'))
                 $('#notification-menu').append(
-                    '<li class="notification"><a href="/pages/content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +
+                    '<li class="notification"><a href="../content/question_page.php?id=' + notification.contentId + '">' + notification.text + '</a></li>' +
                     '<li class="divider"></li>'
                 );
         }
+
+       console.log( $('#notification-menu').append(
+            '<li class="text-center"><a href="../content/notifications_page.php">View All Notifications</a></li>'));
 
     }).fail(function () {
         $('#notification-menu').append('<li class="dropdown-header">Could not get notifications.</li>');

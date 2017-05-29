@@ -129,6 +129,31 @@ function getUnreadNotifications($userId)
     return $stmt->fetchAll();
 }
 
+function getNumberOfUnreadNotifications($userId){
+    global $conn;
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Notification" WHERE "userId" = ? AND read = FALSE');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['count'];
+
+}
+
+function getNumberOfReadNotifications($userId){
+    global $conn;
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Notification" WHERE "userId" = ? AND read = TRUE');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['count'];
+}
+
+function getReadNotifications($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Notification" WHERE "userId" = ? AND read = TRUE');
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll();
+}
+
+
 function getNumberOfUsersByName($inputString)
 {
     global $conn;
@@ -239,6 +264,84 @@ function getOrderedUsersByName($name, $offset, $limit, $order)
     }
 
 }
+
+
+
+function getOrderedAllBannedUsers($offset, $limit)
+{
+    global $conn;
+
+            $orderCriteria = '"expires"';
+            $orderDirection = 'DESC';
+
+
+    try {
+        $conn->beginTransaction();
+        $countStmt = $conn->prepare('SELECT Count(*) FROM "BannedUser"');
+        $countStmt->execute();
+        $searchStmt = $conn->prepare('SELECT "userId", "reason", "expires" FROM "BannedUser" ORDER BY ? LIMIT ? OFFSET ?');
+        $searchStmt->execute(['"expires" DESC', $limit, $offset]);
+
+        $conn->commit();
+
+        return ['users' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+
+}
+
+function getAllOrderedPendingTags($offset,$limit){
+    global $conn;
+
+
+    try {
+        $conn->beginTransaction();
+        $countStmt = $conn->prepare('SELECT Count(*) FROM "PendingTag"');
+        $countStmt->execute();
+        $searchStmt = $conn->prepare('SELECT "id","name" FROM "PendingTag" ORDER BY ? LIMIT ? OFFSET ?');
+        $searchStmt->execute(['"id" DESC', $limit, $offset]);
+
+        $conn->commit();
+
+        return ['tags' => $searchStmt->fetchAll(), 'numResults' => $countStmt->fetchColumn(0)];
+    } catch (PDOException $exception) {
+        $conn->rollBack();
+        throw $exception;
+    }
+
+}
+
+function getAllBannedUsers()
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "BannedUser"');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function becomeAdmin($id)
+{
+    global $conn;
+    $admin =3 ;
+    $stmt = $conn->prepare('UPDATE "User" SET "privilegeLevelId" = ? WHERE "id" = ?');
+    $stmt->execute([$admin, $id]);
+}
+
+function becomeModerator($id)
+{
+    global $conn;
+    $moderator =2 ;
+    $stmt = $conn->prepare('UPDATE "User" SET "privilegeLevelId" = ? WHERE "id" = ?');
+    $stmt->execute([$moderator, $id]);
+}
+
+
+
+
+
 
 function getUserReplyRating($userId)
 {

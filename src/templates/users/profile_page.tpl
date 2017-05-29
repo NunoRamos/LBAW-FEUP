@@ -12,8 +12,21 @@
 			<button type="button" class="btn btn-primary btn-danger pull-right" data-toggle="modal"
                             data-target="#ban-user-modal">Ban User
                     	</button>
+                <form action="{$BASE_URL}actions/become_moderator.php" >
+
+                    <input type="submit" class="btn btn-primary btn-danger pull-right"
+                           id="#button-become-Moderator" value="Become Admin">
+
+                </form>
+                <form action="{$BASE_URL}actions/become_admin.php" >
+
+                    <input type="submit" class="btn btn-primary btn-danger pull-right"
+                           id="#button-become-admin" value="Become Admin">
+
+                </form>
 			{/if}
 			{/if}
+
 			<div class="well no-bottom-margin">
 				<h2 class="center">{$user['name']}</h2>
 				<h4 class="center">Score: {$rating}</h4>
