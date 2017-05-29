@@ -18,10 +18,12 @@ $currPassword = htmlspecialchars($_POST['curr-password']);
 $newPassword = htmlspecialchars($_POST['new-password']);
 $repeatPassword = htmlspecialchars($_POST['repeat-password']);
 
+if (strlen($newPassword) < 8)
+    $_SESSION['error_messages']['account-settings'] = 'New password must be at least 8 characters long.';
 if (!checkCurrentPassword($userId, $currPassword))
     $_SESSION['error_messages']['account-settings'] = 'The password provided does not match your current password.';
-else if (!strcmp($newPassword, $repeatPassword) === 0)
-    $_SESSION['error_messages']['account-settings'] = 'The new password and its repetition do not match.';
+else if (strcmp($newPassword, $repeatPassword) !== 0)
+    $_SESSION['error_messages']['account-settings'] = 'New password and its repetition do not match.';
 else
     changePassword($userId, $newPassword);
 

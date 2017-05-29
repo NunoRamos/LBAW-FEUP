@@ -16,11 +16,11 @@
                 <a href="#account-settings" class="list-group-item highlight" role="tab" data-toggle="tab">Account
                     Settings</a>
                 {if $canAcceptPendingTags}
-                    <a href="#moderator" class="list-group-item highlight" role="tab" data-toggle="tab">Moderation
+                    <a href="#moderation-area" class="list-group-item highlight" role="tab" data-toggle="tab">Moderation
                         Area</a>
                 {/if}
                 {if $canBanUsers}
-                    <a href="#admin" class="list-group-item highlight" role="tab" data-toggle="tab">Administration
+                    <a href="#administration-area" class="list-group-item highlight" role="tab" data-toggle="tab">Administration
                         Area</a>
                 {/if}
             </div>
@@ -29,6 +29,7 @@
         <div class="col-md-9 tab-content">
             <input type="hidden" id="token" name="token" value="{$TOKEN}">
 
+            <!-- Personal Details-->
             <div id="personal-details" class="panel panel-default tab-pane settings-tab active">
                 <div class="panel-heading">Personal Details</div>
                 <div class="panel-body">
@@ -69,7 +70,7 @@
                 </div>
             </div>
 
-
+            <!-- Update Picture -->
             <div id="update-picture" class="panel panel-default tab-pane settings-tab">
                 <div class="panel-heading">Update Picture</div>
                 <div class="panel-body">
@@ -97,9 +98,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
+            <!-- Account Settings -->
             <div id="account-settings" class="panel panel-default tab-pane settings-tab">
                 <div class="panel-heading">Account Settings</div>
                 <div class="panel-body">
@@ -133,11 +134,26 @@
                                        placeholder="Repeat Password" name="new-repeat-password">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <div class="col-xs-12 col-sm-offset-3 col-sm-5">
                                 <input class="btn btn-default form-control" type="submit" value="Change Password">
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <div id="error-message" class="col-xs-12 col-sm-offset-3 col-sm-5">
+                                {foreach $ERROR_MESSAGES['account-settings'] as $error_message}
+                                    <div class="alert alert-danger" role="alert">
+                                        <span class="text-center">{$error_message}</span>
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                    </div>
+                                {/foreach}
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>

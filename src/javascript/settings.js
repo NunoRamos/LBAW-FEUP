@@ -1,41 +1,42 @@
 $(document).ready(function () {
     $('#bio').trumbowyg();
+    $('#settings-tabs').find('a.list-group-item.highlight').on('show.bs.tab', changeTab);
 
     if (window.location.href.indexOf('#personal-details') !== -1)
-        $('#personal-details').tab('show');
+        $('a[href="#personal-details"]').tab('show');
     else if (window.location.href.indexOf('#update-picture') !== -1)
-        $('#update-picture').tab('show');
+        $('a[href="#update-picture"]').tab('show');
     else if (window.location.href.indexOf('#account-settings') !== -1)
-        $('#account-settings').tab('show');
+        $('a[href="#account-settings"]').tab('show');
     else if (window.location.href.indexOf('moderation-area') !== -1)
-        $('#moderation-area').tab('show');
+        $('a[href="#moderation-area"]').tab('show');
     else if (window.location.href.indexOf('administration-area') !== -1)
-        $('#administration-area').tab('show');
-
-    $('#settings-tabs').find('a.list-group-item.highlight').on('click', function (e) {
-        $(e.target).siblings().removeClass('selected');
-        $(e.target).addClass('selected');
-    });
+        $('a[href="#administration-area"]').tab('show');
 });
 
-function validatePassword() {
-    let currPassword = $("#curr-password").val();
-    let newPassword = $("#new-password").val();
-    let repeatPassword = $("#new-repeat-password").val();
+function changeTab(e) {
+    $(e.target).siblings().removeClass('selected');
+    $(e.target).addClass('selected');
+}
 
-    let errorMessage = $("#new-password-failed");
+function validatePassword() {
+    const newPassword = $("#new-password").val();
+    const repeatPassword = $("#new-repeat-password").val();
+    const errorMessage = $("#error-message");
+
+    errorMessage.children().remove();
+
+    if (newPassword.length < 8) {
+        errorMessage.append(createErrorMessage('New password must be at least 8 characters long.'));
+        return false;
+    }
+
 
     if (repeatPassword !== newPassword) {
-        errorMessage.text("Passwords do not match");
-        errorMessage.show();
+        errorMessage.append(createErrorMessage('Passwords do not match.'));
         return false;
     }
 
-    if (currPassword === newPassword) {
-        errorMessage.text("New password is the same to the current password");
-        errorMessage.show();
-        return false;
-    }
 
     return true;
 }
@@ -102,4 +103,12 @@ function previewFile() {
 
 function uploadImage() {
     $("#fileToUpload").trigger('click');
+}
+function createErrorMessage(message) {
+    return $('<div class="alert alert-danger" role="alert">' +
+        '<span class="text-center">' + message +
+        '</span>' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span' +
+        'aria-hidden="true">&times;</span></button>' +
+        '</div>');
 }
