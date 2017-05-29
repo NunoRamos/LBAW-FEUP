@@ -569,3 +569,11 @@ function getMostUsedTags($numberOfTags)
 
     return $stmt->fetchAll();
 }
+
+function readNotification($userId, $contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('UPDATE "Notification" SET "read" = TRUE WHERE "userId" = ? AND "contentId" = ?');
+    $stmt->execute([$userId, $contentId]);
+}
