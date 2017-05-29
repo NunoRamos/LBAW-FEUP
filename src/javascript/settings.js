@@ -1,6 +1,5 @@
 const SEARCH_FOR_TAGS = 1;
 const SEARCH_FOR_USERS = 0;
-let currentPage = 1;
 const resultsPerPage = 5;
 const tagsPerPage = 12;
 let searchType = 0;
@@ -15,13 +14,15 @@ $(document).ready(function () {
         $('a[href="#update-picture"]').tab('show');
     else if (window.location.href.indexOf('#account-settings') !== -1)
         $('a[href="#account-settings"]').tab('show');
-    else if (window.location.href.indexOf('moderation-area') !== -1)
+    else if (window.location.href.indexOf('moderation-area') !== -1) {
         $('a[href="#moderation-area"]').tab('show');
-    else if (window.location.href.indexOf('administration-area') !== -1)
+        changeTypeToPendingTags();
+    } else if (window.location.href.indexOf('administration-area') !== -1) {
         $('a[href="#administration-area"]').tab('show');
+        changeTypeToBanUsers()
+    }
 
-
-search()
+    search()
 });
 
 function changeTab(e) {
@@ -107,7 +108,8 @@ function previewFile() {
         var validFileType = ".jpg , .png , .jpeg";
         if (!(validFileType.toLowerCase().indexOf(extension) < 0)) {
 
-        preview.src = reader.result;}
+            preview.src = reader.result;
+        }
     }
 
     if (file) {
@@ -141,10 +143,8 @@ function changeTypeToPendingTags() {
     search();
 }
 
-    function search() {
-
-    if(searchType == SEARCH_FOR_USERS) {
-
+function search(currentPage) {
+    if (searchType === SEARCH_FOR_USERS) {
         $.ajax({
             url: "../../api/search_banned_users.php",
             dataType: "html",
@@ -154,7 +154,7 @@ function changeTypeToPendingTags() {
             }
         }).done(insertSearchBannedUsers)
 
-    }else if (searchType == SEARCH_FOR_TAGS){
+    } else if (searchType === SEARCH_FOR_TAGS) {
         $.ajax({
             url: "../../api/search_pending_tags.php",
             dataType: "html",
@@ -165,13 +165,11 @@ function changeTypeToPendingTags() {
         }).done(insertSearchPendingTags)
 
     }
+}
 
-    }
-
-    function insertSearchBannedUsers(response) {
+function insertSearchBannedUsers(response) {
     const searchBarContainer = $('#title-admin');
     searchBarContainer.siblings().remove();
-
 
     searchBarContainer.after(response);
     addEventToClickableElements();
@@ -179,7 +177,6 @@ function changeTypeToPendingTags() {
 function insertSearchPendingTags(response) {
     const searchBarContainer = $('#title-moderator');
     searchBarContainer.siblings().remove();
-
 
     searchBarContainer.after(response);
     addEventToClickableElements();

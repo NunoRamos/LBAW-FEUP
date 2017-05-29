@@ -25,7 +25,7 @@ function toggleTextBox(caller, edit) {
 
     if (boxDiv.children().length === 0) {
         let parentId = button.attr('data-content-id');
-        let questionId = $('#question').children().attr('id');
+        let questionId = $('#question').attr('data-content-id');
 
         let formUrl, buttonValue;
         if (edit === 1) {

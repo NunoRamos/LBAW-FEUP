@@ -1,7 +1,6 @@
 const SEARCH_FOR_QUESTIONS = 0;
 const SEARCH_FOR_USERS = 1;
 
-let currentPage = 1;
 const resultsPerPage = 10;
 let orderBy = 0;
 let searchType = 0;
@@ -61,14 +60,14 @@ function filterChanged() {
 }
 
 function insertLoadingIcon() {
-    $('#search-bar-container').after('<div class="panel panel-default loading"><img src="{$BASE_URL}images/rolling.svg"/></div>');
+    $('#search-bar-container').after('<div class="panel panel-default loading"><img src="../../images/rolling.svg"/></div>');
 }
 
 function searchFailed() {
     $('#search-bar-container').after('<div class="panel panel-default text-center"><div class="list-group-item">Could not connect to server.</div></div>');
 }
 
-function search() {
+function search(currentPage) {
     let selectedTags = getSelectedTags();
 
     const input = $('#search-bar').val();

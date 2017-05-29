@@ -177,7 +177,6 @@
             {if $canAcceptPendingTags}
                 <div id="moderation-area" class="panel panel-default tab-pane settings-tab">
                     <div id="title-moderator" class="panel-heading">Moderation Area</div>
-
                 </div>
             {/if}
             {if $canBanUsers}
@@ -191,5 +190,6 @@
 </div>
 <script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
 <script src="{$BASE_URL}javascript/fileuploader.js"></script>
+<script src="{$BASE_URL}javascript/clickable_div.js"></script>
 
 {include file="common/footer.tpl"}

@@ -7,7 +7,7 @@ function addEventToClickableElements() {
 
         let href = $(this).attr('href');
 
-        if (typeof href == 'undefined'){
+        if (typeof href === 'undefined') {
             return;
         }
 
