@@ -1,3 +1,10 @@
+const SEARCH_FOR_TAGS = 1;
+const SEARCH_FOR_USERS = 0;
+let currentPage = 1;
+const resultsPerPage = 5;
+const tagsPerPage = 12;
+let searchType = 0;
+
 $(document).ready(function () {
     $('#bio').trumbowyg();
     $('#settings-tabs').find('a.list-group-item.highlight').on('show.bs.tab', changeTab);
@@ -12,6 +19,9 @@ $(document).ready(function () {
         $('a[href="#moderation-area"]').tab('show');
     else if (window.location.href.indexOf('administration-area') !== -1)
         $('a[href="#administration-area"]').tab('show');
+
+
+search()
 });
 
 function changeTab(e) {
@@ -57,7 +67,7 @@ function addPendingTag(id) {
 
     $.ajax({
         method: "GET",
-        url: "../../api/add_pending_tag.php",
+        url: "../../api/add_tag.php",
         data: {
             id: id,
         }
@@ -111,4 +121,60 @@ function createErrorMessage(message) {
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span' +
         'aria-hidden="true">&times;</span></button>' +
         '</div>');
+}
+
+
+function changeTypeToBanUsers() {
+    searchType = SEARCH_FOR_USERS;
+    search();
+}
+
+
+function changeTypeToPendingTags() {
+    searchType = SEARCH_FOR_TAGS;
+    search();
+}
+
+    function search() {
+
+    if(searchType == SEARCH_FOR_USERS) {
+
+        $.ajax({
+            url: "../../api/search_banned_users.php",
+            dataType: "html",
+            data: {
+                page: currentPage,
+                resultsPerPage: resultsPerPage
+            }
+        }).done(insertSearchBannedUsers)
+
+    }else if (searchType == SEARCH_FOR_TAGS){
+        $.ajax({
+            url: "../../api/search_pending_tags.php",
+            dataType: "html",
+            data: {
+                page: currentPage,
+                resultsPerPage: tagsPerPage
+            }
+        }).done(insertSearchPendingTags)
+
+    }
+
+    }
+
+    function insertSearchBannedUsers(response) {
+    const searchBarContainer = $('#title-admin');
+    searchBarContainer.siblings().remove();
+
+
+    searchBarContainer.after(response);
+    addEventToClickableElements();
+}
+function insertSearchPendingTags(response) {
+    const searchBarContainer = $('#title-moderator');
+    searchBarContainer.siblings().remove();
+
+
+    searchBarContainer.after(response);
+    addEventToClickableElements();
 }

@@ -2,7 +2,11 @@
 {$canAcceptPendingTags = canAcceptPendingTags($USERID)}
 {$canBanUsers = canBanUsers($USERID)}
 
+<script src="{$BASE_URL}javascript/settings.js"></script>
 <link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
+
+
+<script src="{$BASE_URL}javascript/clickable_div.js"></script>
 
 <div class="container">
     <div class="row">
@@ -16,11 +20,11 @@
                 <a href="#account-settings" class="list-group-item highlight" role="tab" data-toggle="tab">Account
                     Settings</a>
                 {if $canAcceptPendingTags}
-                    <a href="#moderation-area" class="list-group-item highlight" role="tab" data-toggle="tab">Moderation
+                    <a href="#moderation-area" class="list-group-item highlight" role="tab" data-toggle="tab" onclick="changeTypeToPendingTags()">Moderation
                         Area</a>
                 {/if}
                 {if $canBanUsers}
-                    <a href="#administration-area" class="list-group-item highlight" role="tab" data-toggle="tab">Administration
+                    <a href="#administration-area" class="list-group-item highlight" role="tab" data-toggle="tab" onclick="changeTypeToBanUsers()">Administration
                         Area</a>
                 {/if}
             </div>
@@ -169,48 +173,14 @@
             </div>
             {if $canAcceptPendingTags}
                 <div id="moderation-area" class="panel panel-default tab-pane settings-tab">
-                    <div class="panel-heading">Moderation Area</div>
-                    <div class="panel-body">
-                        <h3>Pending Tags</h3>
-                        <hr class="divider">
-                        <div class="row">
-                            <div class="panel-body row">
-                                {foreach getAllPendingTags() as $tag}
-                                    {include file="content/common/tag_choice.tpl"}
-                                {/foreach}
-                            </div>
-                        </div>
-                    </div>
+                    <div id="title-moderator" class="panel-heading">Moderation Area</div>
+
                 </div>
             {/if}
             {if $canBanUsers}
                 <div id="administration-area" class="panel panel-default tab-pane settings-tab">
-                    <div class="panel-heading">Administration Area</div>
-                    <div class="panel-body">
-                        <h3>Banned Users</h3>
-                        <hr class="divider">
-                        <table class="table table-hover col-xs-12">
-                            <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Banned Until</th>
-                                <th>Reason</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {foreach getAllBannedUsers() as $user}
-                                <tr id="ban-user-tr-{$user['userId']}">
-                                    <td><a href="#">{getUserNameById($user['userId'])}</a></td>
-                                    <td>{$user['expires']}</td>
-                                    <td>{$user['reason']}</td>
-                                    <td><a id="unban-user-button"
-                                           class="btn btn-primary btn-danger pull-right ban-user-button"
-                                           onclick="unbanUser({$user['userId']})">Unban User</a></td>
-                                </tr>
-                            {/foreach}
-                            </tbody>
-                        </table>
-                    </div>
+                    <div id ="title-admin" class="panel-heading">Administration Area</div>
+
                 </div>
             {/if}
         </div>
@@ -218,5 +188,5 @@
 </div>
 <script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
 <script src="{$BASE_URL}javascript/fileuploader.js"></script>
-<script src="{$BASE_URL}javascript/settings.js"></script>
+
 {include file="common/footer.tpl"}

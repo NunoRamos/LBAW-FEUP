@@ -145,12 +145,12 @@ function getAllTags()
     return $stmt->fetchAll();
 }
 
-function getAllBannedUsers()
+function getFixNumberOfTags($number)
 {
     global $conn;
 
-    $stmt = $conn->prepare('SELECT * FROM "BannedUser"');
-    $stmt->execute();
+    $stmt = $conn->prepare('SELECT * FROM "Tag" LIMIT ?');
+    $stmt->execute([$number]);
     return $stmt->fetchAll();
 }
 
@@ -447,6 +447,24 @@ function addTagFromPendingTag($tagId)
         $conn->rollBack();
         throw $exception;
     }
+}
+
+function verifyNameIfIsValid($name)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "PendingTag" WHERE "name"=?');
+    $stmt->execute([$name]);
+
+    return $stmt->fetchAll();
+}
+
+function addPendingTag($name)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('INSERT INTO "PendingTag" ("name") VALUES (?)');
+    $stmt->execute([$name]);
 }
 
 function unbanUser($id)
