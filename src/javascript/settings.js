@@ -26,6 +26,7 @@ $(document).ready(function () {
             thumb.attr('src', response);
         }
     });*/
+   search();
 });
 
 function validatePassword() {
@@ -118,4 +119,34 @@ function previewFile(){
 function uploadImage() {
 
     $("#fileToUpload").trigger('click');
+}
+
+
+let currentPage = 1;
+const resultsPerPage = 5;
+
+
+
+
+function search() {
+
+    $.ajax({
+        url: "../../api/search_banned_users.php",
+        dataType: "html",
+        data: {
+            page: currentPage,
+            resultsPerPage: resultsPerPage
+        }
+    }).done(insertSearchBannedUsers)
+
+
+}
+
+function insertSearchBannedUsers(response) {
+    const searchBarContainer = $('#title-admin');
+    searchBarContainer.siblings().remove();
+
+
+    searchBarContainer.after(response);
+    addEventToClickableElements();
 }

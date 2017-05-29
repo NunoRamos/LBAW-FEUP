@@ -1,10 +1,7 @@
 {include file="common/header.tpl"}
 
-<script src="{$BASE_URL}javascript/settings.js"></script>
-<script src="{$BASE_URL}javascript/jquery.js"></script>
-<script src="{$BASE_URL}javascript/fileuploader.js"></script>
+<script src="{$BASE_URL}javascript/settings.js"></script
 
-<script src="{$BASE_URL}javascript/ban_user_pagination.js"></script>
 
 <script src="{$BASE_URL}javascript/clickable_div.js"></script>
 
@@ -149,30 +146,12 @@
             </div>
             </div>
             <div id='admin' class="panel panel-default tab-content settings-tab ">
-                <div class="panel-heading">Admin Settings</div>
-                <div class="panel-body">
-                    <h3>Banned Users</h3>
-                    <hr class="divider">
-                    <table class="table table-hover col-xs-12">
-
-                        <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Banned Until</th>
-                            <th>Reason</th>
-                        </tr>
-                        </thead>
-                        {include file="content/common/admin_tab.tpl"}
-
-
-
-                    </div>
+                <div id ="title-admin" class="panel-heading">Admin Settings</div>
 
                 </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 
 {include file="common/footer.tpl"}

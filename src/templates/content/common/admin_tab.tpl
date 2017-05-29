@@ -1,5 +1,17 @@
-<tbody>
+<div id = "banned-users-table" class="panel-body">
 
+<h3>Banned Users</h3>
+<hr class="divider">
+<table class="table table-hover col-xs-12">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Banned Until</th>
+        <th>Reason</th>
+    </tr>
+    </thead>
+
+<tbody>
 
 {foreach $users as $user}
     <div id ="banned-users">
@@ -19,5 +31,5 @@
 {if $numResults !== 0}
     {$numPages = $numResults/$resultsPerPage}
     {include file="content/common/pagination.tpl"}
-
 {/if}
+</div>

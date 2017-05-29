@@ -255,7 +255,7 @@ function getOrderedAllBannedUsers($offset, $limit)
         $countStmt = $conn->prepare('SELECT Count(*) FROM "BannedUser"');
         $countStmt->execute();
         $searchStmt = $conn->prepare('SELECT "userId", "reason", "expires" FROM "BannedUser" ORDER BY ? LIMIT ? OFFSET ?');
-        $searchStmt->execute([$orderCriteria . ' ' . $orderDirection, $limit, $offset]);
+        $searchStmt->execute(['"expires" DESC', $limit, $offset]);
 
         $conn->commit();
 
@@ -265,6 +265,31 @@ function getOrderedAllBannedUsers($offset, $limit)
         throw $exception;
     }
 
+}
+
+function getAllBannedUsers()
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "BannedUser"');
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function becomeAdmin($id)
+{
+    global $conn;
+    $admin =3 ;
+    $stmt = $conn->prepare('UPDATE "User" SET "privilegeLevelId" = ? WHERE "id" = ?');
+    $stmt->execute([$admin, $id]);
+}
+
+function becomeModerator($id)
+{
+    global $conn;
+    $moderator =2 ;
+    $stmt = $conn->prepare('UPDATE "User" SET "privilegeLevelId" = ? WHERE "id" = ?');
+    $stmt->execute([$moderator, $id]);
 }
 
 

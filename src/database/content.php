@@ -144,14 +144,7 @@ function getAllTags()
     $stmt->execute();
     return $stmt->fetchAll();
 }
-function getAllBannedUsers()
-{
-    global $conn;
 
-    $stmt = $conn->prepare('SELECT * FROM "BannedUser"');
-    $stmt->execute();
-    return $stmt->fetchAll();
-}
 
 function getAllPendingTags()
 {
@@ -559,3 +552,6 @@ function updateContentText($contentId, $text)
     $stmt = $conn->prepare('UPDATE "Content" SET "text" = ? WHERE "id" = ?');
     $stmt->execute([$text, $contentId]);
 }
+
+
+

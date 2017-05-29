@@ -12,6 +12,7 @@ $tags = $_POST['tags'];
 
 if (is_array($tags)) {
     foreach ($tags as $tag)
+
         $tag = htmlspecialchars($tag);
 } else {
     header('Location: ' . $_SERVER['HTTP_REFERER']);
