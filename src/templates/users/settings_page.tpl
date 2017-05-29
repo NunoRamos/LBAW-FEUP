@@ -96,26 +96,29 @@
                 <div class="panel-body">
                     <h3>Change profile picture</h3>
                     <hr class="divider">
-                    <div class="row  col-sm-12">
-                        <div class="form-horizontal col-sm-offset-4">
+                    <div class="row  col-sm-12 form-horizontal">
                             <form action="../../actions/upload_img.php" method="post" enctype="multipart/form-data">
-                                <img id="upload" class="img-circle form-group col-sm-offset-2"
+                                <div class="col-sm-12">
+                                    <div class="col-sm-8 pull-right">
+                                <img id="upload" class="img-circle form-group"
                                      src="{$BASE_URL}images/user-default.png" height="200" width="200"
                                      alt="Image preview">
-                                <div class="row form-groupcol-sm-offset-4">
-                                    <div class="col-sm-4">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-offset-3 col-sm-3">
                                         <div id="btn-upload" class="btn btn-default" onclick="uploadImage()">Choose your
                                             Image
                                         </div>
                                         <input type="file" name="fileToUpload" id="fileToUpload" class="form-group"
                                                onchange="previewFile()" style="display: none">
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
+
                                         <input type="submit" class="btn btn-default" value="Save Image" name="submit">
                                     </div>
                                 </div>
                             </form>
-                        </div>
                     </div>
                 </div>
             </div>

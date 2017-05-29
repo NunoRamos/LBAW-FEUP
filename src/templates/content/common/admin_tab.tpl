@@ -6,8 +6,8 @@
     <thead>
     <tr>
         <th>Username</th>
-        <th>Banned Until</th>
-        <th>Reason</th>
+        <th class="hidden-xs">Banned Until</th>
+        <th class="hidden-xs">Reason</th>
     </tr>
     </thead>
 
@@ -16,9 +16,9 @@
 {foreach $users as $user}
     <div id ="banned-users">
         <tr id ="ban-user-tr-{$user['userId']}">
-            <td><a href="#">{getUserNameById($user['userId'])}</a></td>
-            <td>{$user['expires']}</td>
-            <td>{$user['reason']}</td>
+            <td><a href="../users/profile_page.php?id={$user["userId"]}">{getUserNameById($user['userId'])}</a></td>
+            <td class="hidden-xs">{$user['expires']}</td>
+            <td class="hidden-xs">{$user['reason']}</td>
             <td><a id="unban-user-button"class="btn btn-primary btn-danger pull-right ban-user-button" onclick="unbanUser({$user['userId']})">Unban User</a></td>
         </tr>
 

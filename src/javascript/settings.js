@@ -99,9 +99,15 @@ function previewFile() {
     var preview = document.querySelector('#upload'); //selects the query named img
     var file = document.querySelector('input[type=file]').files[0]; //sames as here
     var reader = new FileReader();
-
+    var extension = file.name.substring(file.name.lastIndexOf('.'));
     reader.onloadend = function () {
-        preview.src = reader.result;
+
+
+        // Only process image files.
+        var validFileType = ".jpg , .png , .jpeg";
+        if (!(validFileType.toLowerCase().indexOf(extension) < 0)) {
+
+        preview.src = reader.result;}
     }
 
     if (file) {
