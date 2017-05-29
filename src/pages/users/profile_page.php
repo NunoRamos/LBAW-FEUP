@@ -16,6 +16,7 @@ $smarty->assign('questions', getUserQuestions($userId));
 $smarty->assign('numberQuestions', getNumberUserQuestions($userId));
 $smarty->assign('questionsAnswered', getUserQuestionAnswered($userId));
 $smarty->assign('numberQuestionsAnswered', getNumberUserReply($userId));
+$smarty->assign('rating', userScore($userId));
 
 
 $smarty->display('users/profile_page.tpl');

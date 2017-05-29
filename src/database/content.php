@@ -351,8 +351,16 @@ function readNotifications($questionId)
     $stmt->execute([$questionId, $questionId, $questionId, $questionId]);
 }
 
+function editPersonalDetails($userId, $name, $email, $bio)
+{
+    global $conn;
 
-function editName($id, $name)
+    $stmt = $conn->prepare('UPDATE "User" SET ("name", "email", "bio") = (?, ?, ?) WHERE "id" = ?;');
+    $stmt->execute([$name, $email, $bio, $userId]);
+}
+
+
+function editPhoto($id, $photo)
 {
     //FIXME: untested
     global $conn;
@@ -361,8 +369,8 @@ function editName($id, $name)
         // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
         //$conn->beginTransaction();
 
-        $stmt = $conn->prepare('UPDATE "User" SET "name" = ? WHERE "id" = ?;');
-        $stmt->execute([$name, $id]);
+        $stmt = $conn->prepare('UPDATE "User" SET "photo" = ? WHERE "id" = ?;');
+        $stmt->execute([$photo, $id]);
         //$conn->commit();
 
     } catch (PDOException $exception) {
@@ -374,53 +382,6 @@ function editName($id, $name)
         //$conn = null;
     }
 }
-
-function editBio($id, $bio)
-{
-    //FIXME: untested
-    global $conn;
-
-    try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "User" SET "bio" = ? WHERE "id" = ?;');
-        $stmt->execute([$bio, $id]);
-        //$conn->commit();
-
-    } catch (PDOException $exception) {
-        //$conn->rollBack();
-        {
-            echo $stmt . "<br>" . $exception->getMessage();
-        }
-
-        //$conn = null;
-    }
-}
-
-function editEmail($id, $email)
-{
-    //FIXME: untested
-    global $conn;
-
-    try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
-
-        $stmt = $conn->prepare('UPDATE "User" SET "email" = ? WHERE "id" = ?;');
-        $stmt->execute([$email, $id]);
-        //$conn->commit();
-
-    } catch (PDOException $exception) {
-        //$conn->rollBack();
-        {
-            echo $stmt . "<br>" . $exception->getMessage();
-        }
-
-        //$conn = null;
-    }
-}
-
 
 function deleteQuestion($questionId)
 {

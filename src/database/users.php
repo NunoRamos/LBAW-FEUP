@@ -49,18 +49,20 @@ function checkCurrentPassword($id, $currentPassword){
         return false;
 }
 
+
+
 function changePassword($id, $newPassword){
 
     //FIXME: untested
     global $conn;
 
     try {
-        // $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
-        //$conn->beginTransaction();
+        $conn->query('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
+        $conn->beginTransaction();
         $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
         $stmt = $conn->prepare('UPDATE "User" SET "password" = ? WHERE "id" = ?;');
         $stmt->execute([$hashed_password, $id]);
-        //$conn->commit();
+        $conn->commit();
 
     } catch (PDOException $exception) {
         //$conn->rollBack();
@@ -87,6 +89,18 @@ function getUserEmailById($id)
     $stmt = $conn->prepare('SELECT "User"."email" FROM "User" WHERE "User".id = ?');
     $stmt->execute([$id]);
     return $stmt->fetch()["email"];
+}
+
+function getUserPhotoById($id)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT "User"."photo" FROM "User" WHERE "User".id = ?');
+    $stmt->execute([$id]);
+    $photo = $stmt->fetch()["photo"];
+    if ($photo == NULL)
+        return "user-default.png";
+    else
+        return $photo;
 }
 
 function getUserBioById($id)
@@ -225,3 +239,30 @@ function getOrderedUsersByName($name, $offset, $limit, $order)
     }
 
 }
+
+function getUserReplyRating($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare(
+        'SELECT SUM("Content"."rating") FROM final."Content", final."Reply" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['sum'];
+}
+
+function getUserQuestionRating($userId)
+{
+    global $conn;
+    $stmt = $conn->prepare('SELECT SUM("Content"."rating") FROM final."Content", final."Question" WHERE "creatorId" = ? AND "contentId" = "Content".id');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['sum'];
+}
+
+function userScore($userId)
+{
+    $question = getUserQuestionRating($userId);
+	$reply = getUserReplyRating($userId);
+    return $question + 3 * $reply;
+}
+
+
+
