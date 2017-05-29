@@ -16,6 +16,7 @@
 			{/if}
 			<div class="well no-bottom-margin">
 				<h2 class="center">{$user['name']}</h2>
+				<h4 class="center">Score: {$rating}</h4>
                 <i class="glyphicon glyphicon-envelope"></i> {$user['email']}<br>
                 <i class="glyphicon glyphicon-paperclip"></i> {$user['bio']}<br>
                 <i class="glyphicon glyphicon-time"></i> {$user['signupDate']}
