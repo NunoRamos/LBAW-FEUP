@@ -1,57 +1,45 @@
 $(document).ready(function () {
-    $('.nav .list-group-item:first').addClass('active');
-    $('.settings-tab').slice(1).hide();
-    $('#edit-profile-nav a').click(function (event) {
-        event.preventDefault();
-        var content = $(this).attr('href');
-        $(this).addClass('active');
-        $(this).siblings().removeClass('active');
-        $(content).show();
-        $(content).siblings('.tab-content').hide();
-    });
+    $('#bio').trumbowyg();
+    $('#settings-tabs').find('a.list-group-item.highlight').on('show.bs.tab', changeTab);
 
-   /* var thumb = $('#thumb');
-
-    new AjaxUpload('imageUpload', {
-        action: $('#newHotnessForm').attr('action'),
-        name: 'image',
-        onSubmit: function(file, extension) {
-            $('#preview').addClass('loading');
-        },
-        onComplete: function(file, response) {
-            thumb.load(function(){
-                $('#preview').removeClass('loading');
-                thumb.unbind();
-            });
-            thumb.attr('src', response);
-        }
-    });*/
-   search();
+    if (window.location.href.indexOf('#personal-details') !== -1)
+        $('a[href="#personal-details"]').tab('show');
+    else if (window.location.href.indexOf('#update-picture') !== -1)
+        $('a[href="#update-picture"]').tab('show');
+    else if (window.location.href.indexOf('#account-settings') !== -1)
+        $('a[href="#account-settings"]').tab('show');
+    else if (window.location.href.indexOf('moderation-area') !== -1)
+        $('a[href="#moderation-area"]').tab('show');
+    else if (window.location.href.indexOf('administration-area') !== -1)
+        $('a[href="#administration-area"]').tab('show');
 });
 
+function changeTab(e) {
+    $(e.target).siblings().removeClass('selected');
+    $(e.target).addClass('selected');
+}
+
 function validatePassword() {
-    let newPassword = $("#new-password").val();
-    let repeatPassword = $("#new-repeat-password").val();
-    let currPassword = $("#curr-password").val();
-    let errorMessage = $("#new-password-failed");
+    const newPassword = $("#new-password").val();
+    const repeatPassword = $("#new-repeat-password").val();
+    const errorMessage = $("#password-error-message");
 
+    errorMessage.children().remove();
 
-    if (repeatPassword !== newPassword) {
-        errorMessage.text("Passwords do not match");
-        errorMessage.show();
+    if (newPassword.length < 8) {
+        errorMessage.append(createErrorMessage('New password must be at least 8 characters long.'));
         return false;
     }
 
- /*   if (currPassword == newPassword) {
-        errorMessage.text("New password is the same to the current password");
-        errorMessage.show();
+
+    if (repeatPassword !== newPassword) {
+        errorMessage.append(createErrorMessage('Passwords do not match.'));
         return false;
-    }*/
+    }
+
+
     return true;
 }
-
-
-
 
 function removePendingTag(id) {
 
@@ -59,7 +47,7 @@ function removePendingTag(id) {
         method: "GET",
         url: "../../api/remove_pending_tag.php",
         data: {
-            id:id,
+            id: id,
         }
     }).done(removePendingTagDiv(id));
 
@@ -71,16 +59,13 @@ function addPendingTag(id) {
         method: "GET",
         url: "../../api/add_pending_tag.php",
         data: {
-            id:id,
+            id: id,
         }
     }).done(removePendingTagDiv(id));
 }
 
-
 function removePendingTagDiv(id) {
-
     $('div[data-tag-id=' + id + ']').remove();
-
 }
 
 function unbanUser(id) {
@@ -90,20 +75,20 @@ function unbanUser(id) {
         method: "GET",
         url: "../../api/unban_user.php",
         data: {
-            id:id,
+            id: id,
         }
     }).done(removeBannedUserDiv(id));
 
 }
 
-function removeBannedUserDiv(id){
-    $("#ban-user-tr-"+id).remove();
+function removeBannedUserDiv(id) {
+    $("#ban-user-tr-" + id).remove();
 }
 
-function previewFile(){
+function previewFile() {
     var preview = document.querySelector('#upload'); //selects the query named img
-    var file    = document.querySelector('input[type=file]').files[0]; //sames as here
-    var reader  = new FileReader();
+    var file = document.querySelector('input[type=file]').files[0]; //sames as here
+    var reader = new FileReader();
 
     reader.onloadend = function () {
         preview.src = reader.result;
@@ -114,39 +99,16 @@ function previewFile(){
     } else {
         preview.src = "";
     }
-
 }
-function uploadImage() {
 
+function uploadImage() {
     $("#fileToUpload").trigger('click');
 }
-
-
-let currentPage = 1;
-const resultsPerPage = 5;
-
-
-
-
-function search() {
-
-    $.ajax({
-        url: "../../api/search_banned_users.php",
-        dataType: "html",
-        data: {
-            page: currentPage,
-            resultsPerPage: resultsPerPage
-        }
-    }).done(insertSearchBannedUsers)
-
-
-}
-
-function insertSearchBannedUsers(response) {
-    const searchBarContainer = $('#title-admin');
-    searchBarContainer.siblings().remove();
-
-
-    searchBarContainer.after(response);
-    addEventToClickableElements();
+function createErrorMessage(message) {
+    return $('<div class="alert alert-danger" role="alert">' +
+        '<span class="text-center">' + message +
+        '</span>' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span' +
+        'aria-hidden="true">&times;</span></button>' +
+        '</div>');
 }
