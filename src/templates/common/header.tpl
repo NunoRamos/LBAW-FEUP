@@ -7,7 +7,9 @@
     <title>Reply Planet</title>
     <link rel="stylesheet" href="{$BASE_URL}css/bootstrap.min.css">
     <link rel="stylesheet" href="{$BASE_URL}css/custom.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
     <script src="{$BASE_URL}javascript/header.js"></script>
 </head>
 <body>

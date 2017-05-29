@@ -1,24 +1,15 @@
 $(document).ready(function () {
-    $('.nav .list-group-item:first').addClass('active');
-    $('.settings-tab').slice(1).hide();
-    $('#edit-profile-nav a').click(function (event) {
-        event.preventDefault();
-        const content = $(this).attr('href');
-        $(this).addClass('active');
-        $(this).siblings().removeClass('active');
-        $(content).show();
-        $(content).siblings('.tab-content').hide();
+    $('#bio').trumbowyg();
 
-
-    });
-
-
-    if (window.location.href.indexOf('#personal-details') !== -1) {
+    if (window.location.href.indexOf('#personal-details') !== -1)
         $('#personal-details').tab('show');
-    }
-    else if (window.location.href.indexOf('#account-settings') !== -1) {
-        $('#account-settings').modal('show');
-    }
+    else if (window.location.href.indexOf('#account-settings') !== -1)
+        $('#account-settings').tab('show');
+
+    $('#settings-tabs').find('a.list-group-item.highlight').on('click', function (e) {
+        $(e.target).siblings().removeClass('selected');
+        $(e.target).addClass('selected');
+    });
 });
 
 function validatePassword() {
@@ -43,7 +34,6 @@ function validatePassword() {
     return true;
 }
 
-
 function removePendingTag(id) {
 
     $.ajax({
@@ -67,11 +57,8 @@ function addPendingTag(id) {
     }).done(removePendingTagDiv(id));
 }
 
-
 function removePendingTagDiv(id) {
-
     $('div[data-tag-id=' + id + ']').remove();
-
 }
 
 function unbanUser(id) {
@@ -105,9 +92,8 @@ function previewFile() {
     } else {
         preview.src = "";
     }
-
 }
-function uploadImage() {
 
+function uploadImage() {
     $("#fileToUpload").trigger('click');
 }

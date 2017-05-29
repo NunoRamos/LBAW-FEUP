@@ -2,61 +2,66 @@
 {$canAcceptPendingTags = canAcceptPendingTags($USERID)}
 {$canBanUsers = canBanUsers($USERID)}
 
-<script src="{$BASE_URL}javascript/settings.js"></script>
-<script src="{$BASE_URL}javascript/jquery.js"></script>
-<script src="{$BASE_URL}javascript/fileuploader.js"></script>
+<link rel="stylesheet" href="{$BASE_URL}lib/trumbowyg/ui/trumbowyg.min.css">
 
 <div class="container">
     <div class="row">
         <div class="col-md-3">
             <p class="lead">{$NAME}</p>
-            <div class="list-group nav" id="edit-profile-nav">
-                <a href="#personal-details" class="list-group-item">Personal Details</a>
-                <a href="#account-settings" class="list-group-item">Account Settings</a>
-                {if $canAcceptPendingTags}<a href="#moderator" class="list-group-item">Moderation Area</a>{/if}
-                {if $canBanUsers}<a href="#admin" class="list-group-item">Administration Area</a>{/if}
+            <div class="list-group nav" id="settings-tabs">
+                <a href="#personal-details" class="list-group-item highlight selected" role="tab" data-toggle="tab">Personal
+                    Details</a>
+                <a href="#account-settings" class="list-group-item highlight" role="tab" data-toggle="tab">Account
+                    Settings</a>
+                {if $canAcceptPendingTags}
+                    <a href="#moderator" class="list-group-item highlight" role="tab" data-toggle="tab">Moderation
+                        Area</a>
+                {/if}
+                {if $canBanUsers}
+                    <a href="#admin" class="list-group-item highlight" role="tab" data-toggle="tab">Administration
+                        Area</a>
+                {/if}
             </div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-9 tab-content">
             <input type="hidden" id="token" name="token" value="{$TOKEN}">
 
-            <div id="personal-details" class="panel panel-default tab-content settings-tab ">
+            <div id="personal-details" class="panel panel-default tab-pane settings-tab active">
                 <div class="panel-heading">Personal Details</div>
                 <div class="panel-body">
-                    <h3>Personal Details</h3>
+                    <h3>Personal Information</h3>
                     <hr class="divider">
-                    <form class="col-xs-12" method="post"
+                    <form class="row" method="post"
                           action="../../actions/update_personal_info.php">
                         <input type="hidden" name="token" value="{$TOKEN}">
 
-                        <div class="form-group">
-                            <div class="input-group col-xs-12 col-sm-5">
-                                <div class="input-group-addon glyphicon glyphicon-user"></div>
+                        <div class="col-xs-12 col-sm-6 large-bottom-margin">
+                            <div class="input-group">
+                                <span class="input-group-addon glyphicon glyphicon-user"></span>
                                 <input id="name" class="form-control" value="{getUserNameById($USERID)}"
                                        name="name" title="Name" placeholder="John Doe" required/>
                             </div>
+                        </div>
 
-                            <div class="input-group col-xs-12 col-sm-5">
-                                <div class="input-group-addon glyphicon glyphicon-envelope"></div>
+                        <div class=" col-xs-12 col-sm-6 large-bottom-margin">
+                            <div class="input-group">
+                                <span class="input-group-addon glyphicon glyphicon-envelope"></span>
                                 <input id="email" type="email" class="form-control"
                                        value="{getUserEmailById($USERID)}" name="email" title="Email"
                                        placeholder="john@doe.com" required/>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="bio" class="col-xs-12">Bio</label>
-                            <div class="col-xs-12">
-                                <input id="bio" class="form-control col-xs-12" value="{getUserBioById($USERID)}"
-                                       name="bio"/>
-                            </div>
+
+                        <div class="col-xs-12 large-top-bottom-margin">
+                            <label for="bio" class="large-text">Describe yourself</label>
+                            <div class="form-control" id="bio" name="bio">{getUserBioById($USERID)}</div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <input class="btn btn-default form-control" type="submit" value="Update Details">
-                            </div>
+                        <div class="col-xs-12">
+                            <input class="btn btn-default form-control" type="submit" value="Update Details"
+                                   placeholder="Describe yourself">
                         </div>
                     </form>
                 </div>
@@ -87,8 +92,7 @@
                 </div>
             </div>
 
-
-            <div id="account-settings" class="panel panel-default tab-content settings-tab ">
+            <div id="account-settings" class="panel panel-default tab-pane settings-tab">
                 <div class="panel-heading">Account Settings</div>
                 <div class="panel-body">
                     <h3>Change Password</h3>
@@ -130,7 +134,7 @@
                 </div>
             </div>
             {if $canAcceptPendingTags}
-                <div id='moderator' class="panel panel-default tab-content settings-tab ">
+                <div id='moderator' class="panel panel-default tab-pane settings-tab ">
                     <div class="panel-heading">Moderation Area</div>
                     <div class="panel-body">
                         <h3>Pending Tags</h3>
@@ -146,7 +150,7 @@
                 </div>
             {/if}
             {if $canBanUsers}
-                <div id='admin' class="panel panel-default tab-content settings-tab ">
+                <div id='admin' class="panel panel-default tab-pane settings-tab ">
                     <div class="panel-heading">Administration Area</div>
                     <div class="panel-body">
                         <h3>Banned Users</h3>
@@ -178,4 +182,7 @@
         </div>
     </div>
 </div>
+<script src="{$BASE_URL}lib/trumbowyg/trumbowyg.min.js"></script>
+<script src="{$BASE_URL}javascript/fileuploader.js"></script>
+<script src="{$BASE_URL}javascript/settings.js"></script>
 {include file="common/footer.tpl"}
