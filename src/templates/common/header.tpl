@@ -105,6 +105,7 @@
                 <div class="tab-content row">
                     <form id="sign-in" class="modal-form tab-pane fade in active col-xs-12"
                           method="post" action="{$BASE_URL}actions/sign_in.php">
+                        <input type="hidden" name="token" value="{$TOKEN}">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-envelope"></div>
                             <input type="text" class="form-control" name="email" placeholder="Email" required
@@ -125,6 +126,7 @@
                     </form>
                     <form id="sign-up" class="modal-form tab-pane fade col-xs-12"
                           method="post" action="{$BASE_URL}actions/sign_up.php" onsubmit="return validateSignUp()">
+                        <input type="hidden" name="token" value="{$TOKEN}">
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-user"></div>
                             <input type="text" class="form-control" name="name" placeholder="Real Name" required
