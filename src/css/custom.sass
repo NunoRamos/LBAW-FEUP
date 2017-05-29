@@ -88,17 +88,6 @@ body
   white-space: nowrap
   width: 100%
 
-@media (min-width: $screen-sm-min)
-  .dropdown ul.dropdown-menu:before
-    content: ""
-    border-bottom: 10px solid #fff
-    border-right: 10px solid transparent
-    border-left: 10px solid transparent
-    position: absolute
-    top: -10px
-    right: 13px
-    z-index: 10
-
 /******************************
  * Question Page
  ******************************/
@@ -133,25 +122,8 @@ button .glyphicon-plus
 button .glyphicon-minus
   color: black
 
-ul#edit-options.dropdown-menu:before
-  content: ""
-  border-bottom: 12px solid #fff
-  border-right: 10px solid transparent
-  border-left: 10px solid transparent
-  position: absolute
-  top: -10px
-  right: 22%
-  z-index: 10
-
-ul#edit-options.dropdown-menu:after
-  content: ""
-  border-bottom: 13px solid rgba(0, 0, 0, 0.14902)
-  border-right: 10px solid transparent
-  border-left: 10px solid transparent
-  position: absolute
-  top: -12px
-  right: 22%
-  z-index: 9
+button .glyphicon-menu-down
+  color: black
 
 #tags
   a
@@ -234,6 +206,10 @@ a.filter
 
 .padding-bio
   padding: 5px 10px
+
+.some-margin
+  margin-bottom: 5px
+  margin-top: 5px
 
 /******************************
  * Bootstrap Overrides
@@ -484,3 +460,15 @@ div.loading
   text-overflow: ellipsis
   white-space: nowrap
   width: 100%
+
+.nav-justified > li
+  display: table-cell
+  width: 1%
+
+.nav-justified > li > a
+  border-bottom: 1px solid #ddd !important
+  border-radius: 4px 4px 0 0 !important
+  margin-bottom: 0 !important
+
+.remove-panel-padding
+  padding: 0 !important
