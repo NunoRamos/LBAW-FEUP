@@ -10,22 +10,28 @@
 <div id="question" class="container col-xs-12 col-md-8 full-screen-xs">
     <div id="{$content["id"]}" class="panel panel-default">
         <div id="title-container" class="panel-heading">
-            <h3 id="question-title-header" class="panel-title inline">{$content["title"]}</h3>
-            {assign "questionId" $content["id"]}
-            <form id="edit-title-form" style="display: none" class="panel-title inline" method="post"
-                  action="../../actions/edit_content.php">
-                <input type="hidden" name="content-id" value="{$content["id"]}">
-                <input type="hidden" name="edit-type" value="{$TITLE}">
-                <input class="edit-title-input" name="title" value="{$content["title"]}">
-                <input class="btn btn-default submit-answer-btn btn-xs" type="submit" value="Edit Title">
-            </form>
             {if canEditContent($USERID, $content["id"])}
                 <div class="btn-group pull-right">
-                    <button data-content-id="{$content["id"]}" class="btn btn-xs" onclick="toggleTitleInput()"><span
-                                class="glyphicon glyphicon-pencil"></span>
+                    <button data-content-id="{$content["id"]}" class="btn btn-xs" onclick="toggleTitleInput()">
+                        <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                 </div>
             {/if}
+            <h3 id="question-title-header" class="panel-title">{$content["title"]}</h3>
+            {assign "questionId" $content["id"]}
+            <form id="edit-title-form" style="display: none" class="" method="post"
+                  action="../../actions/edit_content.php">
+                <input type="hidden" name="content-id panel-title" value="{$content["id"]}">
+                <input type="hidden" name="edit-type" value="{$TITLE}">
+                <div class="pull-right small-right-margin">
+                    <button class="btn btn-xs" type="submit">
+                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                    </button>
+                </div>
+                <div class="edit-title-input">
+                    <input name="title" class="full-width" value="{$content["title"]}" title="Title">
+                </div>
+            </form>
         </div>
         <div id="main-body" class="panel-body">
             <div class="small-bottom-margin">

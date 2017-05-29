@@ -11,7 +11,6 @@
                     <span class="small-text">{$content["creationDate"]}</span>
                 </div>
                 <div class="content-text text-wrap">
-
                     {if $content.deleted}
                         [deleted]
                     {else}
@@ -20,7 +19,45 @@
                 </div>
             </div>
             <div class="col-xs-2 text-align-right no-gutter btn-toolbar">
-                {if canDeleteContent($USERID, $content.id)}
+                {assign "canDeleteContent" canDeleteContent($USERID, $content.id)}
+                {assign "canEditContent" canEditContent($USERID, $content.id)}
+                {assign "canReply" canReply($USERID, $content.id)}
+                {assign "canFollowContent" canFollowContent($USERID, $content.id)}
+                {if $canDeleteContent || $canEditContent || $canReply || $canFollowContent}
+                    <span class="dropdown-toggle glyphicon glyphicon-chevron-down pull-right" data-toggle="dropdown"></span>
+                    <ul id="edit-options" class="dropdown-menu dropdown-responsive">
+                        {if canDeleteContent}
+                            <li>
+                                <form action="{$BASE_URL}actions/delete_content.php" method="post">
+                                    <input type="hidden" value="{$content.id}" name="content-id">
+                                    <input id="delete-content-input" type="submit" value="Delete">
+                                </form>
+                            </li>
+                        {/if}
+                        {if canEditContent}
+                            <li>
+                                <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Edit</span>
+                            </li>
+                        {/if}
+                        {if canReply}
+                            <li>
+                                <span data-content-id="{$content.id}" onclick="toggleTextBox(this,0)">Comment</span>
+                            </li>
+                        {/if}
+                        {if canFollowContent}
+                            {if followsContent($USERID, $content.id)}
+                                {assign "text" "Follow"}
+                            {else}
+                                {assign "text" "Unfollow"}
+                            {/if}
+                            <li>
+                                <span onclick="{if $followsContent}unfollowContent(this, {$content.id}){else}followContent(this, {$content.id}){/if}"
+                                  data-content-id="{$content.id}">{$text}</span>
+                            </li>
+                        {/if}
+                    </ul>
+                {/if}
+                <!--      {if canDeleteContent($USERID, $content.id)}
                     <form class="btn-group pull-right" action="{$BASE_URL}actions/delete_content.php" method="post">
                         <input type="hidden" value="{$content.id}" name="content-id">
                         <button type="submit" class="btn btn-danger btn-xs"><span
@@ -52,7 +89,7 @@
                             <span class="glyphicon {if $followsContent}glyphicon-star-empty{else}glyphicon-star{/if}"></span>
                         </button>
                     </div>
-                {/if}
+                {/if}-->
             </div>
         </div>
     </div>
