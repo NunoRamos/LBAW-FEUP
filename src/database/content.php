@@ -578,3 +578,26 @@ function removeTagFromQuestion($tagId, $contentId)
     $stmt = $conn->prepare('DELETE FROM "QuestionTags" WHERE "contentId" = ? AND "tagId" = ?');
     $stmt->execute([$contentId, $tagId]);
 }
+
+function addTagToQuestion($tagId, $contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('INSERT INTO "QuestionTags"("contentId", "tagId") VALUES(?, ?)');
+    $stmt->execute([$contentId, $tagId]);
+}
+
+function getAllTagsExceptQuestionTags($contentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('
+        SELECT "id", "name" FROM "Tag"
+        WHERE "id" NOT IN (
+        SELECT "tagId" FROM "QuestionTags"
+        WHERE "contentId" = ?);
+        ');
+    $stmt->execute([$contentId]);
+
+    return $stmt->fetchAll();
+}

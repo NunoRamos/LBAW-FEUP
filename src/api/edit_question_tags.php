@@ -14,12 +14,35 @@ if (!isset($userId) || !isset($_POST['editType'])){
 
 switch ($_POST['editType']) {
     case EditQuestionTagType::ADD_TAGS:
+        $tags = $_POST['tags'];
+        $contentId = intval($_POST['contentId']);
+        addTagsToQuestion();
+        $results = getAllTagsExceptQuestionTags($contentId);
+        $smarty->assign('tags', $results);
+        $smarty->display('content/common/tags_select.tpl');
         break;
     case EditQuestionTagType::REMOVE_TAG:
         $tagId = intval($_POST['tagId']);
         $contentId = intval($_POST['contentId']);
         removeTagFromQuestion($tagId, $contentId);
         break;
+    case EditQuestionTagType::GET_QUESTION_TAGS:
+        $contentId = intval($_POST['contentId']);
+        $results = getAllTagsExceptQuestionTags($contentId);
+        error_log(print_r($results, TRUE));
+        $smarty->assign('tags', $results);
+        $smarty->display('content/common/tags_select.tpl');
+        break;
     default:
         break;
+}
+
+
+function addTagsToQuestion() {
+    global $tags;
+    global $contentId;
+
+    foreach ($tags as $tag){
+        addTagToQuestion($tag[0],$contentId);
+    }
 }
