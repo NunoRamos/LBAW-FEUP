@@ -29,7 +29,6 @@ switch ($_POST['editType']) {
     case EditQuestionTagType::GET_QUESTION_TAGS:
         $contentId = intval($_POST['contentId']);
         $results = getAllTagsExceptQuestionTags($contentId);
-        error_log(print_r($results, TRUE));
         $smarty->assign('tags', $results);
         $smarty->display('content/common/tags_select.tpl');
         break;
