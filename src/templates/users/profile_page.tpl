@@ -15,7 +15,7 @@
                 <form action="{$BASE_URL}actions/become_moderator.php" >
 
                     <input type="submit" class="btn btn-primary btn-danger pull-right"
-                           id="#button-become-Moderator" value="Moderator Admin">
+                           id="#button-become-Moderator" value="Become Admin">
 
                 </form>
                 <form action="{$BASE_URL}actions/become_admin.php" >
