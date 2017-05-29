@@ -1,77 +1,132 @@
 {include file="../common/header.tpl"}
 
-	
-<div class="row">
-    <div class="col-xs-12 col-sm-3 style="padding:0px">
+
+<!--<div class="col-xs-12 col-sm-3 full-screen-xs">
         <div class="panel panel-default">
-			<img class="center-block img-responsive img-profile" src="{$BASE_URL}images/user-default.png" alt="User Image">
-		</div>
-		<div class="panel panel-default">
-			{if $USERID}
-			{if $PRIVILEGELEVELID = 3}
-			<button type="button" class="btn btn-primary btn-danger pull-right" data-toggle="modal"
+            <img class="center-block img-responsive img-profile" src="{$BASE_URL}images/user-default.png" alt="User Image">
+        </div>
+        <div class="panel panel-default">
+            <!--  {if $USERID}
+                {if $PRIVILEGELEVELID = 3}
+                    <button type="button" class="btn btn-primary btn-danger pull-right" data-toggle="modal"
                             data-target="#ban-user-modal">Ban User
-                    	</button>
-                <form action="{$BASE_URL}actions/become_moderator.php" >
+                    </button>
+                    <form action="{$BASE_URL}actions/become_moderator.php" >
 
-                    <input type="submit" class="btn btn-primary btn-danger pull-right"
-                           id="#button-become-Moderator" value="Become Admin">
+                        <input type="submit" class="btn btn-primary btn-danger pull-right"
+                               id="#button-become-Moderator" value="Become Admin">
 
-                </form>
-                <form action="{$BASE_URL}actions/become_admin.php" >
+                    </form>
+                    <form action="{$BASE_URL}actions/become_admin.php" >
 
-                    <input type="submit" class="btn btn-primary btn-danger pull-right"
-                           id="#button-become-admin" value="Become Admin">
+                        <input type="submit" class="btn btn-primary btn-danger pull-right"
+                               id="#button-become-admin" value="Become Admin">
 
-                </form>
-			{/if}
-			{/if}
+                    </form>
+                {/if}
+            {/if}
 
-			<div class="well no-bottom-margin">
-				<h2 class="center">{$user['name']}</h2>
-				<h4 class="center">Score: {$rating}</h4>
+            <div class="well no-bottom-margin">
+                <h2 class="center">{$user['name']}</h2>
+                <h4 class="center">Score: {$rating}</h4>
                 <i class="glyphicon glyphicon-envelope"></i> {$user['email']}<br>
                 <i class="glyphicon glyphicon-paperclip"></i> {$user['bio']}<br>
                 <i class="glyphicon glyphicon-time"></i> {$user['signupDate']}
             </div>
         </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <ul class="nav nav-tabs">
-					<li class="active panel-title"><a data-toggle="tab" href="#questions">Questions ({$numberQuestions})</a></li>
-					<li><a data-toggle="tab" class="panel-title" href="#answers">Answered Questions ({$numberQuestionsAnswered})</a></li>
-				</ul>
-            </div>
-			<div class="tab-content">
-            <div id="questions" class="tab-pane fade in active list-group">
-                {foreach $questions as $content}
-                    {include file="content/common/question_overview.tpl"}
-                {/foreach}
-            </div>
-			<div id="answers" class="tab-pane fade list-group">
-                {foreach $questionsAnswered as $content}
-                    {include file="content/common/question_overview.tpl"}
-                {/foreach}
-            </div>
-			</div>
+    </div>-->
+<div class="container col-sm-3 col-xs-12 full-screen-xs" style="height: 100%">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-style">
+            <h3 class="panel-title inline">{$user['name']}</h3>
+            {if $PRIVILEGELEVELID == 3}
+                <div class="btn-group dropdown pull-right">
+                    <span class="glyphicon glyphicon-menu-down dropdown-toggle"
+                          data-toggle="dropdown"></span>
+                    <ul class="dropdown-menu dropdown-responsive">
+                        <li>
+                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Ban User</span>
+                        </li>
+                        <li>
+                            {if $user['privilegeLevelId'] == 2}
+                                <span data-content-id="{$content.id}"
+                                      onclick="toggleTextBox(this,1)">Remove Moderator</span>
+                            {else}
+                                <span data-content-id="{$content.id}"
+                                      onclick="toggleTextBox(this,1)">Make Moderator</span>
+                            {/if}
+                        </li>
+                        <li>
+                            {if $user['privilegeLevelId'] == 3}
+                                <span data-content-id="{$content.id}"
+                                      onclick="toggleTextBox(this,1)">Remove Admin</span>
+                            {else}
+                                <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Make Admin</span>
+                            {/if}
+                        </li>
+                    </ul>
+                </div>
+            {/if}
         </div>
-    </div>
-	<div class="col-xs-12 col-sm-3">
-        <div class="panel panel-default">
-        <div class="panel-heading">
-            <h1 class="panel-title">Tags</h1>
+        <img class="center-block img-responsive img-profile"
+             src="{$BASE_URL}images/user-default.png" alt="User Image">
+        <!-- src="{$BASE_URL}{if isset($user["photo"]) && !is_null($user["photo"])}images/{$user["photo"]}{else}images/user-default.png{/if}" -->
+        <div class="panel-body">
+            <div class="row some-margin" title="Email">
+                <span class="glyphicon glyphicon-envelope col-xs-2"></span>
+                <span class="col-xs-10">{$user['email']}</span>
+            </div>
+            <div class="row some-margin" title="Bio">
+                <span class="glyphicon glyphicon-paperclip col-xs-2"></span>
+                <span class="col-xs-10">{$user['bio']}</span>
+            </div>
+            <div class="row some-margin" title="Creation Date">
+                <span class="glyphicon glyphicon-time col-xs-2"></span>
+                <span class="col-xs-10">{$user['signupDate']}</span>
+            </div>
+            <div class="row some-margin" title="Score">
+                <span class="glyphicon glyphicon-heart-empty col-xs-2"></span>
+                <span class="col-xs-10">{{$rating}}</span>
+            </div>
         </div>
-        <div class="panel-body list-group">
-              {foreach $tags as $tag}
-                <a href="../content/search_results.php?activeTags={$tag['name']}" class="list-group-item">{$tag['name']}</a>
-            {/foreach}
-        </div>
-    </div>
     </div>
 </div>
 
+<div class="col-sm-9 full-screen-xs">
+    <div class="container col-xs-12 full-screen-xs">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-style">
+                <h3 class="panel-title">Questions ({$numberQuestions})</h3>
+            </div>
+            <div class="remove-panel-padding panel-body">
+                {if sizeof($questions) == 0}
+                    <p class="list-group-item">No questions created.</p>
+                {else}
+                    {foreach $questions as $content}
+                        {include file="content/common/question_overview.tpl"}
+                    {/foreach}
+                {/if}
+            </div>
+        </div>
+    </div>
+
+    <div class="container col-xs-12 full-screen-xs">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Answered Questions ({$numberQuestionsAnswered})</h3>
+            </div>
+            <div class="remove-panel-padding panel-body">
+                {if sizeof($questionsAnswered) == 0}
+                    <p class="list-group-item">No questions answered.</p>
+                {else}
+                    {foreach $questionsAnswered as $content}
+                        {include file="content/common/question_overview.tpl"}
+                    {/foreach}
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="ban-user-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -86,27 +141,28 @@
             <div class="modal-body">
                 <div class="tab-content row">
                     <form id="ban-user" class="modal-form tab-pane fade in active col-xs-12"
-                         method="post" action="{$BASE_URL}actions/ban_user.php">
-						<input type="hidden" class="form-control" name="id" value="15" />
+                          method="post" action="{$BASE_URL}actions/ban_user.php">
+                        <input type="hidden" class="form-control" name="id" value="15"/>
                         <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-thumbs-down"></div>
                             <input type="text" class="form-control" name="explanation" placeholder="Explanation"
                                    value="{$FORM_VALUES['ban-user']['explanation']}">
                         </div>
-			<div class="form-group input-group">
+                        <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-time"></div>
-                            <input type="date" class="form-control" name="expires" placeholder="Ban Expires Date" required
+                            <input type="date" class="form-control" name="expires" placeholder="Ban Expires Date"
+                                   required
                                    value="{$FORM_VALUES['ban-user']['expires']}">
                         </div>
-						<div class="form-group input-group">
+                        <div class="form-group input-group">
                             <div class="input-group-addon glyphicon glyphicon-ban-circle"></div>
-							<select class="form-control" name="reason">
-								<option value="bad_language">Bad Language</option>
-								<option value="inappropriate_content">Inappropriate Content</option>
-								<option value="spam">Spam</option>
-								<option value="disrespect_against_others">Disrespect Against Others</option>
-								</select>
-						</div>
+                            <select class="form-control" name="reason">
+                                <option value="bad_language">Bad Language</option>
+                                <option value="inappropriate_content">Inappropriate Content</option>
+                                <option value="spam">Spam</option>
+                                <option value="disrespect_against_others">Disrespect Against Others</option>
+                            </select>
+                        </div>
                         {foreach $ERROR_MESSAGES['ban-user'] as $error_message}
                             <div class="alert alert-danger" role="alert">
                                 <span class="text-center">{$error_message}</span>
