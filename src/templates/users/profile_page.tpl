@@ -39,7 +39,29 @@
 <div class="container col-sm-3 col-xs-12 full-screen-xs">
     <div class="panel panel-default">
         <div class="panel-heading panel-style">
-            <h3 class="panel-title">Nuno Ramos</h3>
+            <h3 class="panel-title inline">{$user['name']}</h3>
+            {if $PRIVILEGELEVELID == 3}
+                <span class="glyphicon glyphicon-menu-down dropdown-toggle pull-right" data-toggle="dropdown"></span>
+                <ul class="dropdown-menu dropdown-responsive">
+                    <li>
+                        <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Ban User</span>
+                    </li>
+                    <li>
+                        {if $user['privilegeLevelId'] == 2}
+                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Remove Moderator</span>
+                        {else}
+                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Make Moderator</span>
+                        {/if}
+                    </li>
+                    <li>
+                        {if $user['privilegeLevelId'] == 3}
+                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Remove Admin</span>
+                        {else}
+                            <span data-content-id="{$content.id}" onclick="toggleTextBox(this,1)">Make Admin</span>
+                        {/if}
+                    </li>
+                </ul>
+            {/if}
         </div>
         <img class="center-block img-responsive img-profile"
              src="{$BASE_URL}images/user-default.png" alt="User Image"><!-- src="{$BASE_URL}{if isset($user["photo"]) && !is_null($user["photo"])}images/{$user["photo"]}{else}images/user-default.png{/if}" -->
