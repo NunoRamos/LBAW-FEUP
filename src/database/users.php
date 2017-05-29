@@ -129,6 +129,31 @@ function getUnreadNotifications($userId)
     return $stmt->fetchAll();
 }
 
+function getNumberOfUnreadNotifications($userId){
+    global $conn;
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Notification" WHERE "userId" = ? AND read = FALSE');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['count'];
+
+}
+
+function getNumberOfReadNotifications($userId){
+    global $conn;
+    $stmt = $conn->prepare('SELECT COUNT(*) FROM "Notification" WHERE "userId" = ? AND read = TRUE');
+    $stmt->execute([$userId]);
+    return $stmt->fetch()['count'];
+}
+
+function getReadNotifications($userId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare('SELECT * FROM "Notification" WHERE "userId" = ? AND read = TRUE');
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll();
+}
+
+
 function getNumberOfUsersByName($inputString)
 {
     global $conn;
