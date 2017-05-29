@@ -10,9 +10,15 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
-            <p class="lead">{$NAME}</p>
-            <div class="list-group nav" id="settings-tabs">
+        <div class="col-md-3 panel-default">
+            <div class="panel-heading">{$NAME}
+                <button class="btn btn-default btn-xs pull-right" data-toggle="collapse"
+                        data-target=".settings-collapse">
+                    <span class="collapse in settings-collapse no-animation"><i
+                                class="glyphicon glyphicon-resize-small"></i></span>
+                    <span class="collapse settings-collapse"><i class="glyphicon glyphicon-resize-full"></i></span>
+            </div>
+            <div class="list-group nav collapse in settings-collapse" id="settings-tabs">
                 <a href="#personal-details" class="list-group-item highlight selected" role="tab" data-toggle="tab">Personal
                     Details</a>
                 <a href="#update-picture" class="list-group-item highlight" role="tab" data-toggle="tab">

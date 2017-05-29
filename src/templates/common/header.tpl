@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{$BASE_URL}images/icon.png">
     <title>Reply Planet</title>
     <link rel="stylesheet" href="{$BASE_URL}css/bootstrap.min.css">
     <link rel="stylesheet" href="{$BASE_URL}css/custom.min.css">
@@ -66,6 +67,7 @@
                     <ul id="notification-menu" class="dropdown-menu dropdown-responsive notification-dropdown">
                         <li id="notification-header" class="dropdown-header">Notifications</li>
                         <li role="separator" class="divider"></li>
+
                     </ul>
                 </li>
                 <li class="pull-right">
@@ -75,7 +77,7 @@
                 </li>
             {else}
                 <li class="pull-right">
-                    <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                    <button type="button" class="btn btn-default navbar-btn small-margin-sign-in-button" data-toggle="modal"
                             data-target="#sign-in-modal">Sign In
                     </button>
                 </li>
@@ -95,7 +97,7 @@
         <div class="modal-content">
             <div class="modal-header no-bottom-border">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                            class="hidden-xs" aria-hidden="true">&times;</span></button>
                 <ul class="nav nav-tabs nav-justified">
                     <li role="presentation" class="active"><a href="#sign-in" data-toggle="tab">Sign In</a></li>
                     <li role="presentation"><a id="sign-up-tab" href="#sign-up" data-toggle="tab">Sign Up</a></li>
@@ -152,7 +154,7 @@
                                 <div class="alert alert-danger" role="alert">
                                     <span class="text-center">{$error_message}</span>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></button>
+                                                 aria-hidden="true">&times;</span></button>
                                 </div>
                             {/foreach}
                         </div>
