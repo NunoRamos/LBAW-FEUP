@@ -10,8 +10,8 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
-            <p class="lead">{$NAME}</p>
+        <div class="col-md-3 panel-default">
+            <div class="panel-heading">{$NAME}</div>
             <div class="list-group nav" id="settings-tabs">
                 <a href="#personal-details" class="list-group-item highlight selected" role="tab" data-toggle="tab">Personal
                     Details</a>
